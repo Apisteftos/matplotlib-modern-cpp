@@ -67,3 +67,17 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+
+# ingore build 
+build/
+
+
+# ignore vscode settings
+.vscode/
+
+
+#ignore pics
+pics/
+
+
