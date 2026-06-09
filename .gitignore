@@ -76,6 +76,9 @@ build/
 # ignore vscode settings
 .vscode/
 
+#ingore environment
+*.env
+*.key
 
 #ignore pics
 pics/
