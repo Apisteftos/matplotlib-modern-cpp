@@ -29,6 +29,7 @@ function(add_plot_executable target source)
 endfunction()
 
 
+add_plot_executable(plot plot_example.cpp)
 add_plot_executable(subplots subplots_example.cpp)
 
 

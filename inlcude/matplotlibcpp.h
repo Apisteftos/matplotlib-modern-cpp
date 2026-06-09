@@ -166,8 +166,10 @@ PyObject* toNumpy(const std::vector<T>& v) {
 // Free functions - pyplot wrappers
 // ============================================================
 
-
-
+/**
+ * @brief Shows the plots.
+ * @param block if true, waits for user input.
+ */
 inline void show( bool block = true)
 {
     Interpreter::getInstance(); 
@@ -195,15 +197,40 @@ inline void show( bool block = true)
 
     if (!res) throw std::runtime_error("Call to show() failed.");
 
-
 }
 
+//TODO: add more parameters to plot
 
 
+/**
+ * @brief Plots a line graph.
+ * @param x x coordinates
+ * @param y y coordinates
+ * @param format format string
+ */
+inline void plot(const std::vector<double>& x, 
+                 const std::vector<double>& y, 
+                 const std::string& fmt = "b") 
+{
+    Interpreter::getInstance(); 
 
+    PyPtr args(PyTuple_New(3));
+    PyPtr kwargs(PyDict_New());
 
+    PyTuple_SetItem(args.get(), 0, toNumpy(x));
+    PyTuple_SetItem(args.get(), 1, toNumpy(y));
+    PyTuple_SetItem(args.get(), 2, PyUnicode_FromString(fmt.c_str()));
+    
+    PyDict_SetItemString(kwargs.get(), "format", PyUnicode_FromString(fmt.c_str()));
+    
 
+    PyPtr plot(PyObject_GetAttrString(
+        Interpreter::getInstance().getPyplot(), "plot"));
+    if (!plot) throw std::runtime_error("Failed to get plot function");
 
+    PyPtr res(PyObject_Call(plot.get(), args.get(), nullptr));
+    if (!res) throw std::runtime_error("Call to plot() failed.");
+}
 
 
 

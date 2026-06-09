@@ -80,4 +80,7 @@ build/
 #ignore pics
 pics/
 
+#ignore png files
+*.png
+
 
