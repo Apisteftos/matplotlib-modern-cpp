@@ -31,5 +31,6 @@ endfunction()
 
 add_plot_executable(plot plot_example.cpp)
 add_plot_executable(subplots subplots_example.cpp)
+add_plot_executable(sca sca_example.cpp)
 
 

@@ -7,9 +7,10 @@
 // Date: 07/06/2024
 // =============================================================================
 
+#include "PyPtr.h"
+#include "Interpreter.h"
+#include "numpy_utils.h"
 #include "Axes.h"
 #include "Figure.h"
-#include "PyPtr.h"
-#include "matplotlibcpp.h"
-
+#include "functions.h"
 

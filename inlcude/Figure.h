@@ -8,7 +8,7 @@
 // =============================================================================
 
 #include "Axes.h"
-#include "matplotlibcpp.h"
+#include "Interpreter.h"
 #include "PyPtr.h"
 
 #include <vector>
@@ -61,12 +61,11 @@ namespace matplotlibcpp {
         PyDict_SetItemString(kwargs.get(), "figsize", fs.get());
         PyDict_SetItemString(kwargs.get(), "squeeze", Py_False);
         
-        PyObject* subplots = PyObject_GetAttrString(
-        Interpreter::getInstance().getPyplot(), "subplots");
+        PyPtr subplots(PyObject_GetAttrString(
+        Interpreter::getInstance().getPyplot(), "subplots"));
         if (!subplots) throw std::runtime_error("Failed to get subplots function");
 
-        PyPtr res(PyObject_Call(subplots, args.get(), kwargs.get()));
-        Py_XDECREF(subplots);
+        PyPtr res(PyObject_Call(subplots.get(), args.get(), kwargs.get()));
         if(!res) throw std::runtime_error("Call to subplots() failed.");
 
 

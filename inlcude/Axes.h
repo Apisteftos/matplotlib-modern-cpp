@@ -7,8 +7,9 @@
 // Date: 07/06/2024
 // =============================================================================
 
-#include "matplotlibcpp.h"
+#include "Interpreter.h"
 #include "PyPtr.h"
+#include "numpy_utils.h"
 
 #include <string>
 #include <vector>
@@ -24,6 +25,7 @@ public:
 
     explicit Axes(PyObject* ax) : ax_(ax) {}
 
+    PyObject* get_axes() const { return ax_.get(); }
 
     void plot(const std::vector<double>& x, 
               const std::vector<double>& y, 
