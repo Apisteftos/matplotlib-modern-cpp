@@ -22,7 +22,7 @@ int main() {
 
     }
 
-    std::vector<long> figsize = {10, 15};
+    std::vector<long> figsize = {10, 10};
     auto [fig, axes] = plt::subplots(2, 2, figsize);   
     
     
@@ -47,8 +47,9 @@ int main() {
 
     fig.suptitle("Math Functions");
     fig.save("../pics/math_functions.png");
-    fig.tight_layout();
-
+    // fig.tight_layout();
+    
+    plt::tight_layout();
     plt::show();
 
     return 0;

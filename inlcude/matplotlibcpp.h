@@ -234,6 +234,24 @@ inline void plot(const std::vector<double>& x,
 
 
 
+/**
+ * @brief Calls tight_layout() function.
+ */
+inline void tight_layout() {
+    Interpreter::getInstance();
+
+    PyPtr args(PyTuple_New(0));
+
+    PyPtr tight_layout(PyObject_GetAttrString(
+        Interpreter::getInstance().getPyplot(), "tight_layout"));
+    if (!tight_layout) throw std::runtime_error("Failed to get tight_layout function"); 
+
+    PyPtr res(PyObject_Call(tight_layout.get(), args.get(), nullptr));
+    if (!res) throw std::runtime_error("Call to tight_layout() failed.");
+}
+
+
+
 
 } // namespace matplotlibcpp
 
