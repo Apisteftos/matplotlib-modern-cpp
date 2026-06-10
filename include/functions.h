@@ -176,6 +176,46 @@ namespace matplotlibcpp {
     }
 
 
+    /**
+     * @brief Calls subplot2grid() function.
+     * @param config subplot2gridConfig struct
+     */
+    inline Axes subplot2grid(const subplot2gridConfig& config) {
+
+        Interpreter::getInstance();
+
+        PyPtr shape(PyTuple_New(2));    
+        PyTuple_SetItem(shape.get(), 0, PyLong_FromLong(config.shape[0]));
+        PyTuple_SetItem(shape.get(), 1, PyLong_FromLong(config.shape[1]));
+
+        PyPtr loc(PyTuple_New(2));    
+        PyTuple_SetItem(loc.get(), 0, PyLong_FromLong(config.loc[0]));
+        PyTuple_SetItem(loc.get(), 1, PyLong_FromLong(config.loc[1]));
+
+        PyPtr args(PyTuple_New(2));
+        PyTuple_SetItem(args.get(), 0, shape.get());
+        PyTuple_SetItem(args.get(), 1, loc.get());
+
+        PyPtr kwargs(PyDict_New());
+        PyDict_SetItemString(kwargs.get(), "rowspan", PyLong_FromLong(config.rowspan));
+        PyDict_SetItemString(kwargs.get(), "colspan", PyLong_FromLong(config.colspan));
+
+        if (config.fig != nullptr) {
+            PyDict_SetItemString(kwargs.get(), "fig", config.fig->get_figure());
+        }
+
+
+        PyPtr subplot2grid(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "subplot2grid"));
+        if (!subplot2grid) throw std::runtime_error("Failed to get subplot2grid function");
+
+        PyPtr res(PyObject_Call(subplot2grid.get(), args.get(), kwargs.get()));
+        if (!res) throw std::runtime_error("Call to subplot2grid() failed.");
+
+        return Axes(res.get());
+    }
+
+
+
 
     /**
      * @brief Calls tight_layout() function.

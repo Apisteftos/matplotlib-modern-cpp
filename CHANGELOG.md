@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
+
+## [0.3.0] - 10/06/2026
+
+### Added
+- `subplot2grid()` function
+- `Subplot2Grid` class
+- `Subplot2GridConfig`, `FigureConfig`, `ErrorbarConfig`, `ScatterConfig`, `StepConfig` structs
+- examples for `subplot2grid()` in c++ and python
+- errorValueToNumpy() and dataValueToNumpy() functions
+- get_figure() function in Figure class
+- optional types and multiple data types in configs
+
+
+
 ## [0.2.1] - 10/06/2026
 
 ### Fixed

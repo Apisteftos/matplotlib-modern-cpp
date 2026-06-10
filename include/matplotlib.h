@@ -14,4 +14,5 @@
 #include "Figure.h"
 #include "functions.h"
 #include "configs.h"
+#include "Subplot2Grid.h"
 

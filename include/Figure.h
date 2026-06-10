@@ -7,7 +7,7 @@
 // Date: 07/06/2024
 // =============================================================================
 
-#include "Axes.h"
+
 #include "Interpreter.h"
 #include "PyPtr.h"
 
@@ -21,6 +21,8 @@ namespace matplotlibcpp {
         PyPtr fig_;
     public:
         explicit Figure(PyObject* fig) : fig_(fig) {}
+
+        PyObject* get_figure() const { return fig_.get(); }
 
         void suptitle(const std::string& title) {
             PyObject_CallMethod(fig_.get(), "suptitle", "s", title.c_str());

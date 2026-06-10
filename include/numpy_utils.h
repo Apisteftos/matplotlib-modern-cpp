@@ -9,6 +9,7 @@
 
 #include "Interpreter.h"
 #include "PyPtr.h"
+#include "configs.h"
 
 #include <string>
 #include <vector>
@@ -72,5 +73,37 @@ namespace matplotlibcpp {
 
         return array;
     }
+
+
+    inline PyObject* errorValueToNumpy(const ErrorValue& ev) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>) {
+                return PyFloat_FromDouble(val);
+            } else if constexpr (std::is_same_v<T, std::vector<double>>) {
+                return toNumpy(val);
+            } else {
+                // shape(2,N) — list of two numpy arrays
+                PyObject* list = PyList_New(2);
+                PyList_SetItem(list, 0, toNumpy(val[0]));
+                PyList_SetItem(list, 1, toNumpy(val[1]));
+                return list;
+            }
+        }, ev);
+    }
+
+
+
+    inline PyObject* dataValueToNumpy(const DataValue& dv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>) {
+                return PyFloat_FromDouble(val);
+            } else {
+                return toNumpy(val);
+            }
+        }, dv);
+    }
+    
 
 }
