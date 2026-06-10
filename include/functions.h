@@ -122,7 +122,10 @@ namespace matplotlibcpp {
      * @param figsize size of each subplot
      * @return pair of Figure and vector of Axes
      */
-    std::pair<Figure, std::vector<Axes>> subplots(long nrows, long ncols, std::vector<long> &figsize)
+    inline std::pair<Figure, std::vector<Axes>> subplots(
+        long nrows, 
+        long ncols, 
+        std::vector<long> &figsize)
     {
         
         Interpreter::getInstance();
@@ -458,7 +461,7 @@ namespace matplotlibcpp {
 
 
 
-    std::vector<std::string> get_figlabels() {
+    inline std::vector<std::string> get_figlabels() {
         Interpreter::getInstance();
 
         PyPtr args(PyTuple_New(0));

@@ -1,6 +1,6 @@
-#include "../inlcude/matplotlib.h"
+#include "../include/matplotlib.h"  
 
-#include <iostream>
+#include <iostream>                 
 #include <vector>
 #include <print>
 

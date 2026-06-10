@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+
+## [0.2.1] - 10/06/2026
+
+### Fixed
+
+- missing inline keyword for `get_figlabels()` and `subplot()`
+- typo in the include dir name
+
+
+
+
 ## [0.2.0] - 09/06/2026
 
 ### Added

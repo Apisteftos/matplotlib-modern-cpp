@@ -87,3 +87,6 @@ pics/
 *.png
 
 
+# ignore clangd 
+.clangd
+
