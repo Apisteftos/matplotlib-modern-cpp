@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 
 - missing inline keyword for `get_figlabels()` and `subplot()`
 - typo in the include dir name
+- all inlcude paths in the src files
 
 
 
