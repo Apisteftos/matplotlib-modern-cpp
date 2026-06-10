@@ -30,7 +30,9 @@ endfunction()
 
 
 add_plot_executable(plot plot_example.cpp)
+add_plot_executable(subplot subplot_example.cpp)
 add_plot_executable(subplots subplots_example.cpp)
 add_plot_executable(sca sca_example.cpp)
+add_plot_executable(get_fignums get_fignums_example.cpp)
 
 

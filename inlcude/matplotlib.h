@@ -13,4 +13,5 @@
 #include "Axes.h"
 #include "Figure.h"
 #include "functions.h"
+#include "configs.h"
 

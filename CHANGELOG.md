@@ -8,18 +8,25 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Free functions: `show()`, `plot()`, `tight_layout()`, `clf()`, `cla()`, `close()`, `sca()`
+- Free functions: `show()`, `plot()`, `tight_layout()`, `clf()`, `cla()`, `close()`, `sca()`, `grid()`, `title()`, `subplot()`, `axes()`, `delaxes()`, `gca()`, `gcf()`, 
 - `Axes.h` a get_axes() function 
 - `CHANGELOG.md` unreleased version
+- `configs.h` structs configurations for the free functions
+- `subplot_example.cpp` example subplot
+- `get_fignums_example.cpp` example get_fignums
 
 
 ### Fixed
 
+- Free functions `get_figlabels()`, `get_fignums()`
+
 
 ### Changed
+
 - `matplotlibcpp.h` is now `Interpreter.h`
 - Moved free functions to functions.h
 - Moved numpy utils from Interpreter.h to numpy_utils.h
+- Moved `subplots()` to functions.h
 
 
 
@@ -31,7 +38,7 @@ All notable changes to this project will be documented in this file.
 - `Axes` class - RAII-based wrapper for matplotlib axes object with multiple plotting functions
 - `Figure` class - RAII-based wrapper for matplotlib figure object
 - `PyPtr` - RAII smart pointer for `PyObject*` using `std::unique_ptr`
-- `Interpreter` - Meyers' singleton managing Python lifecycle
+- `matplotlibcpp.h` - Meyers' singleton managing Python lifecycle
 - `NumpyType` - type trait mapping C++ types to numpy type constants
 - `toNumpy()` - template function converting `std::vector<T>` to numpy array
 - `subplots()` returns `std::pair<Figure, std::vector<Axes>>`
