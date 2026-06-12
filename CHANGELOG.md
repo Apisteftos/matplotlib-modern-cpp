@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
+## [0.4.0] - 12/06/2026
+
+
+### Changed
+
+- free functions from `functions.h` — moved to `PyPlot.h`
+
 
 ## [0.3.0] - 10/06/2026
 

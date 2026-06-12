@@ -4,11 +4,12 @@
 #include <math.h>
 #include <vector>
 
-namespace plt = matplotlibcpp;
+
 
 
 int main() {
     
+    matplotlibcpp::PyPlot plt;
 
     const int n = 100;
     std::vector<double> x(n), sinY(n), cosY(n), tanY(n), acosY(n);
@@ -23,7 +24,7 @@ int main() {
     }
 
     std::vector<long> figsize = {10, 10};
-    auto [fig, axes] = plt::subplots(2, 2, figsize);   
+    auto [fig, axes] = plt.subplots(2, 2, figsize);   
     
     
     axes[0].plot(x, sinY, "b");
@@ -47,10 +48,10 @@ int main() {
 
     fig.suptitle("Math Functions");
     fig.save("../pics/math_functions.png");
-    // fig.tight_layout();
+
     
-    plt::tight_layout();
-    plt::show();
+    plt.tight_layout();
+    plt.show();
 
     return 0;
 }

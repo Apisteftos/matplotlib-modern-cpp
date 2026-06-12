@@ -12,7 +12,7 @@
 #include "numpy_utils.h"
 #include "Axes.h"
 #include "Figure.h"
-#include "functions.h"
 #include "configs.h"
 #include "Subplot2Grid.h"
+#include "PyPlot.h"
 

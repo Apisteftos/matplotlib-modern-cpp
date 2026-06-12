@@ -1,10 +1,10 @@
 #pragma once
 
 // =============================================================================
-// functions.h - C++ wrapper for matplotlib.pyplot.functions
+// PyPlot.h - C++ wrapper for matplotlib.pyplot
 // Modern C++23 matplotlib wrapper build on top of Python C API
 // Author: Konstantinos Angeloulis
-// Date: 09/06/2024
+// Date: 12/06/2024
 // =============================================================================
 
 #include "Interpreter.h"
@@ -20,18 +20,25 @@
 
 namespace matplotlibcpp {
 
+class PyPlot {
+
+public:
+
+    PyPlot( ) {
+        Interpreter::getInstance();
+    }
+
 
 
     // ============================================================
-    // Free functions - pyplot wrappers
+    // functions - pyplot wrappers
     // ============================================================
 
     /**
      * @brief Shows the plots.
      * @param block if true, waits for user input.
      */
-    inline void show( bool block = true){
-        Interpreter::getInstance(); 
+    void show( bool block = true){
 
         PyPtr args(PyTuple_New(0));
 
@@ -67,11 +74,10 @@ namespace matplotlibcpp {
      * @param y y coordinates
      * @param format format string
      */
-    inline void plot(const std::vector<double>& x, 
-                    const std::vector<double>& y, 
-                    const std::string& fmt = "b") {
+    void plot(const std::vector<double>& x, 
+              const std::vector<double>& y, 
+              const std::string& fmt = "b") {
 
-        Interpreter::getInstance(); 
 
         PyPtr args(PyTuple_New(3));
         PyPtr kwargs(PyDict_New());
@@ -97,9 +103,8 @@ namespace matplotlibcpp {
      * @param ncols number of columns
      * @param plot_number subplot number
      */
-    inline void subplot(long nrows, long ncols, long plot_number) {
+    void subplot(long nrows, long ncols, long plot_number) {
 
-        Interpreter::getInstance();
 
         PyPtr args(PyTuple_New(3));
         PyTuple_SetItem(args.get(), 0, PyLong_FromLong(nrows));
@@ -122,13 +127,11 @@ namespace matplotlibcpp {
      * @param figsize size of each subplot
      * @return pair of Figure and vector of Axes
      */
-    inline std::pair<Figure, std::vector<Axes>> subplots(
+    std::pair<Figure, std::vector<Axes>> subplots(
         long nrows, 
         long ncols, 
-        std::vector<long> &figsize)
-    {
+        std::vector<long> &figsize){
         
-        Interpreter::getInstance();
         
         PyPtr args(PyTuple_New(2));
         PyTuple_SetItem(args.get(), 0, PyLong_FromLong(nrows));
@@ -180,9 +183,8 @@ namespace matplotlibcpp {
      * @brief Calls subplot2grid() function.
      * @param config subplot2gridConfig struct
      */
-    inline Axes subplot2grid(const subplot2gridConfig& config) {
+    Axes subplot2grid(const subplot2gridConfig& config) {
 
-        Interpreter::getInstance();
 
         PyPtr shape(PyTuple_New(2));    
         PyTuple_SetItem(shape.get(), 0, PyLong_FromLong(config.shape[0]));
@@ -220,8 +222,7 @@ namespace matplotlibcpp {
     /**
      * @brief Calls tight_layout() function.
      */
-    inline void tight_layout() {
-        Interpreter::getInstance();
+    void tight_layout() {
 
         PyPtr args(PyTuple_New(0));
 
@@ -235,9 +236,8 @@ namespace matplotlibcpp {
 
 
 
-    inline void clf() {
-        Interpreter::getInstance();
-
+    void clf() {
+    
         PyPtr args(PyTuple_New(0));
 
         PyPtr clf(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "clf"));
@@ -249,8 +249,7 @@ namespace matplotlibcpp {
     }
 
 
-    inline void cla() {
-        Interpreter::getInstance();
+    void cla() {
 
         PyPtr args(PyTuple_New(0));
 
@@ -267,9 +266,7 @@ namespace matplotlibcpp {
     /**
      * @brief Closes current figure
      */
-    inline void close() { 
-
-        Interpreter::getInstance();
+    void close() { 
 
         PyPtr args(PyTuple_New(0));
 
@@ -286,9 +283,8 @@ namespace matplotlibcpp {
      * @brief Closes by string 
      * @param fig figure name
      */
-    inline void close(const std::string& fig) { 
+    void close(const std::string& fig) { 
 
-        Interpreter::getInstance();
 
         PyPtr args(PyTuple_New(1));
         PyTuple_SetItem(args.get(), 0, PyUnicode_FromString(fig.c_str()));
@@ -305,9 +301,7 @@ namespace matplotlibcpp {
      * @brief Closes by int 
      * @param fig figure number
      */
-    inline void close(const int fig) { 
-        
-        Interpreter::getInstance();
+    void close(const int fig) { 
 
         PyPtr args(PyTuple_New(1));
         PyTuple_SetItem(args.get(), 0, PyLong_FromLong(fig));
@@ -321,8 +315,7 @@ namespace matplotlibcpp {
         
 
     
-    inline void gca() {
-        Interpreter::getInstance();
+    void gca() {
 
         PyPtr args(PyTuple_New(0));
 
@@ -335,8 +328,7 @@ namespace matplotlibcpp {
     }
 
 
-    inline void gcf() {
-        Interpreter::getInstance();
+    void gcf() {
 
         PyPtr args(PyTuple_New(0));
 
@@ -352,9 +344,7 @@ namespace matplotlibcpp {
 
 
 
-    inline void sca(const Axes& ax) {
-
-        Interpreter::getInstance();
+    void sca(const Axes& ax) {
 
         PyPtr args(PyTuple_New(1));
         PyTuple_SetItem(args.get(), 0, ax.get_axes());
@@ -373,9 +363,8 @@ namespace matplotlibcpp {
      * @brief Sets the title of the current axes.
      * @param tlt title string
      */
-    inline void title(const std::string& tlt) {
+    void title(const std::string& tlt) {
 
-        Interpreter::getInstance();
 
         PyPtr args(PyTuple_New(1));
         PyTuple_SetItem(args.get(), 0, PyUnicode_FromString(tlt.c_str()));
@@ -392,9 +381,7 @@ namespace matplotlibcpp {
      * @brief Sets the grid on or off.
      * @param flag if true, grid is on
      */
-    inline void grid(bool flag = true) {
-
-        Interpreter::getInstance();
+    void grid(bool flag = true) {
 
         PyPtr args(PyTuple_New(0));
 
@@ -416,8 +403,7 @@ namespace matplotlibcpp {
     }
 
 
-    inline void axes() {
-        Interpreter::getInstance();
+    void axes() {
         
         PyPtr args(PyTuple_New(0));
         
@@ -430,9 +416,7 @@ namespace matplotlibcpp {
 
 
 
-    inline void axes(const Axes& ax) {
-
-        Interpreter::getInstance();
+    void axes(const Axes& ax) {
         
         PyPtr args(PyTuple_New(1));
         PyTuple_SetItem(args.get(), 0, ax.get_axes());
@@ -445,8 +429,7 @@ namespace matplotlibcpp {
     }
 
 
-    inline void delaxes(const Axes& ax) {
-        Interpreter::getInstance();
+    void delaxes(const Axes& ax) {
         
         PyPtr args(PyTuple_New(1));
         PyTuple_SetItem(args.get(), 0, ax.get_axes());
@@ -459,8 +442,7 @@ namespace matplotlibcpp {
     }
 
 
-    inline void fignum_exists(const std::string& fig) {
-        Interpreter::getInstance();
+    void fignum_exists(const std::string& fig) {
         
         PyPtr args(PyTuple_New(1));
         PyTuple_SetItem(args.get(), 0, PyUnicode_FromString(fig.c_str()));
@@ -474,9 +456,7 @@ namespace matplotlibcpp {
 
 
 
-    inline Figure figure(const FigureConfig& config)
-    {
-        Interpreter::getInstance();
+    Figure figure(const FigureConfig& config){
 
         PyPtr args(PyTuple_New(1));  
         PyTuple_SetItem(args.get(), 0, PyLong_FromLong(config.num));
@@ -501,8 +481,7 @@ namespace matplotlibcpp {
 
 
 
-    inline std::vector<std::string> get_figlabels() {
-        Interpreter::getInstance();
+    std::vector<std::string> get_figlabels() {
 
         PyPtr args(PyTuple_New(0));
 
@@ -528,8 +507,7 @@ namespace matplotlibcpp {
     }
 
 
-    inline std::vector<int> get_fignums() {
-        Interpreter::getInstance();
+    std::vector<int> get_fignums() {
 
         PyPtr args(PyTuple_New(0));
 
@@ -555,8 +533,8 @@ namespace matplotlibcpp {
         return nums;
     }
 
-        
 
 
+};
 
-}
+} // namespace matplotlibcpp

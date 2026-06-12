@@ -5,9 +5,10 @@
 #include <cmath>
 
 
-namespace plt = matplotlibcpp;
 
 int main() {
+
+    matplotlibcpp::PyPlot plt;
 
     const int n = 100;
     std::vector<double> x(n), sinY(n), cosY(n);
@@ -19,18 +20,18 @@ int main() {
     }
 
     
-    plt::subplot(1, 2, 1);
-    plt::plot(x, sinY, "b");
-    plt::title("Sine");
-    plt::grid(true);
+    plt.subplot(1, 2, 1);
+    plt.plot(x, sinY, "b");
+    plt.title("Sine");
+    plt.grid(true);
 
-    plt::subplot(1, 2, 2);
-    plt::plot(x, cosY, "r");
-    plt::title("Cosine");
-    plt::grid(true);
+    plt.subplot(1, 2, 2);
+    plt.plot(x, cosY, "r");
+    plt.title("Cosine");
+    plt.grid(true);
 
-    plt::tight_layout();
-    plt::show();
+    plt.tight_layout();
+    plt.show();
 
     return 0;
 }
