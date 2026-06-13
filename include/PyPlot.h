@@ -402,7 +402,9 @@ public:
 
     }
 
-
+    /**
+     * @brief Returns the current axes.
+     */
     void axes() {
         
         PyPtr args(PyTuple_New(0));
@@ -415,7 +417,10 @@ public:
     }
 
 
-
+    /**
+     * @brief Sets the current axes.
+     * @param ax axes object
+     */
     void axes(const Axes& ax) {
         
         PyPtr args(PyTuple_New(1));
@@ -428,7 +433,10 @@ public:
         if (!res) throw std::runtime_error("call to axes() failed.");
     }
 
-
+    /**
+     * @brief Deletes the current axes.
+     * @param ax axes object
+     */
     void delaxes(const Axes& ax) {
         
         PyPtr args(PyTuple_New(1));
@@ -441,7 +449,10 @@ public:
         if (!res) throw std::runtime_error("call to delaxes() failed.");
     }
 
-
+    /**
+    * @brief Checks if figure exists.
+    * @param fig figure number
+    */
     void fignum_exists(const std::string& fig) {
         
         PyPtr args(PyTuple_New(1));
@@ -455,7 +466,11 @@ public:
     }
 
 
-
+    /**
+     * @brief Creates a new figure.
+     * @param config figure configuration
+     * @return Figure
+     */
     Figure figure(const FigureConfig& config){
 
         PyPtr args(PyTuple_New(1));  
@@ -480,7 +495,10 @@ public:
     }
 
 
-
+    /**
+     * @brief Returns the figure labels.
+     * @return vector of figure labels
+     */
     std::vector<std::string> get_figlabels() {
 
         PyPtr args(PyTuple_New(0));
@@ -506,7 +524,10 @@ public:
         return labels;
     }
 
-
+    /**
+     * @brief Returns the figure numbers.
+     * @return vector of figure numbers
+     */
     std::vector<int> get_fignums() {
 
         PyPtr args(PyTuple_New(0));
