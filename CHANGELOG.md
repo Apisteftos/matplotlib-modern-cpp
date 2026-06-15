@@ -12,9 +12,9 @@ All notable changes to this project will be documented in this file.
 - `twinx()`, `ticks_params()` functions
 - `twinx` cpp and python examples
 - `helper.h` — helper functions for checking PyObject* results and printing Python errors
-- Enum `Axis`, `Which`, `Direction`, `Loc` for `tick_params()` and XLabelConfig, YLabelConfig
-- free functions `toString()` for converting enums to strings
-- `AxisConfig`, `WhichConfig`, `DirectionConfig`, `LocConfig`, SubplotsConfig, TickParamsConfig, XLabelConfig, YLabelConfig structs
+- Enum `Axis`, `Which`, `Direction`, `Loc`  used by TickParamsConfig, XLabelConfig, YLabelConfig
+- toString() overloads for converting enums to strings
+- TickParamsConfig, XLabelConfig, YLabelConfig, SubplotsConfig structs
 
 
 
