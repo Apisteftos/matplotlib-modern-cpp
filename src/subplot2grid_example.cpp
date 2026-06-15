@@ -47,7 +47,7 @@ int main() {
     auto ax3 = plt.subplot2grid({.shape = {3, 3}, .loc = {1, 2}, .rowspan = 2});
     ax3.plot({x, tanY, "g"});
     ax3.set_title("Tan - 2 rows");
-    ax3.set_ylim(-5, 5);
+    ax3.set_ylim({-5, 5});
 
     
     auto ax4 = plt.subplot2grid({.shape = {3, 3}, .loc = {2, 0}});

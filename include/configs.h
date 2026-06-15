@@ -265,6 +265,25 @@ namespace matplotlibcpp {
     };
 
 
+    struct SetXlimConfig {
+        std::optional<double> left = std::nullopt;
+        std::optional<double> right = std::nullopt;
+        bool emit = true;
+        std::optional<bool> auto_ = false;
+        std::optional<double> xmin = std::nullopt;
+        std::optional<double> xmax = std::nullopt;
+    };
+
+    struct SetYlimConfig {
+        std::optional<double> bottom = std::nullopt;
+        std::optional<double> top = std::nullopt;
+        bool emit = true;
+        std::optional<bool> auto_ = false;
+        std::optional<double> ymin = std::nullopt;
+        std::optional<double> ymax = std::nullopt;
+    };
+
+
     struct subplotMosaicConfig {
     
     };

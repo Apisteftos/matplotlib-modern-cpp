@@ -12,7 +12,9 @@
 #include "numpy_utils.h"
 #include "configs.h"
 #include "helper.h"
+#include "pythonrun.h"
 
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -28,6 +30,42 @@ public:
     explicit Axes(PyObject* ax) : ax_(ax) {}
 
     PyObject* get_axes() const { return ax_.get(); }
+
+    std::pair<double,double> get_xlim() const { 
+        
+        PyPtr args(PyTuple_New(0));
+
+        PyPtr fn(PyObject_GetAttrString(ax_.get(), "get_xlim"));
+        checkAttr(fn.get(), "get_xlim");
+
+        PyPtr res(PyObject_Call(fn.get(), args.get(), nullptr));
+        checkResult(res.get(), "get_xlim");
+
+        double left  = PyFloat_AsDouble(PyTuple_GetItem(res.get(), 0));
+        double right = PyFloat_AsDouble(PyTuple_GetItem(res.get(), 1));
+
+        return std::make_pair(left, right);
+    
+    }
+
+
+    std::pair<double,double> get_ylim() const { 
+        
+        PyPtr args(PyTuple_New(0));
+
+        PyPtr fn(PyObject_GetAttrString(ax_.get(), "get_ylim"));
+        checkAttr(fn.get(), "get_ylim");
+
+        PyPtr res(PyObject_Call(fn.get(), args.get(), nullptr));
+        checkResult(res.get(), "get_ylim");
+
+        double bottom  = PyFloat_AsDouble(PyTuple_GetItem(res.get(), 0));
+        double top = PyFloat_AsDouble(PyTuple_GetItem(res.get(), 1));
+
+        return std::make_pair(bottom, top);
+    
+    }
+
 
     void plot(const PlotConfig& config) {
     
@@ -81,12 +119,65 @@ public:
         checkResult(res.get(), "set_ylabel");
     }
 
-    void set_xlim(double left, double right) {
-        PyObject_CallMethod(ax_.get(), "set_xlim", "dd", left, right);
+    std::pair<double, double> set_xlim(const SetXlimConfig& config) {
+
+        PyPtr args(PyTuple_New(0));
+        PyPtr kwargs(PyDict_New());
+
+        if (config.left)
+            PyDict_SetItemString(kwargs.get(), "left", PyFloat_FromDouble(*config.left));
+        if (config.right)
+            PyDict_SetItemString(kwargs.get(), "right", PyFloat_FromDouble(*config.right));
+        if (config.xmin)
+            PyDict_SetItemString(kwargs.get(), "xmin", PyFloat_FromDouble(*config.xmin));
+        if (config.xmax)
+            PyDict_SetItemString(kwargs.get(), "xmax", PyFloat_FromDouble(*config.xmax));
+        if (config.auto_.has_value())
+            PyDict_SetItemString(kwargs.get(), "auto", config.auto_ ? Py_True : Py_False);
+
+       
+        PyDict_SetItemString(kwargs.get(), "emit",config.emit ? Py_True : Py_False);
+        
+
+        PyPtr set_xlim(PyObject_GetAttrString(ax_.get(), "set_xlim"));
+        checkAttr(set_xlim.get(), "set_xlim");
+        
+        
+        PyPtr res(PyObject_Call(set_xlim.get(), args.get(), kwargs.get()));
+        checkResult(res.get(), "set_xlim");
+        
+        return std::make_pair(PyFloat_AsDouble(PyTuple_GetItem(res.get(), 0)), PyFloat_AsDouble(PyTuple_GetItem(res.get(), 1)));
+
     }
 
-    void set_ylim(double bottom, double top) {
-        PyObject_CallMethod(ax_.get(), "set_ylim", "dd", bottom, top);
+    std::pair<double, double> set_ylim(const SetYlimConfig& config) {
+
+        PyPtr args(PyTuple_New(0));
+        PyPtr kwargs(PyDict_New());
+
+        if (config.bottom)
+            PyDict_SetItemString(kwargs.get(), "bottom", PyFloat_FromDouble(*config.bottom));
+        if (config.top)
+            PyDict_SetItemString(kwargs.get(), "top", PyFloat_FromDouble(*config.top));
+        if (config.ymin)
+            PyDict_SetItemString(kwargs.get(), "ymin", PyFloat_FromDouble(*config.ymin));
+        if (config.ymax)
+            PyDict_SetItemString(kwargs.get(), "ymax", PyFloat_FromDouble(*config.ymax));
+        if (config.auto_.has_value())
+            PyDict_SetItemString(kwargs.get(), "auto", config.auto_ ? Py_True : Py_False);
+
+       
+        PyDict_SetItemString(kwargs.get(), "emit",config.emit ? Py_True : Py_False);
+        
+
+        PyPtr set_ylim(PyObject_GetAttrString(ax_.get(), "set_ylim"));
+        checkAttr(set_ylim.get(), "set_ylim");
+        
+        PyPtr res(PyObject_Call(set_ylim.get(), args.get(), kwargs.get()));
+        checkResult(res.get(), "set_ylim");
+        
+        return std::make_pair(PyFloat_AsDouble(PyTuple_GetItem(res.get(), 0)), PyFloat_AsDouble(PyTuple_GetItem(res.get(), 1)));
+
     }
 
     void set_aspect(const std::string& aspect) {
@@ -207,7 +298,8 @@ public:
         
     }
 
-    void stem(const std::vector<double>& x, const std::vector<double>& y, const std::string& fmt = "b") {
+    void stem(const std::vector<double>& x, const std::vector<double>& y, const std::string&
+ fmt = "b") {
         
         PyPtr xarray(toNumpy(x));
         PyPtr yarray(toNumpy(y));
@@ -230,6 +322,7 @@ public:
         PyPtr xarray(toNumpy(x));
         PyPtr labelslist(PyList_New(labels.size())); 
 
+
         for (size_t i = 0; i < labels.size(); ++i) {
             PyList_SetItem(labelslist.get(), i, PyUnicode_FromString(labels[i].c_str()));
         }
@@ -248,10 +341,25 @@ public:
         PyPtr args(PyTuple_New(0));
 
         PyPtr twinx(PyObject_GetAttrString(ax_.get(), "twinx"));
-        if (!twinx) throw std::runtime_error("Failed to get twinx function");
+        checkAttr(twinx.get(), "twinx");
 
         PyPtr res(PyObject_Call(twinx.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to twinx() failed.");
+        checkResult(res.get(), "twinx");
+        
+        return Axes(res.get());
+
+    }
+
+
+    Axes twiny() {
+
+        PyPtr args(PyTuple_New(0));
+
+        PyPtr twiny(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "twiny"));
+        checkAttr(twiny.get(), "twiny");
+
+        PyPtr res(PyObject_Call(twiny.get(), args.get(), nullptr));
+        checkResult(res.get(), "twiny");
         
         return Axes(res.get());
 

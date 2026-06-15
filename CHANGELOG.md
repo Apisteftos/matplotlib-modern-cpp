@@ -9,17 +9,18 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- `twinx()`, `ticks_params()` functions
-- `twinx` cpp and python examples
-- `helper.h` — helper functions for checking PyObject* results and printing Python errors
+- `twinx()`, `ticks_params()`, `get_xlim()`, `get_ylim()` functions
+- `twinx`, `twiny` cpp and python examples
+- `helper.h` — helper functions for checking PyObject* results, valid objects and printing Python errors
 - Enum `Axis`, `Which`, `Direction`, `Loc`  used by TickParamsConfig, XLabelConfig, YLabelConfig
 - toString() overloads for converting enums to strings
-- TickParamsConfig, XLabelConfig, YLabelConfig, SubplotsConfig structs
+- TickParamsConfig, XLabelConfig, YLabelConfig, SubplotsConfig, SetXlimConfig, SetYlimConfig structs
 
 
 
 ### Changed
 
+- `set_xlim()`, `set_ylim()`, in Axes.h
 - Parameters in `PyPlot.h` for `plot`, `subplots`
 - Parameters in `Axes.h` for `set_xlabel`, `set_ylabel`
 

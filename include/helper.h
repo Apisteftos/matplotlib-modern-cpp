@@ -35,5 +35,18 @@ namespace matplotlibcpp {
         }
     }
 
+    /**
+    * @brief Check if PyPlot returns a valid object
+    * @param obj object returned by PyPlot
+    * @param attrName name of the attribute to check
+    * @throws std::runtime_error if obj is nullptr
+    */
+    inline void checkAttr(PyObject* obj, const char* attrName) {
+        if (!obj) {
+            PyErr_Print();
+            throw std::runtime_error(std::string("Failed to get  ") + attrName + " function");
+        }
+    }
+
 
 } // namespace matplotlibcpp
