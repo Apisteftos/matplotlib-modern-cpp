@@ -15,4 +15,4 @@
 #include "configs.h"
 #include "Subplot2Grid.h"
 #include "PyPlot.h"
-
+#include "helper.h"

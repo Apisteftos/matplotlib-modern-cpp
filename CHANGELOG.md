@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
+## [0.5.0] - 15/06/2026
+
+### Added
+
+- `twinx()`, `ticks_params()` functions
+- `twinx` cpp and python examples
+- `helper.h` — helper functions for checking PyObject* results and printing Python errors
+- Enum `Axis`, `Which`, `Direction`, `Loc` for `tick_params()` and XLabelConfig, YLabelConfig
+- free functions `toString()` for converting enums to strings
+- `AxisConfig`, `WhichConfig`, `DirectionConfig`, `LocConfig`, SubplotsConfig, TickParamsConfig, XLabelConfig, YLabelConfig structs
+
+
+
+### Changed
+
+- Parameters in `PyPlot.h` for `plot`, `subplots`
+- Parameters in `Axes.h` for `set_xlabel`, `set_ylabel`
+
+
+
 ## [0.4.0] - 12/06/2026
 
 

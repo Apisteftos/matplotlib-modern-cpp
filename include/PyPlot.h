@@ -12,7 +12,7 @@
 #include "Figure.h"
 #include "numpy_utils.h"
 #include "configs.h"
-
+#include "helper.h"
 
 #include <map>
 
@@ -61,7 +61,7 @@ public:
 
         Py_XDECREF(show); 
 
-        if (!res) throw std::runtime_error("Call to show() failed.");
+        checkResult(res.get(), "show");
 
     }
 
@@ -74,27 +74,25 @@ public:
      * @param y y coordinates
      * @param format format string
      */
-    void plot(const std::vector<double>& x, 
-              const std::vector<double>& y, 
-              const std::string& fmt = "b") {
+    void plot(const PlotConfig& config) {
 
 
         PyPtr args(PyTuple_New(3));
         PyPtr kwargs(PyDict_New());
 
-        PyTuple_SetItem(args.get(), 0, toNumpy(x));
-        PyTuple_SetItem(args.get(), 1, toNumpy(y));
-        PyTuple_SetItem(args.get(), 2, PyUnicode_FromString(fmt.c_str()));
+        PyTuple_SetItem(args.get(), 0, toNumpy(config.x));
+        PyTuple_SetItem(args.get(), 1, toNumpy(config.y));
+        PyTuple_SetItem(args.get(), 2, PyUnicode_FromString(config.fmt.c_str()));
         
-        PyDict_SetItemString(kwargs.get(), "format", PyUnicode_FromString(fmt.c_str()));
+        PyDict_SetItemString(kwargs.get(), "format", PyUnicode_FromString(config.fmt.c_str()));
         
 
         PyPtr plot(PyObject_GetAttrString(
             Interpreter::getInstance().getPyplot(), "plot"));
-        if (!plot) throw std::runtime_error("Failed to get plot function");
+        if (!plot) checkResult(plot.get(), "plot");
 
         PyPtr res(PyObject_Call(plot.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("Call to plot() failed.");
+        checkResult(res.get(), "plot");
     }
 
     /**
@@ -115,32 +113,27 @@ public:
         if (!subplot) throw std::runtime_error("failed to get subplot function");
         
         PyPtr res(PyObject_Call(subplot.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to subplot() failed.");
+        checkResult(res.get(), "subplot");
         
     }
 
 
     /**
      * @brief Calls subplots() function.
-     * @param nrows number of rows
-     * @param ncols number of columns
-     * @param figsize size of each subplot
+     * @param config subplot config
      * @return pair of Figure and vector of Axes
      */
-    std::pair<Figure, std::vector<Axes>> subplots(
-        long nrows, 
-        long ncols, 
-        std::vector<long> &figsize){
+    std::pair<Figure, std::vector<Axes>> subplots(const SubplotsConfig& config = {}){
         
         
         PyPtr args(PyTuple_New(2));
-        PyTuple_SetItem(args.get(), 0, PyLong_FromLong(nrows));
-        PyTuple_SetItem(args.get(), 1, PyLong_FromLong(ncols));
+        PyTuple_SetItem(args.get(), 0, PyLong_FromLong(config.nrows));
+        PyTuple_SetItem(args.get(), 1, PyLong_FromLong(config.ncols));
 
         PyPtr kwargs(PyDict_New());
         PyPtr fs(PyTuple_New(2));
-        PyTuple_SetItem(fs.get(), 0, PyLong_FromLong(figsize[0]));
-        PyTuple_SetItem(fs.get(), 1, PyLong_FromLong(figsize[1]));
+        PyTuple_SetItem(fs.get(), 0, PyLong_FromLong(config.figsize[0]));
+        PyTuple_SetItem(fs.get(), 1, PyLong_FromLong(config.figsize[1]));
         PyDict_SetItemString(kwargs.get(), "figsize", fs.get());
         PyDict_SetItemString(kwargs.get(), "squeeze", Py_False);
         
@@ -149,7 +142,8 @@ public:
         if (!subplots) throw std::runtime_error("Failed to get subplots function");
 
         PyPtr res(PyObject_Call(subplots.get(), args.get(), kwargs.get()));
-        if(!res) throw std::runtime_error("Call to subplots() failed.");
+        checkResult(res.get(), "subplots");
+            
 
 
         PyObject* fig  = PyTuple_GetItem(res.get(), 0);
@@ -177,6 +171,9 @@ public:
 
         return std::make_pair(Figure(fig), std::move(ax_list));
     }
+
+    
+
 
 
     /**
@@ -211,11 +208,10 @@ public:
         if (!subplot2grid) throw std::runtime_error("Failed to get subplot2grid function");
 
         PyPtr res(PyObject_Call(subplot2grid.get(), args.get(), kwargs.get()));
-        if (!res) throw std::runtime_error("Call to subplot2grid() failed.");
+        checkResult(res.get(), "subplot2grid");
 
         return Axes(res.get());
     }
-
 
 
 
@@ -231,7 +227,7 @@ public:
         if (!tight_layout) throw std::runtime_error("Failed to get tight_layout function"); 
 
         PyPtr res(PyObject_Call(tight_layout.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("Call to tight_layout() failed.");
+        checkResult(res.get(), "tight_layout");
     }
 
 
@@ -244,7 +240,9 @@ public:
         if (!clf) throw std::runtime_error("Failed to get clf function");
 
         PyPtr res(PyObject_Call(clf.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("Call to clf() failed.");
+        checkResult(res.get(), "clf");
+        
+        
 
     }
 
@@ -257,7 +255,7 @@ public:
         if (!cla) throw std::runtime_error("failed to get cla function");
 
         PyPtr res(PyObject_Call(cla.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to cla() failed.");
+        checkResult(res.get(), "cla");
 
     }
 
@@ -274,7 +272,7 @@ public:
         if (!close) throw std::runtime_error("failed to get close function");
 
         PyPtr res(PyObject_Call(close.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to close() failed.");
+        checkResult(res.get(), "close");
 
     }
 
@@ -293,7 +291,8 @@ public:
         if (!close) throw std::runtime_error("failed to get close function");
 
         PyPtr res(PyObject_Call(close.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to close() failed.");
+        checkResult(res.get(), "close");
+       
 
     }
 
@@ -310,7 +309,8 @@ public:
         if (!close) throw std::runtime_error("failed to get close function");
 
         PyPtr res(PyObject_Call(close.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to close() failed.");
+        checkResult(res.get(), "close");
+        
     }
         
 
@@ -323,7 +323,7 @@ public:
         if (!gca) throw std::runtime_error("failed to get gca function");
 
         PyPtr res(PyObject_Call(gca.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to gca() failed.");
+        checkResult(res.get(), "gca");
 
     }
 
@@ -336,14 +336,17 @@ public:
         if (!gcf) throw std::runtime_error("failed to get gcf function");
 
         PyPtr res(PyObject_Call(gcf.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to gcf() failed.");
+        checkResult(res.get(), "gcf");
 
     }
 
 
 
 
-
+    /**
+     * @brief Sets the current axes.
+     * @param ax axes object
+     */
     void sca(const Axes& ax) {
 
         PyPtr args(PyTuple_New(1));
@@ -353,7 +356,7 @@ public:
         if (!sca) throw std::runtime_error("failed to get sca function");
 
         PyPtr res(PyObject_Call(sca.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to sca() failed.");
+        checkResult(res.get(), "sca");
 
     }
 
@@ -373,7 +376,7 @@ public:
         if (!title) throw std::runtime_error("failed to get title function");
         
         PyPtr res(PyObject_Call(title.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to title() failed.");
+        checkResult(res.get(), "title");
         
     }
 
@@ -387,17 +390,17 @@ public:
 
         if (flag) {
             PyPtr grid(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "grid"));
-            if (!grid) throw std::runtime_error("failed to get grid function");
+            if (!grid) checkResult(grid.get(), "grid");
             
             PyPtr res(PyObject_Call(grid.get(), args.get(), nullptr));
-            if (!res) throw std::runtime_error("call to grid() failed.");
+            if (!res) checkResult(grid.get(), "grid");
         }
         else {
             PyPtr grid(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "grid"));
-            if (!grid) throw std::runtime_error("failed to get grid function");
+            if (!grid) checkResult(grid.get(), "grid");
             
             PyPtr res(PyObject_Call(grid.get(), args.get(), nullptr));
-            if (!res) throw std::runtime_error("call to grid() failed.");
+            checkResult(grid.get(), "grid");
         }
 
     }
@@ -413,7 +416,7 @@ public:
         if (!axes) throw std::runtime_error("Failed to get axes function");
         
         PyPtr res(PyObject_Call(axes.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to axes() failed.");
+        checkResult(res.get(), "axes");
     }
 
 
@@ -430,7 +433,7 @@ public:
         if (!axes) throw std::runtime_error("Failed to get axes function");
         
         PyPtr res(PyObject_Call(axes.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to axes() failed.");
+        checkResult(res.get(), "axes");
     }
 
     /**
@@ -443,10 +446,13 @@ public:
         PyTuple_SetItem(args.get(), 0, ax.get_axes());
         
         PyPtr delaxes(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "delaxes"));
-        if (!delaxes) throw std::runtime_error("Failed to get delaxes function");
+        if (!delaxes) {
+            PyErr_Print();
+            throw std::runtime_error("Failed to get delaxes function");
+        } 
         
         PyPtr res(PyObject_Call(delaxes.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to delaxes() failed.");
+        checkResult(res.get(), "delaxes");
     }
 
     /**
@@ -462,7 +468,7 @@ public:
         if (!fignum_exists) throw std::runtime_error("Failed to get fignum_exists function");
         
         PyPtr res(PyObject_Call(fignum_exists.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to fignum_exists() failed.");
+        checkResult(res.get(), "fignum_exists");
     }
 
 
@@ -489,7 +495,7 @@ public:
         if (!figure) throw std::runtime_error("Failed to get figure function");
 
         PyPtr res(PyObject_Call(figure.get(), args.get(), kwargs.get()));
-        if (!res) throw std::runtime_error("Call to figure() failed");
+        checkResult(res.get(), "figure");
 
         return Figure(res.get());
     }
@@ -507,7 +513,7 @@ public:
         if (!get_figlabels) throw std::runtime_error("failed to get get_figlabels function");
 
         PyPtr res(PyObject_Call(get_figlabels.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to get_figlabels() failed.");
+        checkResult(res.get(), "get_figlabels");
         
         std::vector<std::string> labels;
 
@@ -536,7 +542,7 @@ public:
         if (!get_fignums) throw std::runtime_error("failed to get get_fignums function");
 
         PyPtr res(PyObject_Call(get_fignums.get(), args.get(), nullptr));
-        if (!res) throw std::runtime_error("call to get_fignums() failed.");
+        checkResult(res.get(), "get_fignums");
 
         std::vector<int> nums;
         

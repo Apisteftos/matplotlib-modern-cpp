@@ -21,12 +21,12 @@ int main() {
 
     
     plt.subplot(1, 2, 1);
-    plt.plot(x, sinY, "b");
+    plt.plot({x, sinY, "b"});
     plt.title("Sine");
     plt.grid(true);
 
     plt.subplot(1, 2, 2);
-    plt.plot(x, cosY, "r");
+    plt.plot({x, cosY, "r"});
     plt.title("Cosine");
     plt.grid(true);
 

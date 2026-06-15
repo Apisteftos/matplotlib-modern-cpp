@@ -18,29 +18,127 @@
 namespace matplotlibcpp {
 
 
+    // =============================================================================
+    // Enums
+    // =============================================================================
+
+    // TickParamsConfig
+    enum class Axis {
+        X,
+        Y,
+        Both
+    };
+
+    // TickParamsConfig
+    enum class Which {
+        Major,
+        Minor,
+        Both
+    };
+
+    // TickParamsConfig
+    enum class Direction {
+        In,
+        Out,
+        InOut
+    };
+
+
+    // XLabelConfig - YLabelConfig
+    enum class Loc {
+        BOTTOM,
+        TOP,
+        CENTER
+    };
+
+    
+    // =============================================================================
+    // Free functions converting enums to strings
+    // =============================================================================
+
+    /**
+    * @brief Converts Axis enum to string
+    * @param a default is Axis::Both
+    */
+    inline const char* toString(Axis a) {
+        switch (a) {
+            case Axis::X:    return "x";
+            case Axis::Y:    return "y";
+            case Axis::Both: return "both";
+        }
+        return "both";
+    }
+
+    /**
+    * @brief Converts Which enum to string
+    * @param w default is Which::Major
+    */
+    inline const char* toString(Which w) {
+        switch (w) {
+            case Which::Major: return "major";
+            case Which::Minor: return "minor";
+            case Which::Both:  return "both";
+        }
+        return "major";
+    }
+
+    /**
+     * @brief Converts Direction enum to string
+     * @param d default is Direction::In
+     */
+    inline const char* toString(Direction d) {
+        switch (d) {
+            case Direction::In:     return "in";
+            case Direction::Out:    return "out";
+            case Direction::InOut:  return "inout";
+        }
+
+        return "in";
+    }
+
+    /**
+     * @brief Converts Loc enum to string
+     * @param l default is Loc::BOTTOM
+     */
+    inline const char* toString(Loc l) {
+        switch (l) {
+            case Loc::BOTTOM: return "bottom";
+            case Loc::TOP:    return "top";
+            case Loc::CENTER: return "center";
+        }
+        return "center";
+    }
+
+
 
     // =============================================================================
     // Optional types
     // =============================================================================
 
-
+    // errorbar parameters
     using ErrorValue = std::variant<
         double,
         std::vector<double>, 
         std::vector<std::vector<double>>
     >; 
 
+    // tick_params parameters
+    using LabelsizeValue = std::variant<
+        double,
+        std::string
+    >;
+
+
 
     // =============================================================================
     // Multiple data types
     // =============================================================================
 
+    // Errorbar parameters
     using DataValue = std::variant<
         double,
         std::vector<double>
     >;
-
-
 
     // =============================================================================
     // Structs for matplotlib.pyplot.plot() 
@@ -109,6 +207,66 @@ namespace matplotlibcpp {
         int colspan = 1;
         Figure* fig = nullptr;
         ;
+    };
+
+
+    struct XLabelConfig {
+        std::string xlabel = toString(Loc::CENTER);
+        double labelpad = 4.0;
+        std::string color;
+    };
+
+
+    struct YLabelConfig {
+        std::string ylabel = toString(Loc::CENTER);
+        double labelpad = 4.0;
+        std::string color;
+    };
+
+    
+  
+    struct SubplotsConfig {
+        long nrows = 1;
+        long ncols = 1;
+        std::vector<long> figsize = {10, 10};
+    };
+
+
+    struct TickParamsConfig {
+        std::string axis = toString(Axis::Both);
+        std::string which = toString(Which::Both);
+        bool reset = false;
+
+        //optional
+        std::optional<std::string> direction = toString(Direction::In);
+        std::optional<double> length; 
+        std::optional<double> width;
+        std::optional<std::string> color;
+        std::optional<double> pad;
+        std::optional<LabelsizeValue> labelsize;
+        std::optional<std::string> labelcolor;
+        std::optional<std::string> labelfontfamily;
+        std::optional<std::string> colors;
+        std::optional<double> zorder; 
+        std::optional<bool> bottom;
+        std::optional<bool> top;
+        std::optional<bool> left;
+        std::optional<bool> right;
+        std::optional<bool> labelbottom;
+        std::optional<bool> labeltop;
+        std::optional<bool> labelleft;
+        std::optional<bool> labelright;
+        std::optional<double> labelrotation; 
+        std::optional<std::string> grid_color; 
+        std::optional<double> grid_alpha;
+        std::optional<double> grid_linewidth;
+        std::optional<std::string> grid_linestyle;
+    
+    };
+
+
+    struct subplotMosaicConfig {
+    
     };
 
 
