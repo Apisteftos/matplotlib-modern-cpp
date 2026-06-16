@@ -9,7 +9,7 @@
 
 #include "Interpreter.h"
 #include "PyPtr.h"
-#include "configs.h"
+#include "Configs.h"
 
 #include <string>
 #include <vector>

@@ -9,9 +9,9 @@
 
 #include "Interpreter.h"
 #include "PyPtr.h"
-#include "numpy_utils.h"
-#include "configs.h"
-#include "helper.h"
+#include "NumpyUtils.h"
+#include "Configs.h"
+#include "Helper.h"
 
 
 namespace matplotlibcpp {

@@ -8,10 +8,10 @@
 
 #include "Interpreter.h"
 #include "PyPtr.h"
-#include "numpy_utils.h"
-#include "configs.h"
-#include "helper.h"
-#include "detail.h"
+#include "NumpyUtils.h"
+#include "Configs.h"
+#include "Helper.h"
+#include "Detail.h"
 
 #include <string>
 #include <vector>

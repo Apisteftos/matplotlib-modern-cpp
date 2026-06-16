@@ -11,9 +11,9 @@
 #include "Axes.h"
 #include "AxesGrid.h"
 #include "Figure.h"
-#include "numpy_utils.h"
-#include "configs.h"
-#include "helper.h"
+#include "NumpyUtils.h"
+#include "Configs.h"
+#include "Helper.h"
 
 #include <map>
 
@@ -509,7 +509,7 @@ public:
         
         return labels;
     }
-    
+
 
     /**
      * @brief Returns the figure numbers.
