@@ -25,14 +25,14 @@ int main() {
     auto& ax1 =   axes[0];
     
 
-    ax1.plot({x, sinY, "b"});
+    ax1.plot({.x = x, .y = sinY, .fmt = "b"});
     ax1.set_xlabel({.xlabel = "X"});
     ax1.set_ylabel({.ylabel = "Sine", .color = "b"});
     ax1.tick_params({.axis="y", .labelcolor = "b"});
   
 
     auto ax2 = ax1.twinx();
-    ax2.plot({x, expY, "r"});
+    ax2.plot({.x = x, .y = expY, .fmt = "r"});
     ax2.set_ylabel({.ylabel = "Exponential", .color = "r"});
     ax2.tick_params({.axis="y", .labelcolor = "r"});  
 

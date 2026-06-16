@@ -13,6 +13,7 @@
 
 #include <string>
 #include <vector>
+#include <cstring>
 
 namespace matplotlibcpp {
 
@@ -70,6 +71,10 @@ namespace matplotlibcpp {
             const_cast<T*>(v.data()));
 
         if (!array) throw std::runtime_error("Failed to create numpy array");
+
+        std::memcpy(PyArray_DATA(reinterpret_cast<PyArrayObject*>(array)),
+                v.data(),
+                v.size() * sizeof(T));
 
         return array;
     }

@@ -37,4 +37,5 @@ add_plot_executable(get_fignums get_fignums_example.cpp)
 add_plot_executable(subplot2grid subplot2grid_example.cpp)
 add_plot_executable(twinx twinx_example.cpp)
 add_plot_executable(twiny twiny_example.cpp)
+add_plot_executable(step step_example.cpp)
 

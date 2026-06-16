@@ -22,7 +22,7 @@ int main() {
     auto& ax1 =   axes[0];
 
 
-    ax1.plot({time_sec, y, "b"});
+    ax1.plot({.x =time_sec, .y = y, .fmt = "b"});
     ax1.set_xlabel({.xlabel = "Time (seconds)", .color = "b"});
     ax1.tick_params({.axis="x", .labelcolor = "b"});
   

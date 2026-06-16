@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-
+using Vec = std::vector<double>;
 
 int main() {
 
@@ -14,13 +14,13 @@ int main() {
     auto [fig, axes] = plt.subplots({1, 2, figsize});
 
     plt.sca(axes[0]);
-    axes[0].plot({{1, 2, 3, 4, 5}, {1, 4, 9, 16, 25}});
+    axes[0].plot({Vec{1, 2, 3, 4, 5}, Vec{1, 4, 9, 16, 25}});
     axes[0].set_title("Line");
     axes[0].grid(true);
 
 
     plt.sca(axes[1]);
-    axes[1].plot({{1, 2, 3, 4, 5}, {1, 4, 9, 16, 25}});
+    axes[1].plot({Vec{1, 2, 3, 4, 5}, Vec{1, 4, 9, 16, 25}});
     axes[1].set_title("Bar");
     axes[1].grid(true);
 

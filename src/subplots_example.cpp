@@ -27,21 +27,21 @@ int main() {
     auto [fig, axes] = plt.subplots({2, 2, figsize});   
     
     
-    axes[0].plot({x, sinY, "b"});
+    axes[0].plot({.x = x, .y = sinY, .fmt = "b"});
     axes[0].set_title("Sine");
     axes[0].grid(true);
     
 
-    axes[1].plot({x, cosY, "r"});
+    axes[1].plot({.x = x, .y = cosY, .fmt = "r"});
     axes[1].set_title("Cosine");
     axes[1].grid(true);
 
 
-    axes[2].plot({x, tanY, "g"});
+    axes[2].plot({.x = x, .y = tanY, .fmt = "g"});
     axes[2].set_title("Tangent");
     axes[2].grid(true);
 
-    axes[3].plot({x, acosY, "m"});
+    axes[3].plot({.x = x, .y = acosY, .fmt = "m"});
     axes[3].set_title("Arccosine");
     axes[3].grid(true);
 

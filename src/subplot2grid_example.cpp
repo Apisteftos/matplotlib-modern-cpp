@@ -35,28 +35,28 @@ int main() {
 
     Figure fig = plt.figure({.figsize = {10, 8}});
     auto ax1 = plt.subplot2grid({.shape = {3, 3}, .loc = {0, 0}, .colspan = 3});
-    ax1.plot({x, sinY, "b"});
+    ax1.plot({.x = x, .y = sinY, .fmt = "b"});
     ax1.set_title("Sine - full width");
 
   
     auto ax2 = plt.subplot2grid({.shape = {3, 3}, .loc = {1, 0}, .colspan = 2});
-    ax2.plot({x, cosY, "r"});
+    ax2.plot({.x = x, .y = cosY, .fmt = "r"});
     ax2.set_title("Cosine - 2 cols");
 
 
     auto ax3 = plt.subplot2grid({.shape = {3, 3}, .loc = {1, 2}, .rowspan = 2});
-    ax3.plot({x, tanY, "g"});
+    ax3.plot({.x = x, .y = tanY, .fmt = "g"});
     ax3.set_title("Tan - 2 rows");
     ax3.set_ylim({-5, 5});
 
     
     auto ax4 = plt.subplot2grid({.shape = {3, 3}, .loc = {2, 0}});
-    ax4.plot({x, sinCos, "m"});
+    ax4.plot({.x = x, .y = sinCos, .fmt = "m"});
     ax4.set_title("sin*cos");
 
 
     auto ax5 = plt.subplot2grid({.shape = {3, 3}, .loc = {2, 1}});
-    ax5.plot({x, sinY2, "orange"});
+    ax5.plot({.x = x, .y = sinY2, .fmt = "orange"});
     ax5.set_title("sin²");
 
     fig.suptitle("subplot2grid example");

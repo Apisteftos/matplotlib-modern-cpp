@@ -9,6 +9,7 @@
 
 #include "Interpreter.h"
 #include "Axes.h"
+#include "AxesGrid.h"
 #include "Figure.h"
 #include "numpy_utils.h"
 #include "configs.h"
@@ -69,30 +70,12 @@ public:
 
 
     /**
-     * @brief Plots a line graph.
-     * @param x x coordinates
-     * @param y y coordinates
-     * @param format format string
-     */
+    * @brief Plots a line graph.
+    * @param config plot configuration
+    * @throws std::runtime_error if plot fails
+    */
     void plot(const PlotConfig& config) {
-
-
-        PyPtr args(PyTuple_New(3));
-        PyPtr kwargs(PyDict_New());
-
-        PyTuple_SetItem(args.get(), 0, toNumpy(config.x));
-        PyTuple_SetItem(args.get(), 1, toNumpy(config.y));
-        PyTuple_SetItem(args.get(), 2, PyUnicode_FromString(config.fmt.c_str()));
-        
-        PyDict_SetItemString(kwargs.get(), "format", PyUnicode_FromString(config.fmt.c_str()));
-        
-
-        PyPtr plot(PyObject_GetAttrString(
-            Interpreter::getInstance().getPyplot(), "plot"));
-        if (!plot) checkResult(plot.get(), "plot");
-
-        PyPtr res(PyObject_Call(plot.get(), args.get(), nullptr));
-        checkResult(res.get(), "plot");
+        detail::plotImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
     /**
@@ -110,7 +93,7 @@ public:
         PyTuple_SetItem(args.get(), 2, PyLong_FromLong(plot_number));
 
         PyPtr subplot(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "subplot"));
-        if (!subplot) throw std::runtime_error("failed to get subplot function");
+        checkAttr(subplot.get(), "subplot");
         
         PyPtr res(PyObject_Call(subplot.get(), args.get(), nullptr));
         checkResult(res.get(), "subplot");
@@ -123,7 +106,7 @@ public:
      * @param config subplot config
      * @return pair of Figure and vector of Axes
      */
-    std::pair<Figure, std::vector<Axes>> subplots(const SubplotsConfig& config = {}){
+    std::pair<Figure, AxesGrid> subplots(const SubplotsConfig& config = {}){
         
         
         PyPtr args(PyTuple_New(2));
@@ -139,7 +122,7 @@ public:
         
         PyPtr subplots(PyObject_GetAttrString(
         Interpreter::getInstance().getPyplot(), "subplots"));
-        if (!subplots) throw std::runtime_error("Failed to get subplots function");
+        checkAttr(subplots.get(), "subplots");
 
         PyPtr res(PyObject_Call(subplots.get(), args.get(), kwargs.get()));
         checkResult(res.get(), "subplots");
@@ -169,7 +152,7 @@ public:
             ax_list.emplace_back(axes);
         }
 
-        return std::make_pair(Figure(fig), std::move(ax_list));
+        return std::make_pair(Figure(fig), AxesGrid(std::move(ax_list), config.nrows, config.ncols));
     }
 
     
@@ -205,7 +188,7 @@ public:
 
 
         PyPtr subplot2grid(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "subplot2grid"));
-        if (!subplot2grid) throw std::runtime_error("Failed to get subplot2grid function");
+        checkAttr(subplot2grid.get(), "subplot2grid");
 
         PyPtr res(PyObject_Call(subplot2grid.get(), args.get(), kwargs.get()));
         checkResult(res.get(), "subplot2grid");
@@ -224,7 +207,7 @@ public:
 
         PyPtr tight_layout(PyObject_GetAttrString(
             Interpreter::getInstance().getPyplot(), "tight_layout"));
-        if (!tight_layout) throw std::runtime_error("Failed to get tight_layout function"); 
+        checkAttr(tight_layout.get(), "tight_layout");
 
         PyPtr res(PyObject_Call(tight_layout.get(), args.get(), nullptr));
         checkResult(res.get(), "tight_layout");
@@ -237,7 +220,7 @@ public:
         PyPtr args(PyTuple_New(0));
 
         PyPtr clf(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "clf"));
-        if (!clf) throw std::runtime_error("Failed to get clf function");
+        checkAttr(clf.get(), "clf");
 
         PyPtr res(PyObject_Call(clf.get(), args.get(), nullptr));
         checkResult(res.get(), "clf");
@@ -269,7 +252,7 @@ public:
         PyPtr args(PyTuple_New(0));
 
         PyPtr close(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "close"));
-        if (!close) throw std::runtime_error("failed to get close function");
+        checkAttr(close.get(), "close");
 
         PyPtr res(PyObject_Call(close.get(), args.get(), nullptr));
         checkResult(res.get(), "close");
@@ -320,7 +303,7 @@ public:
         PyPtr args(PyTuple_New(0));
 
         PyPtr gca(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "gca"));
-        if (!gca) throw std::runtime_error("failed to get gca function");
+        checkAttr(gca.get(), "gca");
 
         PyPtr res(PyObject_Call(gca.get(), args.get(), nullptr));
         checkResult(res.get(), "gca");
@@ -333,7 +316,7 @@ public:
         PyPtr args(PyTuple_New(0));
 
         PyPtr gcf(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "gcf"));
-        if (!gcf) throw std::runtime_error("failed to get gcf function");
+        checkAttr(gcf.get(), "gcf");
 
         PyPtr res(PyObject_Call(gcf.get(), args.get(), nullptr));
         checkResult(res.get(), "gcf");
@@ -353,7 +336,7 @@ public:
         PyTuple_SetItem(args.get(), 0, ax.get_axes());
 
         PyPtr sca(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "sca"));
-        if (!sca) throw std::runtime_error("failed to get sca function");
+        checkAttr(sca.get(), "sca");
 
         PyPtr res(PyObject_Call(sca.get(), args.get(), nullptr));
         checkResult(res.get(), "sca");
@@ -373,7 +356,7 @@ public:
         PyTuple_SetItem(args.get(), 0, PyUnicode_FromString(tlt.c_str()));
 
         PyPtr title(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "title"));
-        if (!title) throw std::runtime_error("failed to get title function");
+        checkAttr(title.get(), "title");
         
         PyPtr res(PyObject_Call(title.get(), args.get(), nullptr));
         checkResult(res.get(), "title");
@@ -390,14 +373,14 @@ public:
 
         if (flag) {
             PyPtr grid(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "grid"));
-            if (!grid) checkResult(grid.get(), "grid");
+            checkAttr(grid.get(), "grid");
             
             PyPtr res(PyObject_Call(grid.get(), args.get(), nullptr));
-            if (!res) checkResult(grid.get(), "grid");
+            checkResult(grid.get(), "grid");
         }
         else {
             PyPtr grid(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "grid"));
-            if (!grid) checkResult(grid.get(), "grid");
+            checkAttr(grid.get(), "grid");
             
             PyPtr res(PyObject_Call(grid.get(), args.get(), nullptr));
             checkResult(grid.get(), "grid");
@@ -413,7 +396,7 @@ public:
         PyPtr args(PyTuple_New(0));
         
         PyPtr axes(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "axes"));
-        if (!axes) throw std::runtime_error("Failed to get axes function");
+        checkAttr(axes.get(), "axes");
         
         PyPtr res(PyObject_Call(axes.get(), args.get(), nullptr));
         checkResult(res.get(), "axes");
@@ -430,7 +413,7 @@ public:
         PyTuple_SetItem(args.get(), 0, ax.get_axes());
         
         PyPtr axes(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "axes"));
-        if (!axes) throw std::runtime_error("Failed to get axes function");
+        checkAttr(axes.get(), "axes");
         
         PyPtr res(PyObject_Call(axes.get(), args.get(), nullptr));
         checkResult(res.get(), "axes");
@@ -446,10 +429,7 @@ public:
         PyTuple_SetItem(args.get(), 0, ax.get_axes());
         
         PyPtr delaxes(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "delaxes"));
-        if (!delaxes) {
-            PyErr_Print();
-            throw std::runtime_error("Failed to get delaxes function");
-        } 
+        checkAttr(delaxes.get(), "delaxes");
         
         PyPtr res(PyObject_Call(delaxes.get(), args.get(), nullptr));
         checkResult(res.get(), "delaxes");
@@ -465,7 +445,7 @@ public:
         PyTuple_SetItem(args.get(), 0, PyUnicode_FromString(fig.c_str()));
         
         PyPtr fignum_exists(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "fignum_exists"));
-        if (!fignum_exists) throw std::runtime_error("Failed to get fignum_exists function");
+        checkAttr(fignum_exists.get(), "fignum_exists");
         
         PyPtr res(PyObject_Call(fignum_exists.get(), args.get(), nullptr));
         checkResult(res.get(), "fignum_exists");
@@ -492,7 +472,7 @@ public:
         PyDict_SetItemString(kwargs.get(), "label", PyUnicode_FromString(config.label.c_str()));
 
         PyPtr figure(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "figure"));
-        if (!figure) throw std::runtime_error("Failed to get figure function");
+        checkAttr(figure.get(), "figure");
 
         PyPtr res(PyObject_Call(figure.get(), args.get(), kwargs.get()));
         checkResult(res.get(), "figure");
@@ -510,7 +490,7 @@ public:
         PyPtr args(PyTuple_New(0));
 
         PyPtr get_figlabels(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "get_figlabels"));
-        if (!get_figlabels) throw std::runtime_error("failed to get get_figlabels function");
+        checkAttr(get_figlabels.get(), "get_figlabels");
 
         PyPtr res(PyObject_Call(get_figlabels.get(), args.get(), nullptr));
         checkResult(res.get(), "get_figlabels");
@@ -529,6 +509,7 @@ public:
         
         return labels;
     }
+    
 
     /**
      * @brief Returns the figure numbers.
@@ -539,7 +520,7 @@ public:
         PyPtr args(PyTuple_New(0));
 
         PyPtr get_fignums(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "get_fignums"));
-        if (!get_fignums) throw std::runtime_error("failed to get get_fignums function");
+        checkAttr(get_fignums.get(), "get_fignums");
 
         PyPtr res(PyObject_Call(get_fignums.get(), args.get(), nullptr));
         checkResult(res.get(), "get_fignums");
@@ -558,6 +539,26 @@ public:
         
         
         return nums;
+    }
+
+
+    /**
+    * @brief Plots a step graph.
+    * @param config step configuration
+    * @throws std::runtime_error if step fails
+    */
+    void step(const StepConfig& config) {
+        detail::stepImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+
+    /**
+    * @brief Configures the tick parameters.
+    * @param config tick parameters configuration
+    * @throws std::runtime_error if tick_params fails
+    */
+    void tick_params(const TickParamsConfig& config) {
+        detail::tickParamsImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
 

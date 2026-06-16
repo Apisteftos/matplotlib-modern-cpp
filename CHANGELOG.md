@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.6.0] - 16/06/2026
+
+### Added
+
+- `detail.h` — implementation of `plotImpl()`, `stepImpl()`, `tickParamsImpl()`
+-  step example in c++ and python
+- AxesGrid class — flat operator[](long i) for 1D indexing of subplots and 2D indexing of subplots with operator[](long row, long col)
+
+### Changed
+
+- duplicated  `plot()`, `step()`, `tickParams()` moved to `detail.h`
+- StepConfig struct updated with full optional kwargs
+
+### Fixed
+
+- toNumpy() — switched from PyArray_SimpleNewFromData (borrowed pointer, dangling after vector goes out of scope) to PyArray_SimpleNew + memcpy (copies data into numpy's own buffer)
+- PyPtr + PyTuple_SetItem double-free bug — numpy arrays must be passed directly to PyTuple_SetItem, never wrapped in PyPtr first (tuple steals the reference)
+
 
 ## [0.5.0] - 15/06/2026
 

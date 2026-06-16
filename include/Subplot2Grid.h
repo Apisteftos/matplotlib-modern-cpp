@@ -10,6 +10,8 @@
 #include "PyPtr.h"
 #include "numpy_utils.h"
 #include "configs.h"
+#include "helper.h"
+#include "detail.h"
 
 #include <string>
 #include <vector>
@@ -29,22 +31,13 @@ namespace matplotlibcpp {
         PyObject* get_subplot2grid() const { return s2g_.get(); }
 
 
+        /**
+        * @brief Plots a line graph.
+        * @param config plot configuration
+        * @throws std::runtime_error if plot fails
+        */
         void plot(const PlotConfig& config) {
-
-            PyPtr xarray(toNumpy(config.x));
-            PyPtr yarray(toNumpy(config.y));
-            PyPtr fmt(PyUnicode_FromString(config.fmt.c_str()));
-
-            PyPtr args(PyTuple_New(3));
-            PyTuple_SetItem(args.get(), 0, xarray.get());
-            PyTuple_SetItem(args.get(), 1, yarray.get());
-            PyTuple_SetItem(args.get(), 2, fmt.get());
-            
-            PyPtr plot(PyObject_GetAttrString(s2g_.get(), "plot"));
-            if (!plot) throw std::runtime_error("Failed to get plot function");
-            
-            PyPtr res(PyObject_Call(plot.get(), args.get(), nullptr));
-            if (!res) throw std::runtime_error("Call to plot() failed.");
+            detail::plotImpl(s2g_.get(), config);
         }
 
         void grid(bool flag = true) {

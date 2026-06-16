@@ -51,6 +51,13 @@ namespace matplotlibcpp {
         CENTER
     };
 
+    // StepConfig
+    enum class Where{
+        PRE,
+        POST,
+        MID
+    };
+
     
     // =============================================================================
     // Free functions converting enums to strings
@@ -110,6 +117,20 @@ namespace matplotlibcpp {
     }
 
 
+    /**
+     * @brief Converts Where enum to string
+     * @param w default is Where::PRE
+     */
+    inline const char* toString(Where w) {
+        switch (w) {
+            case Where::PRE: return "pre";
+            case Where::POST: return "post";
+            case Where::MID: return "mid";
+        }
+        return "pre";
+    }
+
+
 
     // =============================================================================
     // Optional types
@@ -162,9 +183,26 @@ namespace matplotlibcpp {
 
     struct PlotConfig {
         
-        std::vector<double> x; 
-        std::vector<double> y; 
-        std::string fmt = "b";
+        std::optional<DataValue> x = std::nullopt;
+        DataValue y; 
+        bool scalex = true;
+        bool scaley = true;
+
+
+        // optional
+        std::optional<std::string> fmt = std::nullopt;
+        std::optional<std::string> color = std::nullopt;
+        std::optional<double> alpha = std::nullopt;
+        std::optional<double> linewidth = std::nullopt;
+        std::optional<std::string> label = std::nullopt;
+        std::optional<std::string> marker = std::nullopt;
+        std::optional<double> markersize = std::nullopt;
+        std::optional<std::string> linestyle = std::nullopt;
+        std::optional<std::string> markerfacecolor = std::nullopt;   
+        std::optional<std::string> markeredgecolor = std::nullopt;
+        std::optional<double> markeredgewidth = std::nullopt;
+        std::optional<std::string> drawstyle = std::nullopt;
+        std::optional<std::string> fillstyle = std::nullopt;
 
     };
 
@@ -195,7 +233,17 @@ namespace matplotlibcpp {
     struct StepConfig {
         std::vector<double> x;
         std::vector<double> y;
-        std::string label = "";
+
+        // optional
+        std::optional<std::string> fmt = std::nullopt;
+        std::optional<std::string> where = toString(Where::PRE);
+        std::optional<std::string> label = std::nullopt;
+        std::optional<std::string> color = std::nullopt;
+        std::optional<double> alpha = std::nullopt;
+        std::optional<double> linewidth = std::nullopt;
+        std::optional<std::string> marker = std::nullopt;
+        std::optional<double> markersize = std::nullopt;
+        std::optional<std::string> linestyle = std::nullopt;
     };
 
 
@@ -206,7 +254,7 @@ namespace matplotlibcpp {
         int rowspan = 1;
         int colspan = 1;
         Figure* fig = nullptr;
-        ;
+        
     };
 
 
@@ -282,6 +330,7 @@ namespace matplotlibcpp {
         std::optional<double> ymin = std::nullopt;
         std::optional<double> ymax = std::nullopt;
     };
+
 
 
     struct subplotMosaicConfig {

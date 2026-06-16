@@ -13,6 +13,7 @@
 #include "configs.h"
 #include "helper.h"
 #include "pythonrun.h"
+#include "detail.h"
 
 #include <memory>
 #include <string>
@@ -67,13 +68,13 @@ public:
     }
 
 
+    /**
+    * @brief Plots a line graph.
+    * @param config plot configuration
+    * @throws std::runtime_error if plot fails
+    */
     void plot(const PlotConfig& config) {
-    
-        PyPtr xarray(toNumpy(config.x));
-        PyPtr yarray(toNumpy(config.y));
-        
-        PyObject_CallMethod(ax_.get(), "plot",      "OOs", xarray.get(), yarray.get(), config.fmt.c_str());
-
+        detail::plotImpl(ax_.get(), config);
     }
 
     void grid(bool flag = true){
@@ -366,117 +367,24 @@ public:
     }
 
 
+    /**
+    * @brief Configures the tick parameters.
+    * @param config tick parameters configuration
+    * @throws std::runtime_error if tick_params fails
+    */
     void tick_params(const TickParamsConfig& config) {
-        
+        detail::tickParamsImpl(ax_.get(), config);
+    }
 
 
-        PyPtr args(PyTuple_New(0));
-        PyPtr kwargs(PyDict_New());
 
-        PyDict_SetItemString(kwargs.get(), "axis",
-            PyUnicode_FromString(config.axis.c_str()));
-        PyDict_SetItemString(kwargs.get(), "which",
-            PyUnicode_FromString(config.which.c_str()));
-        PyDict_SetItemString(kwargs.get(), "reset",
-            config.reset ? Py_True : Py_False);
-
-        if (config.direction)
-            PyDict_SetItemString(kwargs.get(), "direction",
-                PyUnicode_FromString(config.direction->c_str()));
-
-        if (config.length)
-            PyDict_SetItemString(kwargs.get(), "length",
-                PyFloat_FromDouble(*config.length));
-
-        if (config.width)
-            PyDict_SetItemString(kwargs.get(), "width",
-                PyFloat_FromDouble(*config.width));
-
-        if (config.color)
-            PyDict_SetItemString(kwargs.get(), "color",
-                PyUnicode_FromString(config.color->c_str()));
-
-        if (config.pad)
-            PyDict_SetItemString(kwargs.get(), "pad",
-                PyFloat_FromDouble(*config.pad));
-
-        if (config.labelsize.has_value()) {
-            std::visit([&](const auto& val) {
-                using T = std::decay_t<decltype(val)>;
-                if constexpr (std::is_same_v<T, double>) {
-                    PyDict_SetItemString(kwargs.get(), "labelsize",
-                        PyFloat_FromDouble(val));
-                } else { 
-                    PyDict_SetItemString(kwargs.get(), "labelsize",
-                        PyUnicode_FromString(val.c_str()));
-                }
-            }, config.labelsize.value());
-        }
-
-        if (config.labelcolor)
-            PyDict_SetItemString(kwargs.get(), "labelcolor",
-                PyUnicode_FromString(config.labelcolor->c_str()));
-
-        if (config.colors)
-            PyDict_SetItemString(kwargs.get(), "colors",
-                PyUnicode_FromString(config.colors->c_str()));
-
-        if (config.labelrotation)
-            PyDict_SetItemString(kwargs.get(), "labelrotation",
-                PyFloat_FromDouble(*config.labelrotation));
-
-        if (config.bottom)
-            PyDict_SetItemString(kwargs.get(), "bottom",
-                *config.bottom ? Py_True : Py_False);
-        if (config.top)
-            PyDict_SetItemString(kwargs.get(), "top",
-                *config.top ? Py_True : Py_False);
-        if (config.left)
-            PyDict_SetItemString(kwargs.get(), "left",
-                *config.left ? Py_True : Py_False);
-        if (config.right)
-            PyDict_SetItemString(kwargs.get(), "right",
-                *config.right ? Py_True : Py_False);
-
-        if (config.labelbottom)
-            PyDict_SetItemString(kwargs.get(), "labelbottom",
-                *config.labelbottom ? Py_True : Py_False);
-        if (config.labeltop)
-            PyDict_SetItemString(kwargs.get(), "labeltop",
-                *config.labeltop ? Py_True : Py_False);
-        if (config.labelleft)
-            PyDict_SetItemString(kwargs.get(), "labelleft",
-                *config.labelleft ? Py_True : Py_False);
-        if (config.labelright)
-            PyDict_SetItemString(kwargs.get(), "labelright",
-                *config.labelright ? Py_True : Py_False);
-
-        if (config.labelrotation)
-            PyDict_SetItemString(kwargs.get(), "labelrotation",
-                PyFloat_FromDouble(*config.labelrotation));
-
-
-        if (config.grid_color)
-            PyDict_SetItemString(kwargs.get(), "grid_color",
-                PyUnicode_FromString(config.grid_color->c_str()));
-
-        if (config.grid_alpha)
-            PyDict_SetItemString(kwargs.get(), "grid_alpha",
-                PyFloat_FromDouble(*config.grid_alpha));
-
-        if (config.grid_linewidth)
-            PyDict_SetItemString(kwargs.get(), "grid_linewidth",
-                PyFloat_FromDouble(*config.grid_linewidth));
-
-        if (config.grid_linestyle)
-            PyDict_SetItemString(kwargs.get(), "grid_linestyle",
-                PyUnicode_FromString(config.grid_linestyle->c_str()));
-
-        PyPtr res(PyObject_Call(
-            PyObject_GetAttrString(ax_.get(), "tick_params"), args.get(), kwargs.get()));
-        checkResult(res.get(), "tick_params");
-       
-
+    /**
+    * @brief Plots a step graph.
+    * @param config step configuration
+    * @throws std::runtime_error if step fails
+    */
+    void step(const StepConfig& config) {
+        detail::stepImpl(ax_.get(), config);
     }
 
     
