@@ -9,13 +9,21 @@ All notable changes to this project will be documented in this file.
 ### Added
 
 - `detail.h` — implementation of `plotImpl()`, `stepImpl()`, `tickParamsImpl()`
--  step example in c++ and python
+-  step, loglog example in c++ and python
 - AxesGrid class — flat operator[](long i) for 1D indexing of subplots and 2D indexing of subplots with operator[](long row, long col)
+- LogLogConfig, GridConfig, LegendConfig structs
+- toSubs() — converts std::vector<double> to Python tuple for subs parameter
+- toStringList() — converts a vector of strings to a Python list of strings
+- Enum NonPositive — NonPositive enum for LogLogConfig
+
 
 ### Changed
 
-- duplicated  `plot()`, `step()`, `tickParams()` moved to `detail.h`
+- duplicated  `plot()`, `step()`, `tickParams()`, `grid()` moved to `detail.h`
 - StepConfig struct updated with full optional kwargs
+- src directory renamed to examples
+- `configs.h`, `helper.h`, `numpy_utils.h`, `detail.h`, `matplotlib.h` renamed to PascalCase style with capital first letter
+- all cpp examples contain the new configuration structs {}
 
 ### Fixed
 

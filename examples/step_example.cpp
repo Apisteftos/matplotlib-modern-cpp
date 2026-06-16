@@ -1,4 +1,4 @@
-#include "../include/matplotlib.h"
+#include "../include/Matplotlib.h"
 
 #include <iostream>
 #include <vector>
@@ -19,24 +19,24 @@ int main() {
     axes[0, 0].step({.x = x, .y = y, .where = "pre", .color = "b"});
     axes[0, 0].plot({.x = x, .y = y, .fmt = "o", .color = "gray", .alpha = 0.3});
     axes[0, 0].set_title("where='pre' (default)");
-    axes[0, 0].grid(true);
+    axes[0, 0].grid({.visible = true});
 
     axes[0, 1].step({.x = x, .y = y, .where = "post", .color = "r"});
     axes[0, 1].plot({.x = x, .y = y, .fmt = "o", .color = "gray", .alpha = 0.3});
     axes[0, 1].set_title("where='post'");
-    axes[0, 1].grid(true);
+    axes[0, 1].grid({.visible = true});
 
 
     axes[1, 0].step({.x = x, .y = y, .where = "mid", .color = "g"});
     axes[1, 0].plot({.x = x, .y = y, .fmt = "o", .color = "gray", .alpha = 0.3});
     axes[1, 0].set_title("where='mid'");
-    axes[1, 0].grid(true);
+    axes[1, 0].grid({.visible = true});
 
 
     axes[1, 1].step({.x = x, .y = y, .where = "pre", .color = "purple", .linewidth = 2,
                      .marker = "o", .markersize = 6, .linestyle = "--"});
     axes[1, 1].set_title("Styled step plot");
-    axes[1, 1].grid(true);
+    axes[1, 1].grid({.visible = true});
 
     fig.suptitle("step() examples");
     fig.save("../pics/step_example.png");

@@ -365,27 +365,11 @@ public:
 
     /**
      * @brief Sets the grid on or off.
-     * @param flag if true, grid is on
+     * @param config grid configuration
+     * @throws std::runtime_error if grid fails
      */
-    void grid(bool flag = true) {
-
-        PyPtr args(PyTuple_New(0));
-
-        if (flag) {
-            PyPtr grid(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "grid"));
-            checkAttr(grid.get(), "grid");
-            
-            PyPtr res(PyObject_Call(grid.get(), args.get(), nullptr));
-            checkResult(grid.get(), "grid");
-        }
-        else {
-            PyPtr grid(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "grid"));
-            checkAttr(grid.get(), "grid");
-            
-            PyPtr res(PyObject_Call(grid.get(), args.get(), nullptr));
-            checkResult(grid.get(), "grid");
-        }
-
+    void grid(const GridConfig& config = {}) {
+        detail::gridImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
     /**
@@ -559,6 +543,24 @@ public:
     */
     void tick_params(const TickParamsConfig& config) {
         detail::tickParamsImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+    /**
+    * @brief Plots a step graph.
+    * @param config step configuration
+    * @throws std::runtime_error if step fails
+    */
+    void legend(const LegendConfig& config = {}) {
+        detail::legendImpl(Interpreter::getInstance().getPyplot(), config);
+    }   
+
+    /**
+     * @brief Plots a step graph.
+     * @param config step configuration
+     * @throws std::runtime_error if step fails 
+     */
+    void loglog(const LogLogConfig& config) {
+        detail::loglogImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
 

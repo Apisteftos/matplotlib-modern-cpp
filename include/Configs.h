@@ -29,7 +29,7 @@ namespace matplotlibcpp {
         Both
     };
 
-    // TickParamsConfig
+    // TickParamsConfig, GridConfig
     enum class Which {
         Major,
         Minor,
@@ -56,6 +56,12 @@ namespace matplotlibcpp {
         PRE,
         POST,
         MID
+    };
+
+    // LogLogConfig
+    enum class NonPositive {
+        Mask,
+        Clip
     };
 
     
@@ -128,6 +134,19 @@ namespace matplotlibcpp {
             case Where::MID: return "mid";
         }
         return "pre";
+    }
+
+
+    /**
+     * @brief Converts NonPositive enum to string
+     * @param w default is NonPositive::Mask
+     */
+    inline const char* toString(NonPositive w) {
+        switch (w) {
+            case NonPositive::Mask: return "mask";
+            case NonPositive::Clip: return "clip";
+        }
+        return "clip";
     }
 
 
@@ -329,6 +348,74 @@ namespace matplotlibcpp {
         std::optional<bool> auto_ = false;
         std::optional<double> ymin = std::nullopt;
         std::optional<double> ymax = std::nullopt;
+    };
+
+
+    struct LegendConfig {
+        
+        // optional
+        std::optional<std::vector<std::string>> labels = std::nullopt;
+        std::optional<int> ncol = 1;
+        std::optional<bool> reverse = false;
+        // TODO: handles
+        // TODO: loc
+        // TODO: bbox_to_anchor
+        // TODO: prop
+        // TODO: fontsize
+        // TODO: labelcolor
+        // TODO: numpoints
+        // TODO: scatterpoints
+        // TODO: scatteryoffsets
+        // TODO: markerscale
+        // TODO: markerfirst
+        // TODO: frameon
+        // TODO: fancybox
+        // TODO: shadow
+        // TODO: framealpha
+        // TODO: facecolor
+        // TODO: edgecolor
+        // TODO: linewidth
+
+    };
+
+
+    struct GridConfig {
+
+        // optional
+        std::optional<bool> visible = std::nullopt;
+        std::optional<std::string> which = toString(Which::Both);
+        std::optional<std::string> axis = toString(Axis::Both);
+        std::optional<std::string> color = std::nullopt;
+        std::optional<double> alpha = std::nullopt;
+        std::optional<std::string> linestyle = std::nullopt;
+        std::optional<double> linewidth = std::nullopt;
+        std::optional<std::string> drawstyle = std::nullopt;
+
+    };
+
+
+
+    struct LogLogConfig {
+        std::vector<double> x;
+        std::vector<double> y;
+        double base = 10.0;
+        std::string nonpositive = toString(NonPositive::Clip);
+        
+        // optional
+        std::optional<std::string> fmt = std::nullopt;
+        std::optional<std::string> color = std::nullopt;
+        std::optional<double> alpha = std::nullopt;
+        std::optional<double> linewidth = std::nullopt;
+        std::optional<std::string> linestyle = std::nullopt;
+        std::optional<std::string> marker = std::nullopt;
+        std::optional<double> markersize = std::nullopt;
+        std::optional<std::string> markerfacecolor = std::nullopt;
+        std::optional<std::string> markeredgecolor = std::nullopt;
+        std::optional<double> markeredgewidth = std::nullopt;
+        std::optional<std::string> drawstyle = std::nullopt;
+        std::optional<std::string> fillstyle = std::nullopt;
+        std::optional<std::string> label = std::nullopt;
+        std::optional<std::vector<double>> subs = std::nullopt;
     };
 
 

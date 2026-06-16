@@ -79,7 +79,11 @@ namespace matplotlibcpp {
         return array;
     }
 
-
+    /**
+     * @brief Converts an ErrorValue to a numpy array
+     * @param ev input ErrorValue
+     * @return PyObject* numpy array
+     */
     inline PyObject* errorValueToNumpy(const ErrorValue& ev) {
         return std::visit([](const auto& val) -> PyObject* {
             using T = std::decay_t<decltype(val)>;
@@ -98,7 +102,11 @@ namespace matplotlibcpp {
     }
 
 
-
+    /**
+     * @brief Converts a DataValue to a numpy array
+     * @param dv input DataValue
+     * @return PyObject* numpy array
+     */
     inline PyObject* dataValueToNumpy(const DataValue& dv) {
         return std::visit([](const auto& val) -> PyObject* {
             using T = std::decay_t<decltype(val)>;
@@ -109,6 +117,38 @@ namespace matplotlibcpp {
             }
         }, dv);
     }
+
+
+    /**
+    * @brief Converts a vector of strings to a Python list of strings
+    * @param v input vector
+    * @return PyObject* Python list of strings
+    */
+    inline PyObject* toStringList(const std::vector<std::string>& v) {
+        PyObject* list = PyList_New(static_cast<Py_ssize_t>(v.size()));
+        if (!list) throw std::runtime_error("Failed to create Python list");
+        for (size_t i = 0; i < v.size(); ++i)
+            PyList_SetItem(list, i, PyUnicode_FromString(v[i].c_str()));
+        return list;
+    }
+
+
+    /**
+    * @brief Converts std::vector<double> to Python tuple for subs parameter.
+    * subs expects a sequence of floats between 1 and 10 representing
+    * minor tick locations on a log scale.
+    * @param v vector of sub-decade positions e.g. {2, 3, 4, 5, 6, 7, 8, 9}
+    * @return PyObject* Python tuple — caller must Py_XDECREF
+    * @throws std::runtime_error if tuple creation fails
+    */
+    inline PyObject* toSubs(const std::vector<double>& v) {
+        PyObject* tuple = PyTuple_New(static_cast<Py_ssize_t>(v.size()));
+        if (!tuple) throw std::runtime_error("Failed to create subs tuple");
+        for (size_t i = 0; i < v.size(); ++i)
+            PyTuple_SetItem(tuple, i, PyFloat_FromDouble(v[i]));
+        return tuple;
+    }
+
     
 
 }

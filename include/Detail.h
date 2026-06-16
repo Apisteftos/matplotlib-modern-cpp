@@ -266,8 +266,177 @@ namespace matplotlibcpp {
         }
 
 
+        /**
+        * @brief Plots a line graph.
+        * @param config plot configuration
+        * @throws std::runtime_error if plot fails
+        */
+        inline void legendImpl(PyObject* pyObj, const LegendConfig& config ) {
 
-        
+            PyPtr args(PyTuple_New(0));
+            PyPtr kwargs(PyDict_New());
+            
+            if (config.labels.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "labels",
+                    toStringList(*config.labels));
+            }
+
+            if (config.ncol.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "ncol",
+                    PyLong_FromLong(config.ncol.value()));
+            }
+            if (config.reverse.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "reverse",
+                    *config.reverse ? Py_True : Py_False);
+            }
+
+
+            PyPtr legend(PyObject_GetAttrString(pyObj, "legend"));
+            checkAttr(legend.get(), "legend");
+            
+            PyPtr res(PyObject_Call(legend.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "legend");
+
+
+            
+        }
+
+
+        /**
+         * @brief Sets the grid on or off.
+         * @param config grid configuration
+         * @throws std::runtime_error if grid fails
+         */
+        inline void gridImpl(PyObject* pyObj, const GridConfig& config) {
+
+            PyPtr args(PyTuple_New(0));
+            PyPtr kwargs(PyDict_New());
+            
+            if (config.visible.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "visible",
+                    config.visible.value() ? Py_True : Py_False);
+            }
+
+            if (config.which.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "which",
+                    PyUnicode_FromString(config.which->c_str()));
+            }
+            if (config.axis.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "axis",
+                    PyUnicode_FromString(config.axis->c_str()));
+            }
+            if (config.color.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "color",
+                    PyUnicode_FromString(config.color->c_str()));
+            }
+            if (config.alpha.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "alpha",
+                    PyFloat_FromDouble(config.alpha.value()));
+            }
+            if (config.linestyle.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "linestyle",
+                    PyUnicode_FromString(config.linestyle->c_str()));
+            }
+            if (config.linewidth.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "linewidth",
+                    PyFloat_FromDouble(config.linewidth.value()));
+            }
+            if (config.drawstyle.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "drawstyle",
+                    PyUnicode_FromString(config.drawstyle->c_str()));
+            }
+
+
+            PyPtr grid(PyObject_GetAttrString(pyObj, "grid"));
+            checkAttr(grid.get(), "grid");
+            
+            PyPtr res(PyObject_Call(grid.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "grid");
+
+        }
+
+        /**
+         * @brief Plots a step graph.
+         * @param config step configuration
+         * @throws std::runtime_error if step fails
+         */
+        inline void loglogImpl(PyObject* pyObj, const LogLogConfig& config) {
+
+            PyPtr args(PyTuple_New(3));
+            PyTuple_SetItem(args.get(), 0, toNumpy(config.x));
+            PyTuple_SetItem(args.get(), 1, toNumpy(config.y));
+            PyTuple_SetItem(args.get(), 2, PyUnicode_FromString(config.fmt.value().c_str()));
+
+            PyPtr kwargs(PyDict_New());
+            
+          
+            PyDict_SetItemString(kwargs.get(), "base",PyFloat_FromDouble(config.base));
+            
+            if (!config.nonpositive.empty()) {
+                PyDict_SetItemString(kwargs.get(), "nonpositive",
+                    PyUnicode_FromString(config.nonpositive.c_str()));
+            }
+            if (config.color.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "color",
+                    PyUnicode_FromString(config.color.value().c_str()));
+            }
+            if (config.alpha.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "alpha",
+                    PyFloat_FromDouble(config.alpha.value()));
+            }
+            if (config.linewidth.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "linewidth",
+                    PyFloat_FromDouble(config.linewidth.value()));
+            }
+            if (config.linestyle.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "linestyle",
+                    PyUnicode_FromString(config.linestyle.value().c_str()));
+            }
+            if (config.marker.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "marker",
+                    PyUnicode_FromString(config.marker.value().c_str()));
+            }
+            if (config.markersize.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markersize",
+                    PyFloat_FromDouble(config.markersize.value()));
+            }
+            if (config.markerfacecolor.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markerfacecolor",
+                    PyUnicode_FromString(config.markerfacecolor.value().c_str()));
+            }
+            if (config.markeredgecolor.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markeredgecolor",
+                    PyUnicode_FromString(config.markeredgecolor.value().c_str()));
+            }
+            if (config.markeredgewidth.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markeredgewidth",
+                    PyFloat_FromDouble(config.markeredgewidth.value()));
+            }
+            if (config.drawstyle.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "drawstyle",
+                    PyUnicode_FromString(config.drawstyle.value().c_str()));
+            }
+            if (config.fillstyle.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "fillstyle",
+                    PyUnicode_FromString(config.fillstyle.value().c_str()));
+            }
+            if (config.label.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "label",
+                    PyUnicode_FromString(config.label.value().c_str()));
+            }
+            if (config.subs.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "subs",
+                    toSubs(*config.subs));
+            }
+
+            PyPtr loglog(PyObject_GetAttrString(pyObj, "loglog"));
+            checkAttr(loglog.get(), "loglog");
+
+            PyPtr res(PyObject_Call(loglog.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "loglog");
+            
+
+        }
 
 
 

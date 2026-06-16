@@ -23,7 +23,7 @@ set(COMMON_INCLUDES
 
 
 function(add_plot_executable target source)
-    add_executable(${target} src/${source})
+    add_executable(${target} examples/${source})
     target_include_directories(${target} PRIVATE ${COMMON_INCLUDES})
     target_link_libraries(${target} PRIVATE ${Python3_LIBRARIES})
 endfunction()
@@ -38,4 +38,5 @@ add_plot_executable(subplot2grid subplot2grid_example.cpp)
 add_plot_executable(twinx twinx_example.cpp)
 add_plot_executable(twiny twiny_example.cpp)
 add_plot_executable(step step_example.cpp)
+add_plot_executable(loglog loglog_example.cpp)
 

@@ -1,4 +1,4 @@
-#include "../include/matplotlib.h"
+#include "../include/Matplotlib.h"
 
 #include <iostream>
 
@@ -16,13 +16,13 @@ int main() {
     plt.sca(axes[0]);
     axes[0].plot({Vec{1, 2, 3, 4, 5}, Vec{1, 4, 9, 16, 25}});
     axes[0].set_title("Line");
-    axes[0].grid(true);
+    axes[0].grid({.visible = true});
 
 
     plt.sca(axes[1]);
     axes[1].plot({Vec{1, 2, 3, 4, 5}, Vec{1, 4, 9, 16, 25}});
     axes[1].set_title("Bar");
-    axes[1].grid(true);
+    axes[1].grid({ .visible = true});
 
 
     fig.suptitle("SCA Example");

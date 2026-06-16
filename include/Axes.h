@@ -77,8 +77,13 @@ public:
         detail::plotImpl(ax_.get(), config);
     }
 
-    void grid(bool flag = true){
-        PyObject_CallMethod(ax_.get(), "grid", "O", flag ? Py_True : Py_False);
+    /**
+     * @brief Sets the grid on or off.
+     * @param config grid configuration
+     * @throws std::runtime_error if grid fails
+     */
+    void grid(const GridConfig& config) {
+        detail::gridImpl(ax_.get(), config);
     }
 
     void set_title(const std::string& title) {
@@ -216,13 +221,13 @@ public:
         
     }
 
-    void loglog(const std::vector<double>& x, const std::vector<double>& y, const std::string& fmt = "b") {
-        
-        PyPtr xarray(toNumpy(x));
-        PyPtr yarray(toNumpy(y));
-        
-        PyObject_CallMethod(ax_.get(), "loglog", "OOs", xarray.get(), yarray.get(), fmt.c_str());
-        
+    /**
+     * @brief Plots a step graph.
+     * @param config step configuration
+     * @throws std::runtime_error if step fails
+     */
+    void loglog(const LogLogConfig& config) {
+        detail::loglogImpl(ax_.get(), config);
     }
 
     void semilogx(const std::vector<double>& x, const std::vector<double>& y, const std::string& fmt = "b") {
@@ -299,8 +304,7 @@ public:
         
     }
 
-    void stem(const std::vector<double>& x, const std::vector<double>& y, const std::string&
- fmt = "b") {
+    void stem(const std::vector<double>& x, const std::vector<double>& y, const std::string&fmt = "b") {
         
         PyPtr xarray(toNumpy(x));
         PyPtr yarray(toNumpy(y));
@@ -385,6 +389,15 @@ public:
     */
     void step(const StepConfig& config) {
         detail::stepImpl(ax_.get(), config);
+    }
+
+    /**
+    * @brief Plots a step graph.
+    * @param config step configuration
+    * @throws std::runtime_error if step fails
+    */
+    void legend(const LegendConfig& config = {}) {
+        detail::legendImpl(ax_.get(), config);
     }
 
     

@@ -1,4 +1,4 @@
-#include "../include/matplotlib.h"
+#include "../include/Matplotlib.h"
 
 #include <iostream>
 #include <vector>
@@ -23,12 +23,12 @@ int main() {
     plt.subplot(1, 2, 1);
     plt.plot({.x = x, .y = sinY, .fmt = "b"});
     plt.title("Sine");
-    plt.grid(true);
+    plt.grid({.visible = true});
 
     plt.subplot(1, 2, 2);
     plt.plot({.x = x, .y =cosY, .fmt = "r"});
     plt.title("Cosine");
-    plt.grid(true);
+    plt.grid({.visible = true});
 
     plt.tight_layout();
     plt.show();

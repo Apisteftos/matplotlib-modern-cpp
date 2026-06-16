@@ -1,4 +1,4 @@
-#include "../include/matplotlib.h"
+#include "../include/Matplotlib.h"
 
 #include <iostream>
 #include <math.h>
@@ -29,21 +29,21 @@ int main() {
     
     axes[0].plot({.x = x, .y = sinY, .fmt = "b"});
     axes[0].set_title("Sine");
-    axes[0].grid(true);
+    axes[0].grid({.visible = true});
     
 
     axes[1].plot({.x = x, .y = cosY, .fmt = "r"});
     axes[1].set_title("Cosine");
-    axes[1].grid(true);
+    axes[1].grid({.visible = true});
 
 
     axes[2].plot({.x = x, .y = tanY, .fmt = "g"});
     axes[2].set_title("Tangent");
-    axes[2].grid(true);
+    axes[2].grid({.visible = true});
 
     axes[3].plot({.x = x, .y = acosY, .fmt = "m"});
     axes[3].set_title("Arccosine");
-    axes[3].grid(true);
+    axes[3].grid({.visible = true});
 
 
     fig.suptitle("Math Functions");

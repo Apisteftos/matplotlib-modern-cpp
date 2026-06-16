@@ -1,4 +1,4 @@
-#include "../include/matplotlib.h"
+#include "../include/Matplotlib.h"
 
 #include <iostream>
 #include <math.h>
