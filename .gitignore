@@ -90,3 +90,6 @@ pics/
 # ignore clangd 
 .clangd
 
+# ignore temporary py files
+tempCodeRunnerFile.py
+
