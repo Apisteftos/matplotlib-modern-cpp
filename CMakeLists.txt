@@ -39,4 +39,6 @@ add_plot_executable(twinx twinx_example.cpp)
 add_plot_executable(twiny twiny_example.cpp)
 add_plot_executable(step step_example.cpp)
 add_plot_executable(loglog loglog_example.cpp)
+add_plot_executable(semilogx semilogx_example.cpp)
+add_plot_executable(semilogy semilogy_example.cpp)
 

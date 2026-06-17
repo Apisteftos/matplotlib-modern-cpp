@@ -230,23 +230,22 @@ public:
         detail::loglogImpl(ax_.get(), config);
     }
 
-    void semilogx(const std::vector<double>& x, const std::vector<double>& y, const std::string& fmt = "b") {
-        
-        PyPtr xarray(toNumpy(x));
-        PyPtr yarray(toNumpy(y));
-        
-        PyObject_CallMethod(ax_.get(), "semilogx", "OOs", xarray.get(), yarray.get(), fmt.c_str());
-        
+    /**
+     * @brief Plots a step graph.
+     * @param config step configuration
+     * @throws std::runtime_error if step fails 
+     */
+    void semilogx(const SemiLogxConfig& config) {
+        detail::semilogxImpl(ax_.get(), config);
     }
 
-
-    void semilogy(const std::vector<double>& x, const std::vector<double>& y, const std::string& fmt = "b") {
-        
-        PyPtr xarray(toNumpy(x));
-        PyPtr yarray(toNumpy(y));
-        
-        PyObject_CallMethod(ax_.get(), "semilogy", "OOs", xarray.get(), yarray.get(), fmt.c_str());
-
+    /**
+     * @brief Plots a step graph.
+     * @param config step configuration
+     * @throws std::runtime_error if step fails 
+     */
+    void semilogy(const SemiLogyConfig& config) {
+        detail::semilogyImpl(ax_.get(), config);
     }
 
 

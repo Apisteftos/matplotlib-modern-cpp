@@ -8,10 +8,10 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- `detail.h` — implementation of `plotImpl()`, `stepImpl()`, `tickParamsImpl()`
--  step, loglog example in c++ and python
+- `detail.h` — implementation of `plotImpl()`, `stepImpl()`, `tickParamsImpl()`, `loglogImpl()`, `semilogxImpl()`, `semilogyImpl()`
+-  step, loglog, semilogx, semilogy examples in c++ and python
 - AxesGrid class — flat operator[](long i) for 1D indexing of subplots and 2D indexing of subplots with operator[](long row, long col)
-- LogLogConfig, GridConfig, LegendConfig structs
+- LogLogConfig, GridConfig, LegendConfig, SemiLogxConfig, SemiLogyConfig structs
 - toSubs() — converts std::vector<double> to Python tuple for subs parameter
 - toStringList() — converts a vector of strings to a Python list of strings
 - Enum NonPositive — NonPositive enum for LogLogConfig

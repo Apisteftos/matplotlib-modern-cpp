@@ -419,6 +419,54 @@ namespace matplotlibcpp {
     };
 
 
+    struct SemiLogxConfig {
+        std::vector<double> x;
+        std::vector<double> y;
+        double base = 10.0;
+        std::string nonpositive = toString(NonPositive::Clip);
+        
+        // optional
+        std::optional<std::string> fmt = std::nullopt;
+        std::optional<std::string> color = std::nullopt;
+        std::optional<double> alpha = std::nullopt;
+        std::optional<double> linewidth = std::nullopt;
+        std::optional<std::string> linestyle = std::nullopt;
+        std::optional<std::string> marker = std::nullopt;
+        std::optional<double> markersize = std::nullopt;
+        std::optional<std::string> markerfacecolor = std::nullopt;
+        std::optional<std::string> markeredgecolor = std::nullopt;
+        std::optional<double> markeredgewidth = std::nullopt;
+        std::optional<std::string> drawstyle = std::nullopt;
+        std::optional<std::string> fillstyle = std::nullopt;
+        std::optional<std::string> label = std::nullopt;
+        std::optional<std::vector<double>> subs = std::nullopt;
+    };
+
+
+    struct SemiLogyConfig {
+        std::vector<double> x;
+        std::vector<double> y;
+        double base = 10.0;
+        std::string nonpositive = toString(NonPositive::Clip);
+        
+        // optional
+        std::optional<std::string> fmt = std::nullopt;
+        std::optional<std::string> color = std::nullopt;
+        std::optional<double> alpha = std::nullopt;
+        std::optional<double> linewidth = std::nullopt;
+        std::optional<std::string> linestyle = std::nullopt;
+        std::optional<std::string> marker = std::nullopt;
+        std::optional<double> markersize = std::nullopt;
+        std::optional<std::string> markerfacecolor = std::nullopt;
+        std::optional<std::string> markeredgecolor = std::nullopt;
+        std::optional<double> markeredgewidth = std::nullopt;
+        std::optional<std::string> drawstyle = std::nullopt;
+        std::optional<std::string> fillstyle = std::nullopt;
+        std::optional<std::string> label = std::nullopt;
+        std::optional<std::vector<double>> subs = std::nullopt;
+    };
+
+
 
     struct subplotMosaicConfig {
     

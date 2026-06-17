@@ -438,6 +438,174 @@ namespace matplotlibcpp {
 
         }
 
+        /**
+         * @brief Plots a step graph.
+         * @param config step configuration
+         * @throws std::runtime_error if step fails
+         */
+        inline void semilogxImpl(PyObject* pyObj, const SemiLogxConfig& config) {
+
+            PyPtr args(PyTuple_New(3));
+            PyTuple_SetItem(args.get(), 0, toNumpy(config.x));
+            PyTuple_SetItem(args.get(), 1, toNumpy(config.y));
+            PyTuple_SetItem(args.get(), 2, PyUnicode_FromString(config.fmt.value().c_str()));
+
+            PyPtr kwargs(PyDict_New());
+
+            PyDict_SetItemString(kwargs.get(), "base",PyFloat_FromDouble(config.base));
+
+            
+            if (!config.nonpositive.empty()) {
+                PyDict_SetItemString(kwargs.get(), "nonpositive",
+                    PyUnicode_FromString(config.nonpositive.c_str()));
+            }
+            if (config.color.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "color",
+                    PyUnicode_FromString(config.color.value().c_str()));
+            }
+            if (config.alpha.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "alpha",
+                    PyFloat_FromDouble(config.alpha.value()));
+            }
+            if (config.linewidth.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "linewidth",
+                    PyFloat_FromDouble(config.linewidth.value()));
+            }
+            if (config.linestyle.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "linestyle",
+                    PyUnicode_FromString(config.linestyle.value().c_str()));
+            }
+            if (config.marker.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "marker",
+                    PyUnicode_FromString(config.marker.value().c_str()));
+            }
+            if (config.markersize.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markersize",
+                    PyFloat_FromDouble(config.markersize.value()));
+            }
+            if (config.markerfacecolor.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markerfacecolor",
+                    PyUnicode_FromString(config.markerfacecolor.value().c_str()));
+            }
+            if (config.markeredgecolor.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markeredgecolor",
+                    PyUnicode_FromString(config.markeredgecolor.value().c_str()));
+            }
+            if (config.markeredgewidth.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markeredgewidth",
+                    PyFloat_FromDouble(config.markeredgewidth.value()));
+            }
+            if (config.drawstyle.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "drawstyle",
+                    PyUnicode_FromString(config.drawstyle.value().c_str()));
+            }
+            if (config.fillstyle.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "fillstyle",
+                    PyUnicode_FromString(config.fillstyle.value().c_str()));
+            }
+            if (config.label.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "label",
+                    PyUnicode_FromString(config.label.value().c_str()));
+            }
+            if (config.subs.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "subs",
+                    toSubs(*config.subs));
+            }
+
+            PyPtr semilogx(PyObject_GetAttrString(pyObj, "semilogx"));
+            checkAttr(semilogx.get(), "semilogx");
+
+            PyPtr res(PyObject_Call(semilogx.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "semilogx");
+
+
+        }
+
+
+        /**
+         * @brief Plots a step graph.
+         * @param config step configuration
+         * @throws std::runtime_error if step fails 
+         */
+        inline void semilogyImpl(PyObject* pyObj, const SemiLogyConfig& config) {
+
+            PyPtr args(PyTuple_New(3));
+            PyTuple_SetItem(args.get(), 0, toNumpy(config.x));
+            PyTuple_SetItem(args.get(), 1, toNumpy(config.y));
+            PyTuple_SetItem(args.get(), 2, PyUnicode_FromString(config.fmt.value().c_str()));
+
+            PyPtr kwargs(PyDict_New());
+            
+            PyDict_SetItemString(kwargs.get(), "base",PyFloat_FromDouble(config.base));
+            
+            if (!config.nonpositive.empty()) {
+                PyDict_SetItemString(kwargs.get(), "nonpositive",
+                    PyUnicode_FromString(config.nonpositive.c_str()));
+            }
+            if (config.color.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "color",
+                    PyUnicode_FromString(config.color.value().c_str()));
+            }
+            if (config.alpha.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "alpha",
+                    PyFloat_FromDouble(config.alpha.value()));
+            }
+            if (config.linewidth.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "linewidth",
+                    PyFloat_FromDouble(config.linewidth.value()));
+            }
+            if (config.linestyle.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "linestyle",
+                    PyUnicode_FromString(config.linestyle.value().c_str()));
+            }
+            if (config.marker.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "marker",
+                    PyUnicode_FromString(config.marker.value().c_str()));
+            }
+            if (config.markersize.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markersize",
+                    PyFloat_FromDouble(config.markersize.value()));
+            }
+            if (config.markerfacecolor.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markerfacecolor",
+                    PyUnicode_FromString(config.markerfacecolor.value().c_str()));
+            }
+            if (config.markeredgecolor.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markeredgecolor",
+                    PyUnicode_FromString(config.markeredgecolor.value().c_str()));
+            }
+            if (config.markeredgewidth.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "markeredgewidth",
+                    PyFloat_FromDouble(config.markeredgewidth.value()));
+            }
+            if (config.drawstyle.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "drawstyle",
+                    PyUnicode_FromString(config.drawstyle.value().c_str()));
+            }
+            if (config.fillstyle.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "fillstyle",
+                    PyUnicode_FromString(config.fillstyle.value().c_str()));
+            }
+            if (config.label.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "label",
+                    PyUnicode_FromString(config.label.value().c_str()));
+            }
+            if (config.subs.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "subs",
+                    toSubs(*config.subs));
+            }
+
+            PyPtr semilogy(PyObject_GetAttrString(pyObj, "semilogy"));
+            checkAttr(semilogy.get(), "semilogy");
+
+            PyPtr res(PyObject_Call(semilogy.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "semilogy");
+
+        }
+
+
+
+
 
 
 

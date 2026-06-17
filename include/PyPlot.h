@@ -563,6 +563,15 @@ public:
         detail::loglogImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
+    /**
+     * @brief Plots a step graph.
+     * @param config step configuration
+     * @throws std::runtime_error if step fails 
+     */
+    void semilogx(const SemiLogxConfig& config) {
+        detail::semilogxImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
 
 
 };
