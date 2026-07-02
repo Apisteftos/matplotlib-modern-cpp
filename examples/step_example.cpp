@@ -34,7 +34,7 @@ int main() {
 
 
     axes[1, 1].step({.x = x, .y = y, .where = "pre", .color = "purple", .linewidth = 2,
-                     .marker = "o", .markersize = 6, .linestyle = "--"});
+                     .linestyle = "--", .marker = "o",  .markersize = 6 });
     axes[1, 1].set_title("Styled step plot");
     axes[1, 1].grid({.visible = true});
 

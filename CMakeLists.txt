@@ -41,4 +41,5 @@ add_plot_executable(step step_example.cpp)
 add_plot_executable(loglog loglog_example.cpp)
 add_plot_executable(semilogx semilogx_example.cpp)
 add_plot_executable(semilogy semilogy_example.cpp)
+add_plot_executable(fill fill_example.cpp)
 

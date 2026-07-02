@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+
+## [0.7.0] - 02/07/2026
+
+### Added
+- `fill()` — `FillConfig` with Polygon kwargs (color, facecolor, edgecolor, hatch, zorder)
+- `fill_between()` — `FillBetweenConfig` with `where` boolean mask support
+- `fill_betweenx()` — `FillBetweenxConfig`
+- `Vec` struct — element-wise operators (+, -, *, /, >, <, >=, <=, ==) mirroring numpy
+- `toBoolArray()` — `std::vector<bool>` numpy bool array
+- `toStringList()` — `std::vector<std::string>`  Python list
+- `toSubs()` — `std::vector<double>`  Python tuple
+- `kwargsPolygonImpl<T>()` — shared Polygon kwargs implementation
+- examples for `fill()`, `fill_between()`, `fill_betweenx()` in c++ and python
+- fill example in CmakeLists.txt
+
+
+
+
+
 ## [0.6.0] - 16/06/2026
 
 ### Added

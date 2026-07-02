@@ -572,6 +572,33 @@ public:
         detail::semilogxImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
+    /**
+     * @brief Fills a polygon.
+     * @param config fill configuration
+     * @throws std::runtime_error if fill fails 
+     */
+    void fill(const FillConfig& config) {
+        detail::fillImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+    /**
+     * @brief Fills a polygon.
+     * @param config fill configuration
+     * @throws std::runtime_error if fill fails 
+     */
+    void fill_between(const FillBetweenConfig& config) {
+        detail::fillBetweenImpl(Interpreter::getInstance().getPyplot(), config);
+    }   
+
+    /**
+     * @brief Fills a polygon.
+     * @param config fill configuration
+     * @throws std::runtime_error if fill fails     
+     */
+    void fill_betweenx(const FillBetweenxConfig& config) {
+        detail::fillBetweenxImpl(Interpreter::getInstance().getPyplot(), config);
+    }   
+
 
 
 };

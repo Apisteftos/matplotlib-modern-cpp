@@ -19,6 +19,93 @@ namespace matplotlibcpp {
     namespace detail {
 
 
+        /**
+        * @brief Applies kwargs to plot() function        
+        * @param kwargs kwargs dictionary        
+        * @param config kwargs config
+        */
+        template<typename T>
+        inline void kwargsImpl(PyObject* kwargs, const T& config)  {
+
+            if (config.color)
+                PyDict_SetItemString(kwargs, "color",
+                    PyUnicode_FromString(config.color->c_str()));
+            if (config.label)
+                PyDict_SetItemString(kwargs, "label",
+                    PyUnicode_FromString(config.label->c_str()));
+            if (config.alpha)
+                PyDict_SetItemString(kwargs, "alpha",
+                    PyFloat_FromDouble(*config.alpha));
+            if (config.linewidth)
+                PyDict_SetItemString(kwargs, "linewidth",
+                    PyFloat_FromDouble(*config.linewidth));
+            if (config.linestyle)
+                PyDict_SetItemString(kwargs, "linestyle",
+                    PyUnicode_FromString(config.linestyle->c_str()));
+            if (config.marker)
+                PyDict_SetItemString(kwargs, "marker",
+                    PyUnicode_FromString(config.marker->c_str()));
+            if (config.markersize)
+                PyDict_SetItemString(kwargs, "markersize",
+                    PyFloat_FromDouble(*config.markersize));
+            if (config.markerfacecolor)
+                PyDict_SetItemString(kwargs, "markerfacecolor",
+                    PyUnicode_FromString(config.markerfacecolor->c_str()));
+            if (config.markeredgecolor)
+                PyDict_SetItemString(kwargs, "markeredgecolor",
+                    PyUnicode_FromString(config.markeredgecolor->c_str()));
+            if (config.markeredgewidth)
+                PyDict_SetItemString(kwargs, "markeredgewidth",
+                    PyFloat_FromDouble(*config.markeredgewidth));
+            if (config.drawstyle)
+                PyDict_SetItemString(kwargs, "drawstyle",
+                    PyUnicode_FromString(config.drawstyle->c_str()));
+            if (config.fillstyle)
+                PyDict_SetItemString(kwargs, "fillstyle",
+                    PyUnicode_FromString(config.fillstyle->c_str()));
+        }
+
+        /**
+        * @brief Shared implementation of fill() function
+        * @param pyObj axes object
+        * @param config fill configuration
+        * @throws std::runtime_error if fill fails
+        */
+        template<typename T>
+        inline void kwardsPolygonImpl(PyObject* pyObj, const T& config) {
+
+            if (config.color)
+                PyDict_SetItemString(pyObj, "color",
+                    PyUnicode_FromString(config.color->c_str()));
+            if (config.facecolor)
+                PyDict_SetItemString(pyObj, "facecolor",
+                    PyUnicode_FromString(config.facecolor->c_str()));
+            if (config.edgecolor)
+                PyDict_SetItemString(pyObj, "edgecolor",
+                    PyUnicode_FromString(config.edgecolor->c_str()));
+            if (config.label)
+                PyDict_SetItemString(pyObj, "label",
+                    PyUnicode_FromString(config.label->c_str()));
+            if (config.alpha)
+                PyDict_SetItemString(pyObj, "alpha",
+                    PyFloat_FromDouble(*config.alpha));
+            if (config.linewidth)
+                PyDict_SetItemString(pyObj, "linewidth",
+                    PyFloat_FromDouble(*config.linewidth));
+            if (config.linestyle)
+                PyDict_SetItemString(pyObj, "linestyle",
+                    PyUnicode_FromString(config.linestyle->c_str()));
+            if (config.hatch)
+                PyDict_SetItemString(pyObj, "hatch",
+                    PyUnicode_FromString(config.hatch->c_str()));
+            if (config.fill)
+                PyDict_SetItemString(pyObj, "fill",
+                    *config.fill ? Py_True : Py_False);
+            if (config.zorder)
+                PyDict_SetItemString(pyObj, "zorder",
+                    PyFloat_FromDouble(*config.zorder));    
+
+        }
 
         /**
         * @brief Shared implementation of plot() function
@@ -55,27 +142,7 @@ namespace matplotlibcpp {
 
             PyPtr kwargs(PyDict_New());
 
-            if (config.label)
-                PyDict_SetItemString(kwargs.get(), "label",
-                    PyUnicode_FromString(config.label->c_str()));
-            if (config.color)
-                PyDict_SetItemString(kwargs.get(), "color",
-                    PyUnicode_FromString(config.color->c_str()));
-            if (config.alpha)
-                PyDict_SetItemString(kwargs.get(), "alpha",
-                    PyFloat_FromDouble(*config.alpha));
-            if (config.linewidth)
-                PyDict_SetItemString(kwargs.get(), "linewidth",
-                    PyFloat_FromDouble(*config.linewidth));
-            if (config.marker)
-                PyDict_SetItemString(kwargs.get(), "marker",
-                    PyUnicode_FromString(config.marker->c_str()));
-            if (config.markersize)
-                PyDict_SetItemString(kwargs.get(), "markersize",
-                    PyFloat_FromDouble(*config.markersize));
-            if (config.linestyle)
-                PyDict_SetItemString(kwargs.get(), "linestyle",
-                    PyUnicode_FromString(config.linestyle->c_str()));
+            kwargsImpl(kwargs.get(), config);
 
             PyDict_SetItemString(kwargs.get(), "scalex",
                 config.scalex ? Py_True : Py_False);
@@ -112,34 +179,8 @@ namespace matplotlibcpp {
                 PyDict_SetItemString(kwargs.get(), "where",
                     PyUnicode_FromString(config.where.value().c_str()));
             }
-            if (config.label.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "label",
-                    PyUnicode_FromString(config.label.value().c_str()));
-            }
-            if (config.color.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "color",
-                    PyUnicode_FromString(config.color.value().c_str()));
-            }
-            if (config.alpha.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "alpha",
-                    PyFloat_FromDouble(config.alpha.value()));
-            }
-            if (config.linewidth.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "linewidth",
-                    PyFloat_FromDouble(config.linewidth.value()));
-            }
-            if (config.marker.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "marker",
-                    PyUnicode_FromString(config.marker.value().c_str()));
-            }
-            if (config.markersize.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markersize",
-                    PyFloat_FromDouble(config.markersize.value()));
-            }
-            if (config.linestyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "linestyle",
-                    PyUnicode_FromString(config.linestyle.value().c_str()));
-            }
+            
+            kwargsImpl(kwargs.get(), config);
 
             PyPtr step(PyObject_GetAttrString(pyObj, "step"));
             checkAttr(step.get(), "step");
@@ -296,7 +337,7 @@ namespace matplotlibcpp {
             
             PyPtr res(PyObject_Call(legend.get(), args.get(), kwargs.get()));
             checkResult(res.get(), "legend");
-
+        std::optional<std::string> color = std::nullopt;
 
             
         }
@@ -325,26 +366,8 @@ namespace matplotlibcpp {
                 PyDict_SetItemString(kwargs.get(), "axis",
                     PyUnicode_FromString(config.axis->c_str()));
             }
-            if (config.color.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "color",
-                    PyUnicode_FromString(config.color->c_str()));
-            }
-            if (config.alpha.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "alpha",
-                    PyFloat_FromDouble(config.alpha.value()));
-            }
-            if (config.linestyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "linestyle",
-                    PyUnicode_FromString(config.linestyle->c_str()));
-            }
-            if (config.linewidth.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "linewidth",
-                    PyFloat_FromDouble(config.linewidth.value()));
-            }
-            if (config.drawstyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "drawstyle",
-                    PyUnicode_FromString(config.drawstyle->c_str()));
-            }
+            
+            kwargsImpl(kwargs.get(), config);
 
 
             PyPtr grid(PyObject_GetAttrString(pyObj, "grid"));
@@ -376,58 +399,12 @@ namespace matplotlibcpp {
                 PyDict_SetItemString(kwargs.get(), "nonpositive",
                     PyUnicode_FromString(config.nonpositive.c_str()));
             }
-            if (config.color.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "color",
-                    PyUnicode_FromString(config.color.value().c_str()));
-            }
-            if (config.alpha.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "alpha",
-                    PyFloat_FromDouble(config.alpha.value()));
-            }
-            if (config.linewidth.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "linewidth",
-                    PyFloat_FromDouble(config.linewidth.value()));
-            }
-            if (config.linestyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "linestyle",
-                    PyUnicode_FromString(config.linestyle.value().c_str()));
-            }
-            if (config.marker.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "marker",
-                    PyUnicode_FromString(config.marker.value().c_str()));
-            }
-            if (config.markersize.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markersize",
-                    PyFloat_FromDouble(config.markersize.value()));
-            }
-            if (config.markerfacecolor.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markerfacecolor",
-                    PyUnicode_FromString(config.markerfacecolor.value().c_str()));
-            }
-            if (config.markeredgecolor.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markeredgecolor",
-                    PyUnicode_FromString(config.markeredgecolor.value().c_str()));
-            }
-            if (config.markeredgewidth.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markeredgewidth",
-                    PyFloat_FromDouble(config.markeredgewidth.value()));
-            }
-            if (config.drawstyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "drawstyle",
-                    PyUnicode_FromString(config.drawstyle.value().c_str()));
-            }
-            if (config.fillstyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "fillstyle",
-                    PyUnicode_FromString(config.fillstyle.value().c_str()));
-            }
-            if (config.label.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "label",
-                    PyUnicode_FromString(config.label.value().c_str()));
-            }
             if (config.subs.has_value()) {
                 PyDict_SetItemString(kwargs.get(), "subs",
                     toSubs(*config.subs));
             }
+
+            kwargsImpl(kwargs.get(), config);
 
             PyPtr loglog(PyObject_GetAttrString(pyObj, "loglog"));
             checkAttr(loglog.get(), "loglog");
@@ -459,58 +436,12 @@ namespace matplotlibcpp {
                 PyDict_SetItemString(kwargs.get(), "nonpositive",
                     PyUnicode_FromString(config.nonpositive.c_str()));
             }
-            if (config.color.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "color",
-                    PyUnicode_FromString(config.color.value().c_str()));
-            }
-            if (config.alpha.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "alpha",
-                    PyFloat_FromDouble(config.alpha.value()));
-            }
-            if (config.linewidth.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "linewidth",
-                    PyFloat_FromDouble(config.linewidth.value()));
-            }
-            if (config.linestyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "linestyle",
-                    PyUnicode_FromString(config.linestyle.value().c_str()));
-            }
-            if (config.marker.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "marker",
-                    PyUnicode_FromString(config.marker.value().c_str()));
-            }
-            if (config.markersize.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markersize",
-                    PyFloat_FromDouble(config.markersize.value()));
-            }
-            if (config.markerfacecolor.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markerfacecolor",
-                    PyUnicode_FromString(config.markerfacecolor.value().c_str()));
-            }
-            if (config.markeredgecolor.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markeredgecolor",
-                    PyUnicode_FromString(config.markeredgecolor.value().c_str()));
-            }
-            if (config.markeredgewidth.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markeredgewidth",
-                    PyFloat_FromDouble(config.markeredgewidth.value()));
-            }
-            if (config.drawstyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "drawstyle",
-                    PyUnicode_FromString(config.drawstyle.value().c_str()));
-            }
-            if (config.fillstyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "fillstyle",
-                    PyUnicode_FromString(config.fillstyle.value().c_str()));
-            }
-            if (config.label.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "label",
-                    PyUnicode_FromString(config.label.value().c_str()));
-            }
             if (config.subs.has_value()) {
                 PyDict_SetItemString(kwargs.get(), "subs",
                     toSubs(*config.subs));
             }
+
+            kwargsImpl(kwargs.get(), config);
 
             PyPtr semilogx(PyObject_GetAttrString(pyObj, "semilogx"));
             checkAttr(semilogx.get(), "semilogx");
@@ -542,58 +473,12 @@ namespace matplotlibcpp {
                 PyDict_SetItemString(kwargs.get(), "nonpositive",
                     PyUnicode_FromString(config.nonpositive.c_str()));
             }
-            if (config.color.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "color",
-                    PyUnicode_FromString(config.color.value().c_str()));
-            }
-            if (config.alpha.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "alpha",
-                    PyFloat_FromDouble(config.alpha.value()));
-            }
-            if (config.linewidth.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "linewidth",
-                    PyFloat_FromDouble(config.linewidth.value()));
-            }
-            if (config.linestyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "linestyle",
-                    PyUnicode_FromString(config.linestyle.value().c_str()));
-            }
-            if (config.marker.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "marker",
-                    PyUnicode_FromString(config.marker.value().c_str()));
-            }
-            if (config.markersize.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markersize",
-                    PyFloat_FromDouble(config.markersize.value()));
-            }
-            if (config.markerfacecolor.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markerfacecolor",
-                    PyUnicode_FromString(config.markerfacecolor.value().c_str()));
-            }
-            if (config.markeredgecolor.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markeredgecolor",
-                    PyUnicode_FromString(config.markeredgecolor.value().c_str()));
-            }
-            if (config.markeredgewidth.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "markeredgewidth",
-                    PyFloat_FromDouble(config.markeredgewidth.value()));
-            }
-            if (config.drawstyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "drawstyle",
-                    PyUnicode_FromString(config.drawstyle.value().c_str()));
-            }
-            if (config.fillstyle.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "fillstyle",
-                    PyUnicode_FromString(config.fillstyle.value().c_str()));
-            }
-            if (config.label.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "label",
-                    PyUnicode_FromString(config.label.value().c_str()));
-            }
             if (config.subs.has_value()) {
                 PyDict_SetItemString(kwargs.get(), "subs",
                     toSubs(*config.subs));
             }
+
+            kwargsImpl(kwargs.get(), config);
 
             PyPtr semilogy(PyObject_GetAttrString(pyObj, "semilogy"));
             checkAttr(semilogy.get(), "semilogy");
@@ -604,9 +489,94 @@ namespace matplotlibcpp {
         }
 
 
+        /**
+        * @brief Plots a step graph.
+        * @param config step configuration
+        * @throws std::runtime_error if step fails  
+        */
+        inline void fillImpl(PyObject* pyObj, const FillConfig& config) {   
+
+            PyPtr args(PyTuple_New(2));
+            PyTuple_SetItem(args.get(), 0, toNumpy(config.x));
+            PyTuple_SetItem(args.get(), 1, toNumpy(config.y));
+        
+
+            PyPtr kwargs(PyDict_New());
+            
+            kwardsPolygonImpl(kwargs.get(), config);
 
 
+            PyPtr fill(PyObject_GetAttrString(pyObj, "fill"));
+            checkAttr(fill.get(), "fill");
+            
+            PyPtr res(PyObject_Call(fill.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "fill");
 
+
+        }
+
+        /**
+        * @brief Plots a step graph.
+        * @param config step configuration
+        * @throws std::runtime_error if step fails  
+        */
+        inline void fillBetweenImpl(PyObject* pyObj, const FillBetweenConfig& config) {
+
+            PyPtr args(PyTuple_New(3));
+            PyTuple_SetItem(args.get(), 0, toNumpy(config.x));
+            PyTuple_SetItem(args.get(), 1, dataValueToNumpy(config.y1));
+            PyTuple_SetItem(args.get(), 2, dataValueToNumpy(config.y2));
+
+            PyPtr kwargs(PyDict_New());
+            
+            if (config.fmt.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "fmt",
+                    PyUnicode_FromString(config.fmt.value().c_str()));
+            }   
+            
+            kwargsImpl(kwargs.get(), config);
+
+            PyPtr fill(PyObject_GetAttrString(pyObj, "fill_between"));
+            checkAttr(fill.get(), "fill_between");
+            
+            PyPtr res(PyObject_Call(fill.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "fill_between");
+
+
+        }
+
+        /**
+        * @brief Plots a step graph.
+        * @param config step configuration
+        * @throws std::runtime_error if step fails  
+        */
+        inline void fillBetweenxImpl(PyObject* pyObj, const FillBetweenxConfig& config) {
+
+            PyPtr args(PyTuple_New(3));
+            PyTuple_SetItem(args.get(), 0, toNumpy(config.y));
+            PyTuple_SetItem(args.get(), 1, dataValueToNumpy(config.x1));
+            PyTuple_SetItem(args.get(), 2, dataValueToNumpy(config.x2));
+
+            PyPtr kwargs(PyDict_New());
+            
+            if (config.fmt.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "fmt",
+                    PyUnicode_FromString(config.fmt.value().c_str()));
+            }   
+            
+            kwargsImpl(kwargs.get(), config);
+           
+            PyDict_SetItemString(kwargs.get(), "interpolate",
+                    config.interpolate ? Py_True : Py_False);
+            
+            PyPtr fill(PyObject_GetAttrString(pyObj, "fill_betweenx"));
+            checkAttr(fill.get(), "fill_betweenx");
+            
+            PyPtr res(PyObject_Call(fill.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "fill_betweenx");
+            
+
+        }
 
 
     } // namespace detail

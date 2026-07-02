@@ -249,27 +249,31 @@ public:
     }
 
 
-    void fill_between(const std::vector<double>& x, const std::vector<double>& y1, const std::vector<double>& y2, const std::string& fmt = "b") {
-
-        PyPtr xarray(toNumpy(x));
-        PyPtr y1array(toNumpy(y1));
-        PyPtr y2array(toNumpy(y2));
-
-        
-        PyObject_CallMethod(ax_.get(), "fill_between", "OOOs", xarray.get(), y1array.get(), y2array.get(), fmt.c_str());
-        
+    /**
+     * @brief Fills a polygon.
+     * @param config fill configuration
+     * @throws std::runtime_error if fill fails
+     */
+    void fill(const FillConfig& config) {
+        detail::fillImpl(ax_.get(), config);
     }
 
+    /**
+     * @brief Fills a polygon.
+     * @param config fill configuration
+     * @throws std::runtime_error if fill fails
+     */
+    void fill_between(const FillBetweenConfig& config) {
+        detail::fillBetweenImpl(ax_.get(), config);
+    }
 
-    void fill_betweenx(const std::vector<double>& y, const std::vector<double>& x1, const std::vector<double>& x2, const std::string& fmt = "b") {
-       
-        PyPtr yarray(toNumpy(y)); 
-        PyPtr x1array(toNumpy(x1));
-        PyPtr x2array(toNumpy(x2));
-        
-        PyObject_CallMethod(ax_.get(), "fill_betweenx", "OOOs", yarray.get(), x1array.get(), x2array.get(), fmt.c_str());
-        
-   
+    /**
+     * @brief Fills a polygon.
+     * @param config fill configuration
+     * @throws std::runtime_error if fill fails 
+     */
+    void fill_betweenx(const FillBetweenxConfig& config) {
+        detail::fillBetweenxImpl(ax_.get(), config);
     }
 
 
@@ -398,6 +402,9 @@ public:
     void legend(const LegendConfig& config = {}) {
         detail::legendImpl(ax_.get(), config);
     }
+
+
+    
 
     
 

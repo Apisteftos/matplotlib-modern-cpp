@@ -64,6 +64,13 @@ namespace matplotlibcpp {
         Clip
     };
 
+    // FillBetweenConfig
+    enum class Step {
+        Pre,
+        Post,
+        Mid
+    };
+
     
     // =============================================================================
     // Free functions converting enums to strings
@@ -150,6 +157,20 @@ namespace matplotlibcpp {
     }
 
 
+    /**
+     * @brief Converts Step enum to string
+     * @param w default is Step::Mid    
+     */
+    inline const char* toString(Step w) {
+        switch (w) {
+            case Step::Pre: return "pre";
+            case Step::Post: return "post";
+            case Step::Mid: return "mid";
+        }
+        return "mid";
+    }
+
+
 
     // =============================================================================
     // Optional types
@@ -180,10 +201,120 @@ namespace matplotlibcpp {
         std::vector<double>
     >;
 
+
+
+    // ============================================================
+    // Vec - a vector of doubles with element-wise operators
+    // ============================================================
+
+    struct Vec : std::vector<double> {
+        using std::vector<double>::vector;  
+
+        // ============================================================
+        // Element-wise comparison operators — return bool mask
+        // ============================================================
+        std::vector<bool> operator>(const Vec& other) const {
+            std::vector<bool> result(size());
+            std::transform(begin(), end(), other.begin(), result.begin(),
+                [](double a, double b) { return a > b; });
+            return result;
+        }
+
+        std::vector<bool> operator<(const Vec& other) const {
+            std::vector<bool> result(size());
+            std::transform(begin(), end(), other.begin(), result.begin(),
+                [](double a, double b) { return a < b; });
+            return result;
+        }
+
+        std::vector<bool> operator>=(const Vec& other) const {
+            std::vector<bool> result(size());
+            std::transform(begin(), end(), other.begin(), result.begin(),
+                [](double a, double b) { return a >= b; });
+            return result;
+        }
+
+        std::vector<bool> operator<=(const Vec& other) const {
+            std::vector<bool> result(size());
+            std::transform(begin(), end(), other.begin(), result.begin(),
+                [](double a, double b) { return a <= b; });
+            return result;
+        }
+
+        std::vector<bool> operator==(const Vec& other) const {
+            std::vector<bool> result(size());
+            std::transform(begin(), end(), other.begin(), result.begin(),
+                [](double a, double b) { return a == b; });
+            return result;
+        }
+
+        // ============================================================
+        // Element-wise arithmetic operators — like numpy
+        // ============================================================
+        Vec operator+(const Vec& other) const {
+            Vec result(size());
+            std::transform(begin(), end(), other.begin(), result.begin(),
+                std::plus<double>());
+            return result;
+        }
+
+        Vec operator-(const Vec& other) const {
+            Vec result(size());
+            std::transform(begin(), end(), other.begin(), result.begin(),
+                std::minus<double>());
+            return result;
+        }
+
+        Vec operator*(const Vec& other) const {
+            Vec result(size());
+            std::transform(begin(), end(), other.begin(), result.begin(),
+                std::multiplies<double>());
+            return result;
+        }
+
+        Vec operator/(const Vec& other) const {
+            Vec result(size());
+            std::transform(begin(), end(), other.begin(), result.begin(),
+                std::divides<double>());
+            return result;
+        }
+
+        // scalar versions
+        Vec operator*(double scalar) const {
+            Vec result(size());
+            std::transform(begin(), end(), result.begin(),
+                [scalar](double v) { return v * scalar; });
+            return result;
+        }
+
+        Vec operator/(double scalar) const {
+            Vec result(size());
+            std::transform(begin(), end(), result.begin(),
+                [scalar](double v) { return v / scalar; });
+            return result;
+        }
+
+        Vec operator+(double scalar) const {
+            Vec result(size());
+            std::transform(begin(), end(), result.begin(),
+                [scalar](double v) { return v + scalar; });
+            return result;
+        }
+
+        Vec operator-(double scalar) const {
+            Vec result(size());
+            std::transform(begin(), end(), result.begin(),
+                [scalar](double v) { return v - scalar; });
+            return result;
+        }
+    };
+    
+
+
     // =============================================================================
     // Structs for matplotlib.pyplot.plot() 
     // =============================================================================
-    
+
 
 
     struct FigureConfig {
@@ -207,21 +338,22 @@ namespace matplotlibcpp {
         bool scalex = true;
         bool scaley = true;
 
-
         // optional
         std::optional<std::string> fmt = std::nullopt;
-        std::optional<std::string> color = std::nullopt;
-        std::optional<double> alpha = std::nullopt;
-        std::optional<double> linewidth = std::nullopt;
-        std::optional<std::string> label = std::nullopt;
-        std::optional<std::string> marker = std::nullopt;
-        std::optional<double> markersize = std::nullopt;
-        std::optional<std::string> linestyle = std::nullopt;
-        std::optional<std::string> markerfacecolor = std::nullopt;   
+        
+        // kwargs
+        std::optional<std::string> color          = std::nullopt;
+        std::optional<std::string> label          = std::nullopt;
+        std::optional<double> alpha               = std::nullopt;
+        std::optional<double> linewidth           = std::nullopt;
+        std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
+        std::optional<double> markersize          = std::nullopt;
+        std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
-        std::optional<double> markeredgewidth = std::nullopt;
-        std::optional<std::string> drawstyle = std::nullopt;
-        std::optional<std::string> fillstyle = std::nullopt;
+        std::optional<double> markeredgewidth     = std::nullopt;
+        std::optional<std::string> drawstyle      = std::nullopt;
+        std::optional<std::string> fillstyle      = std::nullopt;
 
     };
 
@@ -254,15 +386,23 @@ namespace matplotlibcpp {
         std::vector<double> y;
 
         // optional
-        std::optional<std::string> fmt = std::nullopt;
         std::optional<std::string> where = toString(Where::PRE);
-        std::optional<std::string> label = std::nullopt;
-        std::optional<std::string> color = std::nullopt;
-        std::optional<double> alpha = std::nullopt;
-        std::optional<double> linewidth = std::nullopt;
-        std::optional<std::string> marker = std::nullopt;
-        std::optional<double> markersize = std::nullopt;
-        std::optional<std::string> linestyle = std::nullopt;
+        std::optional<std::string> fmt = std::nullopt;
+
+        // kwargs
+        std::optional<std::string> color          = std::nullopt;
+        std::optional<std::string> label          = std::nullopt;
+        std::optional<double> alpha               = std::nullopt;
+        std::optional<double> linewidth           = std::nullopt;
+        std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
+        std::optional<double> markersize          = std::nullopt;
+        std::optional<std::string> markerfacecolor = std::nullopt;
+        std::optional<std::string> markeredgecolor = std::nullopt;
+        std::optional<double> markeredgewidth     = std::nullopt;
+        std::optional<std::string> drawstyle      = std::nullopt;
+        std::optional<std::string> fillstyle      = std::nullopt;
+
     };
 
 
@@ -362,7 +502,7 @@ namespace matplotlibcpp {
         // TODO: bbox_to_anchor
         // TODO: prop
         // TODO: fontsize
-        // TODO: labelcolor
+        // TODO: labelcolorarray-like or float
         // TODO: numpoints
         // TODO: scatterpoints
         // TODO: scatteryoffsets
@@ -385,11 +525,21 @@ namespace matplotlibcpp {
         std::optional<bool> visible = std::nullopt;
         std::optional<std::string> which = toString(Which::Both);
         std::optional<std::string> axis = toString(Axis::Both);
-        std::optional<std::string> color = std::nullopt;
-        std::optional<double> alpha = std::nullopt;
-        std::optional<std::string> linestyle = std::nullopt;
-        std::optional<double> linewidth = std::nullopt;
-        std::optional<std::string> drawstyle = std::nullopt;
+
+
+        // kwargs
+        std::optional<std::string> color          = std::nullopt;
+        std::optional<std::string> label          = std::nullopt;
+        std::optional<double> alpha               = std::nullopt;
+        std::optional<double> linewidth           = std::nullopt;
+        std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
+        std::optional<double> markersize          = std::nullopt;
+        std::optional<std::string> markerfacecolor = std::nullopt;
+        std::optional<std::string> markeredgecolor = std::nullopt;
+        std::optional<double> markeredgewidth     = std::nullopt;
+        std::optional<std::string> drawstyle      = std::nullopt;
+        std::optional<std::string> fillstyle      = std::nullopt;
 
     };
 
@@ -403,19 +553,22 @@ namespace matplotlibcpp {
         
         // optional
         std::optional<std::string> fmt = std::nullopt;
-        std::optional<std::string> color = std::nullopt;
-        std::optional<double> alpha = std::nullopt;
-        std::optional<double> linewidth = std::nullopt;
-        std::optional<std::string> linestyle = std::nullopt;
-        std::optional<std::string> marker = std::nullopt;
-        std::optional<double> markersize = std::nullopt;
+        std::optional<std::vector<double>> subs = std::nullopt;
+
+        // kwargs
+        std::optional<std::string> color          = std::nullopt;
+        std::optional<std::string> label          = std::nullopt;
+        std::optional<double> alpha               = std::nullopt;
+        std::optional<double> linewidth           = std::nullopt;
+        std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
+        std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
-        std::optional<double> markeredgewidth = std::nullopt;
-        std::optional<std::string> drawstyle = std::nullopt;
-        std::optional<std::string> fillstyle = std::nullopt;
-        std::optional<std::string> label = std::nullopt;
-        std::optional<std::vector<double>> subs = std::nullopt;
+        std::optional<double> markeredgewidth     = std::nullopt;
+        std::optional<std::string> drawstyle      = std::nullopt;
+        std::optional<std::string> fillstyle      = std::nullopt;
+        
     };
 
 
@@ -427,19 +580,22 @@ namespace matplotlibcpp {
         
         // optional
         std::optional<std::string> fmt = std::nullopt;
-        std::optional<std::string> color = std::nullopt;
-        std::optional<double> alpha = std::nullopt;
-        std::optional<double> linewidth = std::nullopt;
-        std::optional<std::string> linestyle = std::nullopt;
-        std::optional<std::string> marker = std::nullopt;
-        std::optional<double> markersize = std::nullopt;
+        std::optional<std::vector<double>> subs = std::nullopt;
+
+        // kwargs
+        std::optional<std::string> color          = std::nullopt;
+        std::optional<std::string> label          = std::nullopt;
+        std::optional<double> alpha               = std::nullopt;
+        std::optional<double> linewidth           = std::nullopt;
+        std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
+        std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
-        std::optional<double> markeredgewidth = std::nullopt;
-        std::optional<std::string> drawstyle = std::nullopt;
-        std::optional<std::string> fillstyle = std::nullopt;
-        std::optional<std::string> label = std::nullopt;
-        std::optional<std::vector<double>> subs = std::nullopt;
+        std::optional<double> markeredgewidth     = std::nullopt;
+        std::optional<std::string> drawstyle      = std::nullopt;
+        std::optional<std::string> fillstyle      = std::nullopt;
+        
     };
 
 
@@ -451,19 +607,100 @@ namespace matplotlibcpp {
         
         // optional
         std::optional<std::string> fmt = std::nullopt;
-        std::optional<std::string> color = std::nullopt;
-        std::optional<double> alpha = std::nullopt;
-        std::optional<double> linewidth = std::nullopt;
-        std::optional<std::string> linestyle = std::nullopt;
-        std::optional<std::string> marker = std::nullopt;
-        std::optional<double> markersize = std::nullopt;
+        std::optional<std::vector<double>> subs = std::nullopt;
+
+        // kwargs
+        std::optional<std::string> color          = std::nullopt;
+        std::optional<std::string> label          = std::nullopt;
+        std::optional<double> alpha               = std::nullopt;
+        std::optional<double> linewidth           = std::nullopt;
+        std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
+        std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
-        std::optional<double> markeredgewidth = std::nullopt;
-        std::optional<std::string> drawstyle = std::nullopt;
-        std::optional<std::string> fillstyle = std::nullopt;
-        std::optional<std::string> label = std::nullopt;
-        std::optional<std::vector<double>> subs = std::nullopt;
+        std::optional<double> markeredgewidth     = std::nullopt;
+        std::optional<std::string> drawstyle      = std::nullopt;
+        std::optional<std::string> fillstyle      = std::nullopt;
+    };
+
+
+    struct FillConfig {
+        std::vector<double> x;
+        std::vector<double> y;
+        
+    
+
+        // **kwargs polygon properties 
+        std::optional<std::string> color            = std::nullopt;
+        std::optional<std::string> facecolor        = std::nullopt;
+        std::optional<std::string> edgecolor        = std::nullopt;
+        std::optional<std::string> label            = std::nullopt;
+        std::optional<double> alpha                 = std::nullopt;
+        std::optional<double> linewidth             = std::nullopt;
+        std::optional<std::string> linestyle        = std::nullopt;
+        std::optional<std::string> hatch            = std::nullopt;
+        std::optional<bool> fill                    = std::nullopt;
+        std::optional<double> zorder                = std::nullopt;
+    };
+
+
+
+    struct FillBetweenConfig {
+        std::vector<double> x;
+        DataValue y1;
+        DataValue y2 = 0.0;
+        bool interpolate = false;
+
+        
+        // optional
+        std::optional<std::string> fmt = std::nullopt;
+        std::optional<std::vector<bool>> where    = std::nullopt;
+        std::optional<std::string> step = toString(Step::Mid);
+
+        // kwargs
+        std::optional<std::string> color          = std::nullopt;
+        std::optional<std::string> label          = std::nullopt;
+        std::optional<double> alpha               = std::nullopt;
+        std::optional<double> linewidth           = std::nullopt;
+        std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
+        std::optional<double> markersize          = std::nullopt;
+        std::optional<std::string> markerfacecolor = std::nullopt;
+        std::optional<std::string> markeredgecolor = std::nullopt;
+        std::optional<double> markeredgewidth     = std::nullopt;
+        std::optional<std::string> drawstyle      = std::nullopt;
+        std::optional<std::string> fillstyle      = std::nullopt;
+        
+    };
+
+
+    struct FillBetweenxConfig {
+        std::vector<double> y;
+        DataValue x1;
+        DataValue x2 = 0.0;
+        bool interpolate = false;
+
+        // optional
+        std::optional<std::string> fmt = std::nullopt;
+        std::optional<Vec> where    = std::nullopt;
+        std::optional<std::string> step = toString(Step::Mid);
+
+
+        // kwargs
+        std::optional<std::string> color          = std::nullopt;
+        std::optional<std::string> label          = std::nullopt;
+        std::optional<double> alpha               = std::nullopt;
+        std::optional<double> linewidth           = std::nullopt;
+        std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
+        std::optional<double> markersize          = std::nullopt;
+        std::optional<std::string> markerfacecolor = std::nullopt;
+        std::optional<std::string> markeredgecolor = std::nullopt;
+        std::optional<double> markeredgewidth     = std::nullopt;
+        std::optional<std::string> drawstyle      = std::nullopt;
+        std::optional<std::string> fillstyle      = std::nullopt;
+
     };
 
 

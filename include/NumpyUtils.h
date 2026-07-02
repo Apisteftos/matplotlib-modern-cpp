@@ -149,6 +149,29 @@ namespace matplotlibcpp {
         return tuple;
     }
 
+
+
+    
+
+    /** @brief Scalar multiplication operator
+     * @param scalar input scalar
+     * @param v input vector
+     * @return Vec result of scalar multiplication
+     */
+    inline Vec operator*(double scalar, const Vec& v) { return v * scalar; }
+
+
+    /** @brief Scalar addition operator
+     * @param scalar input scalar
+     * @param v input vector
+     * @return Vec result of scalar addition
+     */
+    inline Vec operator+(double scalar, const Vec& v) { return v + scalar; }
+
+
+
+    
+
     
 
 }
