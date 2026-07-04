@@ -579,5 +579,78 @@ namespace matplotlibcpp {
         }
 
 
+        /**
+         * @brief Implementation for plotting error bars.
+         * @param pyObj the Python object representing the axes
+         * @param config the error bar configuration
+         * @throws std::runtime_error if error bar fails
+         */
+        inline void errorbarImpl(PyObject* pyObj, const ErrorbarConfig& config) {
+
+            PyPtr args(PyTuple_New(2));
+            PyTuple_SetItem(args.get(), 0, dataValueToNumpy(config.x));
+            PyTuple_SetItem(args.get(), 1, dataValueToNumpy(config.y));
+            
+
+           
+
+            PyPtr kwargs(PyDict_New());
+            
+            if (config.fmt.has_value())
+                PyDict_SetItemString(kwargs.get(), "fmt",
+                    PyUnicode_FromString(config.fmt.value().c_str()));
+            if (config.yerr.has_value())
+                PyDict_SetItemString(kwargs.get(), "yerr",
+                    errorValueToNumpy(config.yerr.value()));
+            if (config.xerr.has_value())
+                PyDict_SetItemString(kwargs.get(), "xerr",
+                    errorValueToNumpy(config.xerr.value()));
+            if (config.ecolor.has_value())
+                PyDict_SetItemString(kwargs.get(), "ecolor",
+                    PyUnicode_FromString(config.ecolor.value().c_str()));
+            if (config.elinewidth.has_value())
+                PyDict_SetItemString(kwargs.get(), "elinewidth",
+                    PyFloat_FromDouble(config.elinewidth.value()));
+            if (config.capsize.has_value())
+                PyDict_SetItemString(kwargs.get(), "capsize",
+                    PyFloat_FromDouble(config.capsize.value()));   
+            if (config.capthick.has_value())
+                PyDict_SetItemString(kwargs.get(), "capthick",
+                    PyFloat_FromDouble(config.capthick.value()));
+            if (config.barsabove.has_value())
+                PyDict_SetItemString(kwargs.get(), "barsabove",
+                    config.barsabove.value() ? Py_True : Py_False);
+            if (config.lolims.has_value())
+                PyDict_SetItemString(kwargs.get(), "lolims",
+                    limValueToPython(config.lolims.value()));
+            if (config.uplims.has_value())
+                PyDict_SetItemString(kwargs.get(), "uplims",
+                    limValueToPython(config.uplims.value()));
+            if (config.xlolims.has_value())
+                PyDict_SetItemString(kwargs.get(), "xlolims",
+                    limValueToPython(config.xlolims.value()));
+            if (config.xuplims.has_value())
+                PyDict_SetItemString(kwargs.get(), "xuplims",
+                    limValueToPython(config.xuplims.value()));
+            if (config.errorevery.has_value())
+                PyDict_SetItemString(kwargs.get(), "errorevery",
+                    errorEveryValueToPython(config.errorevery.value()));
+
+            // rest of kwargs
+            kwargsImpl(kwargs.get(), config);
+
+            PyPtr errorbar(PyObject_GetAttrString(pyObj, "errorbar"));
+            checkAttr(errorbar.get(), "errorbar");
+
+            // print kwargs
+            //PyObject_Print(kwargs.get(), stdout, 0);
+            
+            PyPtr res(PyObject_Call(errorbar.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "errorbar");
+
+
+        }
+
+
     } // namespace detail
 } // namespace matplotlibcpp

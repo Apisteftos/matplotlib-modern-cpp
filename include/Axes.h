@@ -191,14 +191,13 @@ public:
     }
 
 
-    void errorbar(const std::vector<double>& x, const std::vector<double>& y, const std::vector<double>& yerr, const std::string& fmt = "b") {
-
-        PyPtr xarray(toNumpy(x));
-        PyPtr yarray(toNumpy(y));
-        PyPtr yerrarray(toNumpy(yerr));
-        
-        PyObject_CallMethod(ax_.get(), "errorbar", "OOOs", xarray.get(), yarray.get(), yerrarray.get(), fmt.c_str());
-        
+    /**
+     * @brief Plots a line graph.
+     * @param config plot configuration
+     * @throws std::runtime_error if plot fails
+     */
+    void errorbar(const ErrorbarConfig& config) {
+        detail::errorbarImpl(ax_.get(), config);
     }
 
 

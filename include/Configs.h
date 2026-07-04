@@ -190,7 +190,6 @@ namespace matplotlibcpp {
     >;
 
 
-
     // =============================================================================
     // Multiple data types
     // =============================================================================
@@ -201,6 +200,18 @@ namespace matplotlibcpp {
         std::vector<double>
     >;
 
+
+    // errorbar parameters
+    using LimValue = std::variant<
+        bool,
+        std::vector<bool>
+    >;
+
+    // errorbar parameters
+    using ErrorEveryValue = std::variant<
+        int,
+        std::pair<int, int>
+    >;
 
 
     // ============================================================
@@ -361,15 +372,41 @@ namespace matplotlibcpp {
     struct ErrorbarConfig {
         DataValue x;
         DataValue y;
+        
+        // optional
         std::optional<ErrorValue> yerr = std::nullopt;
         std::optional<ErrorValue> xerr = std::nullopt;
-        std::string fmt = "";
-        std::string ecolor = "";
-        std::string label = "";
-        double capsize = 0.0;
-        double alpha = 1.0;
-        double linewidth = 1.0;
-        double elinewidth; 
+        std::optional<std::string> fmt = std::nullopt;
+        std::optional<std::string> ecolor = std::nullopt;
+        std::optional<double> elinewidth = std::nullopt;
+        std::optional<double> capsize = 0.0;
+        std::optional<double> capthick = std::nullopt;
+        std::optional<bool> barsabove = false;
+
+        // limit arrows
+        std::optional<LimValue> lolims = false;
+        std::optional<LimValue> uplims = false;
+        std::optional<LimValue> xlolims = false;
+        std::optional<LimValue> xuplims = false;
+
+        // errorevery — int or (start, N) e.g. .errorevery={4, 2} 
+        std::optional<ErrorEveryValue> errorevery = 1;
+
+        // kwargs
+        std::optional<std::string> color          = std::nullopt;
+        std::optional<std::string> label          = std::nullopt;
+        std::optional<double> alpha               = std::nullopt;
+        std::optional<double> linewidth           = std::nullopt;
+        std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
+        std::optional<double> markersize          = std::nullopt;
+        std::optional<std::string> markerfacecolor = std::nullopt;
+        std::optional<std::string> markeredgecolor = std::nullopt;
+        std::optional<double> markeredgewidth     = std::nullopt;
+        std::optional<std::string> drawstyle      = std::nullopt;
+        std::optional<std::string> fillstyle      = std::nullopt;
+        
+
     };
 
 

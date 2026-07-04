@@ -69,54 +69,13 @@ namespace matplotlibcpp {
         }
 
 
-
+        /**
+         * @brief Plots a line graph.
+         * @param config plot configuration
+         * @throws std::runtime_error if plot fails
+         */
         void errorbar(const ErrorbarConfig& config) {
-
-            PyPtr xarray(dataValueToNumpy(config.x));
-            PyPtr yarray(dataValueToNumpy(config.y));
-
-            PyPtr args(PyTuple_New(2));
-            PyTuple_SetItem(args.get(), 0, xarray.get());
-            PyTuple_SetItem(args.get(), 1, yarray.get());
-
-            PyPtr kwargs(PyDict_New());
-
-        
-            if (config.yerr.has_value()) {
-                PyPtr yerrarray(errorValueToNumpy(config.yerr.value()));
-                PyDict_SetItemString(kwargs.get(), "yerr", yerrarray.get());
-            }
-
-        
-            if (config.xerr.has_value()) {
-                PyPtr xerrarray(errorValueToNumpy(config.xerr.value()));
-                PyDict_SetItemString(kwargs.get(), "xerr", xerrarray.get());
-            }
-
-            if (!config.fmt.empty())
-                PyDict_SetItemString(kwargs.get(), "fmt",
-                    PyUnicode_FromString(config.fmt.c_str()));
-
-            if (!config.label.empty())
-                PyDict_SetItemString(kwargs.get(), "label",
-                    PyUnicode_FromString(config.label.c_str()));
-
-            if (!config.ecolor.empty())
-                PyDict_SetItemString(kwargs.get(), "ecolor",
-                    PyUnicode_FromString(config.ecolor.c_str()));
-
-            PyDict_SetItemString(kwargs.get(), "alpha",
-                PyFloat_FromDouble(config.alpha));
-            PyDict_SetItemString(kwargs.get(), "linewidth",
-                PyFloat_FromDouble(config.linewidth));
-            PyDict_SetItemString(kwargs.get(), "elinewidth",
-                PyFloat_FromDouble(config.elinewidth));
-
-            PyPtr fn(PyObject_GetAttrString(s2g_.get(), "errorbar"));
-            if (!fn) throw std::runtime_error("Failed to get errorbar function");
-
-            PyPtr res(PyObject_Call(fn.get(), args.get(), kwargs.get()));
-            if (!res) throw std::runtime_error("Call to errorbar() failed");
+            detail::errorbarImpl(s2g_.get(), config);
         }
 
 

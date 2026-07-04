@@ -49,7 +49,7 @@ namespace matplotlibcpp {
 
 
     // ============================================================
-    // toNumpy - converts std::vector to numpy array
+    // Conversion functions
     // ============================================================
 
     /**
@@ -80,6 +80,31 @@ namespace matplotlibcpp {
     }
 
     /**
+    * @brief Converts a std::vector<bool> to a numpy bool array
+    * @param v input vector
+    * @return PyObject* numpy array — caller must Py_XDECREF
+    * @throws std::runtime_error if array creation fails
+    */
+    inline PyObject* toBoolArray(const std::vector<bool>& v) {
+        Interpreter::getInstance();
+
+        npy_intp size = static_cast<npy_intp>(v.size());
+        
+        PyObject* array = PyArray_SimpleNew(1, &size, NPY_BOOL);
+        if (!array) throw std::runtime_error("Failed to create numpy bool array");
+
+        npy_bool* data = reinterpret_cast<npy_bool*>(
+            PyArray_DATA(reinterpret_cast<PyArrayObject*>(array)));
+
+        // Convert bool to npy_bool
+        for (size_t i = 0; i < v.size(); ++i)
+            data[i] = v[i] ? 1 : 0;
+
+        return array;
+    }   
+
+
+    /**
      * @brief Converts an ErrorValue to a numpy array
      * @param ev input ErrorValue
      * @return PyObject* numpy array
@@ -99,6 +124,42 @@ namespace matplotlibcpp {
                 return list;
             }
         }, ev);
+    }
+
+
+    /** 
+    *@brief Converts a LimValue to a Python object
+    * @param val input LimValue
+    * @return PyObject* Python object
+    */
+    inline PyObject* limValueToPython(const LimValue& val) {
+        return std::visit([](const auto& v) -> PyObject* {
+            using T = std::decay_t<decltype(v)>;
+            if constexpr (std::is_same_v<T, bool>) {
+                return v ? Py_True : Py_False;
+            } else if constexpr (std::is_same_v<T, std::vector<bool>>) {
+                return toBoolArray(v);
+            } 
+        }, val);
+    }
+
+    /**
+     * @brief Converts an ErrorEveryValue to a Python object
+     * @param val input ErrorEveryValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* errorEveryValueToPython(const ErrorEveryValue& val) {
+        return std::visit([](const auto& v) -> PyObject* {
+            using T = std::decay_t<decltype(v)>;
+            if constexpr (std::is_same_v<T, int>) {
+                return PyLong_FromLong(v);
+            } else if constexpr (std::is_same_v<T, std::pair<int, int>>) {
+                PyObject* tuple = PyTuple_New(2);
+                PyTuple_SetItem(tuple, 0, PyLong_FromLong(v.first));
+                PyTuple_SetItem(tuple, 1, PyLong_FromLong(v.second));
+                return tuple;
+            }
+        }, val);
     }
 
 
