@@ -78,21 +78,13 @@ namespace matplotlibcpp {
             detail::errorbarImpl(s2g_.get(), config);
         }
 
-
+        /**
+         * @brief Plots a line graph.
+         * @param config plot configuration
+         * @throws std::runtime_error if plot fails
+         */
         void scatter(const ScatterConfig& config) {
-            
-            PyPtr xarray(toNumpy(config.x));
-            PyPtr yarray(toNumpy(config.y));
-
-            PyPtr args(PyTuple_New(2));
-            PyTuple_SetItem(args.get(), 0, xarray.get());
-            PyTuple_SetItem(args.get(), 1, yarray.get());
-
-            PyPtr kwargs(PyDict_New());
-
-
-
-        
+            detail::scatterImpl(s2g_.get(), config);
         }
 
 

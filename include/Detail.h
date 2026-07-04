@@ -664,11 +664,35 @@ namespace matplotlibcpp {
 
             PyPtr kwargs(PyDict_New());
 
-            if (config.fmt.has_value()) {
+            if (config.fmt.has_value())
                 PyDict_SetItemString(kwargs.get(), "fmt",
                     PyUnicode_FromString(config.fmt.value().c_str()));
-            }
-
+            if (config.s.has_value())
+                PyDict_SetItemString(kwargs.get(), "s",
+                    sizeInPointsValueToPython(config.s.value()));
+            if (config.c.has_value())
+                PyDict_SetItemString(kwargs.get(), "c",
+                    colorValueToPython(config.c.value()));
+            if (config.cmap.has_value())
+                PyDict_SetItemString(kwargs.get(), "cmap",
+                    PyUnicode_FromString(config.cmap.value().c_str()));
+            if (config.vmin.has_value())
+                PyDict_SetItemString(kwargs.get(), "vmin",
+                    PyFloat_FromDouble(config.vmin.value()));
+            if (config.vmax.has_value())
+                PyDict_SetItemString(kwargs.get(), "vmax",
+                    PyFloat_FromDouble(config.vmax.value()));
+            if (config.linewidths.has_value())
+                PyDict_SetItemString(kwargs.get(), "linewidths",
+                    linewidthsToPython(config.linewidths.value()));
+            if (config.plotnonfinite.has_value())
+                PyDict_SetItemString(kwargs.get(), "plotnonfinite",
+                    config.plotnonfinite.value() ? Py_True : Py_False);
+            if (config.edgecolors.has_value())
+                PyDict_SetItemString(kwargs.get(), "edgecolors",
+                    PyUnicode_FromString(config.edgecolors.value().c_str()));
+        
+            // rest kwargs
             kwargsImpl(kwargs.get(), config);
 
             PyPtr scatter(PyObject_GetAttrString(pyObj, "scatter"));

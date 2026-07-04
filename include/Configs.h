@@ -172,47 +172,6 @@ namespace matplotlibcpp {
 
 
 
-    // =============================================================================
-    // Optional types
-    // =============================================================================
-
-    // errorbar parameters
-    using ErrorValue = std::variant<
-        double,
-        std::vector<double>, 
-        std::vector<std::vector<double>>
-    >; 
-
-    // tick_params parameters
-    using LabelsizeValue = std::variant<
-        double,
-        std::string
-    >;
-
-
-    // =============================================================================
-    // Multiple data types
-    // =============================================================================
-
-    // Errorbar parameters
-    using DataValue = std::variant<
-        double,
-        std::vector<double>
-    >;
-
-
-    // errorbar parameters
-    using LimValue = std::variant<
-        bool,
-        std::vector<bool>
-    >;
-
-    // errorbar parameters
-    using ErrorEveryValue = std::variant<
-        int,
-        std::pair<int, int>
-    >;
-
 
     // ============================================================
     // Vec - a vector of doubles with element-wise operators
@@ -319,8 +278,67 @@ namespace matplotlibcpp {
             return result;
         }
     };
-    
 
+
+
+    // =============================================================================
+    // Optional types
+    // =============================================================================
+
+    // errorbar parameters
+    using ErrorValue = std::variant<
+        double,
+        std::vector<double>, 
+        std::vector<std::vector<double>>
+    >; 
+
+    // tick_params parameters
+    using LabelsizeValue = std::variant<
+        double,
+        std::string
+    >;
+
+
+    // =============================================================================
+    // Multiple data types
+    // =============================================================================
+
+    // Errorbar parameters
+    using DataValue = std::variant<
+        double,
+        std::vector<double>
+    >;
+
+
+    // errorbar parameters
+    using LimValue = std::variant<
+        bool,
+        std::vector<bool>
+    >;
+
+    // errorbar parameters
+    using ErrorEveryValue = std::variant<
+        int,
+        std::pair<int, int>
+    >;
+
+    // scatter parameters
+    using SizeValue = std::variant<
+        double,
+        Vec
+    >;
+
+    // scatter parameters
+    using LinewidthsValue = std::variant<
+        double, 
+        Vec
+    >;
+
+    // scatter parameters
+    using ColorValue = std::variant<
+        std::string, 
+        Vec
+    >;
 
     // =============================================================================
     // Structs for matplotlib.pyplot.plot() 
@@ -411,25 +429,39 @@ namespace matplotlibcpp {
 
 
     struct ScatterConfig {
-        std::vector<double> x;
-        std::vector<double> y;
+        Vec x;
+        Vec y;
         
         // optional
-        std::optional<std::string> fmt = std::nullopt;
+        std::optional<std::string> fmt              = std::nullopt;
+        std::optional<SizeValue> s                  = std::nullopt;
+        std::optional<ColorValue> c                 = std::nullopt;
+        std::optional<std::string> cmap             = std::nullopt;
+        std::optional<double> vmin                  = std::nullopt;
+        std::optional<double> vmax                  = std::nullopt;
+        std::optional<LinewidthsValue> linewidths   = 1.5;
+        std::optional<bool> plotnonfinite           = false;
+        std::optional<std::string> edgecolors =     "face";
+
+        // normalization 
+        // valid: "linear" (default), "log", "symlog", "logit",
+        std::optional<std::string> norm             = std::nullopt;
+
+
 
         // kwargs
-        std::optional<std::string> color          = std::nullopt;
-        std::optional<std::string> label          = std::nullopt;
-        std::optional<double> alpha               = std::nullopt;
-        std::optional<double> linewidth           = std::nullopt;
-        std::optional<std::string> linestyle      = std::nullopt;
-        std::optional<std::string> marker         = std::nullopt;
-        std::optional<double> markersize          = std::nullopt;
-        std::optional<std::string> markerfacecolor = std::nullopt;
-        std::optional<std::string> markeredgecolor = std::nullopt;
-        std::optional<double> markeredgewidth     = std::nullopt;
-        std::optional<std::string> drawstyle      = std::nullopt;
-        std::optional<std::string> fillstyle      = std::nullopt;
+        std::optional<std::string> color            = std::nullopt;
+        std::optional<std::string> label            = std::nullopt;
+        std::optional<double> alpha                 = std::nullopt;
+        std::optional<double> linewidth             = std::nullopt;
+        std::optional<std::string> linestyle        = std::nullopt;
+        std::optional<std::string> marker           = std::nullopt;
+        std::optional<double> markersize            = std::nullopt;
+        std::optional<std::string> markerfacecolor  = std::nullopt;
+        std::optional<std::string> markeredgecolor  = std::nullopt;
+        std::optional<double> markeredgewidth       = std::nullopt;
+        std::optional<std::string> drawstyle        = std::nullopt;
+        std::optional<std::string> fillstyle        = std::nullopt;
     
     };
 
@@ -439,8 +471,8 @@ namespace matplotlibcpp {
         std::vector<double> y;
 
         // optional
-        std::optional<std::string> where = toString(Where::PRE);
-        std::optional<std::string> fmt = std::nullopt;
+        std::optional<std::string> where          = toString(Where::PRE);
+        std::optional<std::string> fmt            = std::nullopt;
 
         // kwargs
         std::optional<std::string> color          = std::nullopt;
@@ -463,39 +495,39 @@ namespace matplotlibcpp {
 
         std::vector<int> shape;
         std::vector<int> loc;
-        int rowspan = 1;
-        int colspan = 1;
-        Figure* fig = nullptr;
+        int rowspan              = 1;
+        int colspan              = 1;
+        Figure* fig              = nullptr;
         
     };
 
 
     struct XLabelConfig {
-        std::string xlabel = toString(Loc::CENTER);
-        double labelpad = 4.0;
+        std::string xlabel       = toString(Loc::CENTER);
+        double labelpad          = 4.0;
         std::string color;
     };
 
 
     struct YLabelConfig {
-        std::string ylabel = toString(Loc::CENTER);
-        double labelpad = 4.0;
+        std::string ylabel       = toString(Loc::CENTER);
+        double labelpad          = 4.0;
         std::string color;
     };
 
     
   
     struct SubplotsConfig {
-        long nrows = 1;
-        long ncols = 1;
+        long nrows                = 1;
+        long ncols                = 1;
         std::vector<long> figsize = {10, 10};
     };
 
 
     struct TickParamsConfig {
-        std::string axis = toString(Axis::Both);
-        std::string which = toString(Which::Both);
-        bool reset = false;
+        std::string axis           = toString(Axis::Both);
+        std::string which          = toString(Which::Both);
+        bool reset                 = false;
 
         //optional
         std::optional<std::string> direction = toString(Direction::In);
@@ -526,21 +558,21 @@ namespace matplotlibcpp {
 
 
     struct SetXlimConfig {
-        std::optional<double> left = std::nullopt;
-        std::optional<double> right = std::nullopt;
+        std::optional<double> left      = std::nullopt;
+        std::optional<double> right     = std::nullopt;
         bool emit = true;
-        std::optional<bool> auto_ = false;
-        std::optional<double> xmin = std::nullopt;
-        std::optional<double> xmax = std::nullopt;
+        std::optional<bool> auto_       = false;
+        std::optional<double> xmin      = std::nullopt;
+        std::optional<double> xmax      = std::nullopt;
     };
 
     struct SetYlimConfig {
-        std::optional<double> bottom = std::nullopt;
-        std::optional<double> top = std::nullopt;
+        std::optional<double> bottom    = std::nullopt;
+        std::optional<double> top       = std::nullopt;
         bool emit = true;
-        std::optional<bool> auto_ = false;
-        std::optional<double> ymin = std::nullopt;
-        std::optional<double> ymax = std::nullopt;
+        std::optional<bool> auto_       = false;
+        std::optional<double> ymin      = std::nullopt;
+        std::optional<double> ymax      = std::nullopt;
     };
 
 

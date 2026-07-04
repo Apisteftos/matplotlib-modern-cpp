@@ -65,10 +65,7 @@ namespace matplotlibcpp {
 
         npy_intp size = static_cast<npy_intp>(v.size());
 
-        PyObject* array = PyArray_SimpleNewFromData(
-            1, &size,
-            NumpyType<T>::typenum,
-            const_cast<T*>(v.data()));
+        PyObject* array = PyArray_SimpleNew(1, &size, NumpyType<T>::typenum);
 
         if (!array) throw std::runtime_error("Failed to create numpy array");
 
@@ -211,6 +208,57 @@ namespace matplotlibcpp {
     }
 
 
+
+    /**
+     * @brief Converts a SizeValue in points to a Python object
+     * @param sv input SizeValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* sizeInPointsValueToPython(const SizeValue& sv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>) {
+                return PyFloat_FromDouble(val);
+            } else {
+                return toNumpy(val);
+            }
+        }, sv);
+    }
+
+
+    /**
+     * @brief Converts linewidths to a Python object
+     * @param lw input linewidths
+     * @return PyObject* Python object
+     */
+    inline PyObject* linewidthsToPython(const LinewidthsValue& lw) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>) {
+                return PyFloat_FromDouble(val);
+            } else {
+                return toNumpy(val);
+            }
+        }, lw);
+    }
+
+
+    
+    /**
+     * @brief Converts a ColorValue in points to a Python object
+     * @param cv input ColorValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* colorValueToPython(const ColorValue& cv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, std::string>) {
+                return PyUnicode_FromString(val.c_str());
+            } else {
+                return toNumpy(val);
+            }
+        }, cv);
+    }
 
     
 

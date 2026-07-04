@@ -14,11 +14,19 @@ All notable changes to this project will be documented in this file.
 - `ErrorEveryValue` — `std::variant<int, std::pair<int,int>>`
 - `limValueToPython()`, `errorEveryValueToPython()` converters
 - `toBoolArray()` — `std::vector<bool>` → numpy bool array
-- errorbar, fill C++ and Python examples
+- errorbar and scatter, fill C++ and Python examples
+- `scatter()` — full `ScatterConfig` with s, c, cmap, norm, vmin, vmax,
+  alpha, linewidths, edgecolors, plotnonfinite
+- `SizeValue` — `std::variant<double, Vec>` for marker size
+- `ColorValue` — `std::variant<std::string, Vec>` for marker color
+- `LinewidthsValue` — `std::variant<double, Vec>` for linewidths
+- `sizeInPointsValueToPython()`, `colorValueToPython()`, `linewidthsToPython()`
+
 
 ### Fixed
 - `errorbar()` fmt must be kwarg not positional — 3rd positional arg is yerr
-
+- `toNumpy()` — `PyArray_SimpleNewFromData` borrows pointer causing
+  dangling reference switched to `PyArray_SimpleNew` + `memcpy` so numpy owns its own buffer
 
 
 

@@ -21,14 +21,12 @@ axes[0, 1].grid(True)
 
 
 sc = axes[1, 0].scatter(x, y, c=colors, cmap='viridis', alpha=0.7)
-fig.colorbar(sc, ax=axes[1, 0])
 axes[1, 0].set_title("Colormap")
 axes[1, 0].grid(True)
 
 
 sc2 = axes[1, 1].scatter(x, y, s=sizes, c=colors, cmap='plasma',
                           alpha=0.7, edgecolors='black', linewidths=0.5)
-fig.colorbar(sc2, ax=axes[1, 1])
 axes[1, 1].set_title("Size + color + colormap")
 axes[1, 1].grid(True)
 
