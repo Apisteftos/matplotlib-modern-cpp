@@ -201,13 +201,13 @@ public:
     }
 
 
-    void scatter(const std::vector<double>& x, const std::vector<double>& y, const std::string& fmt = "b") {
-        
-        PyPtr xarray(toNumpy(x));
-        PyPtr yarray(toNumpy(y));
-        
-        PyObject_CallMethod(ax_.get(), "scatter", "OOs", xarray.get(), yarray.get(), fmt.c_str());
-    
+    /**
+     * @brief Plots a line graph.
+     * @param config plot configuration
+     * @throws std::runtime_error if plot fails
+     */
+    void scatter(const ScatterConfig& config) {
+        detail::scatterImpl(ax_.get(), config);
     }
 
 

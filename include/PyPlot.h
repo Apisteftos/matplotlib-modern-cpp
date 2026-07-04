@@ -599,6 +599,15 @@ public:
         detail::fillBetweenxImpl(Interpreter::getInstance().getPyplot(), config);
     }   
 
+    /**
+     * @brief Plots a line graph.
+     * @param config plot configuration
+     * @throws std::runtime_error if plot fails
+     */
+    void scatter(const ScatterConfig& config) {
+        detail::scatterImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
 
 
 };

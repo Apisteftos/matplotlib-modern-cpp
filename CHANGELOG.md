@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
+## [0.8.0] - 04/07/2026
+
+### Added
+- `errorbar()` — full `ErrorbarConfig` with yerr, xerr, lolims, uplims, 
+  xlolims, xuplims, errorevery, capsize, capthick, barsabove. etc
+- `LimValue` — `std::variant<bool, std::vector<bool>>` for limit arrows
+- `ErrorEveryValue` — `std::variant<int, std::pair<int,int>>`
+- `limValueToPython()`, `errorEveryValueToPython()` converters
+- `toBoolArray()` — `std::vector<bool>` → numpy bool array
+- errorbar, fill C++ and Python examples
+
+### Fixed
+- `errorbar()` fmt must be kwarg not positional — 3rd positional arg is yerr
+
+
+
+
+
 ## [0.7.0] - 02/07/2026
 
 ### Added

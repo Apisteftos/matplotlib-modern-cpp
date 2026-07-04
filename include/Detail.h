@@ -651,6 +651,33 @@ namespace matplotlibcpp {
 
         }
 
+        /**
+        * @brief Plots a line graph.
+        * @param config plot configuration
+        * @throws std::runtime_error if plot fails
+        */
+        inline void scatterImpl(PyObject* pyObj, const ScatterConfig& config) {
+
+            PyPtr args(PyTuple_New(2));
+            PyTuple_SetItem(args.get(), 0, toNumpy(config.x));
+            PyTuple_SetItem(args.get(), 1, toNumpy(config.y));
+
+            PyPtr kwargs(PyDict_New());
+
+            if (config.fmt.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "fmt",
+                    PyUnicode_FromString(config.fmt.value().c_str()));
+            }
+
+            kwargsImpl(kwargs.get(), config);
+
+            PyPtr scatter(PyObject_GetAttrString(pyObj, "scatter"));
+            checkAttr(scatter.get(), "scatter");
+
+            PyPtr res(PyObject_Call(scatter.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "scatter");
+        }
+
 
     } // namespace detail
 } // namespace matplotlibcpp
