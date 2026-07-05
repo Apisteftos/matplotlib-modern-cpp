@@ -22,11 +22,16 @@ All notable changes to this project will be documented in this file.
 - `LinewidthsValue` — `std::variant<double, Vec>` for linewidths
 - `sizeInPointsValueToPython()`, `colorValueToPython()`, `linewidthsToPython()`
 
+### Changed
+- updated the README.md file
+- separated the API reference from the README.md file into the docs/API.md file
+
 
 ### Fixed
 - `errorbar()` fmt must be kwarg not positional — 3rd positional arg is yerr
 - `toNumpy()` — `PyArray_SimpleNewFromData` borrows pointer causing
   dangling reference switched to `PyArray_SimpleNew` + `memcpy` so numpy owns its own buffer
+- comments in Axes.h and PyPlot.h
 
 
 

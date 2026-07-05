@@ -703,5 +703,8 @@ namespace matplotlibcpp {
         }
 
 
+        
+
+
     } // namespace detail
 } // namespace matplotlibcpp

@@ -2,9 +2,9 @@
 
 A modern C++23 header-only plotting library wrapping Python's matplotlib,
 featuring RAII-based Axes and Figure classes, fixed API compatibility with
-Python 3.11+ and numpy, and a clean CMake build system.
+Python 3.12+ and numpy, and a clean CMake build system.
 
-![Version](https://img.shields.io/badge/version-0.4.0-blue)
+![Version](https://img.shields.io/badge/version-0.9.0-blue)
 ![C++23](https://img.shields.io/badge/C%2B%2B-23-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-Linux-lightgrey)
@@ -19,10 +19,11 @@ This project modernizes the codebase with:
 
 - C++23 support
 - RAII memory management — no manual `Py_DECREF` in user code
-- Object-oriented separated classes (`Axes`, `Figure`, `Pyplot`)
-- Fixed API compatibility with Python 3.11+ and numpy
+- Object-oriented separated classes (`Axes`, `Figure`, `Pyplot`, `Subplot2Grid`)
+- Fixed API compatibility with Python 3.12+ and numpy
 - Modern CMake with `compile_commands.json` support
 - Clean split header architecture
+- `Vec` struct with numpy-like element-wise operators
 
 ---
 
@@ -39,7 +40,7 @@ This project modernizes the codebase with:
 | Package    | Version |
 |------------|---------|
 | Python     | 3.12.3  |
-| matplotlib | 3.10.8  |
+| matplotlib | 3.10.9  |
 | numpy      | 2.4.4   |
 
 ### Install Python dependencies
@@ -73,53 +74,26 @@ make
 ## Quick Start
 
 ```cpp
-#include "matplotlib.h"
+#include "Matplotlib.h"
+#include <cmath>
+#include <vector>
 
 int main() {
-    matplotlibcpp::Pyplot plt;
+    matplotlibcpp::PyPlot plt;
 
     const int n = 100;
-    std::vector<double> x(n), y(n);
+    matplotlibcpp::Vec x(n), y(n);
     for (int i = 0; i < n; ++i) {
         x[i] = i * 2 * M_PI / (n - 1);
         y[i] = std::sin(x[i]);
     }
 
-    plt.plot(x, y, "b");
-    plt.title("Sine Wave");
-    plt.grid();
-    plt.show();
+    auto [fig, axes] = plt.subplots({.figsize = {10, 5}});
+    axes[0].plot({.x = x, .y = y, .color = "b", .label = "sin(x)"});
+    axes[0].set_title("Sine Wave");
+    axes[0].legend();
+    axes[0].grid({.visible = true});
 
-    return 0;
-}
-```
-
----
-
-## Subplots
-
-```cpp
-#include "matplotlib.h"
-
-int main() {
-    matplotlibcpp::Pyplot plt;
-
-    std::vector<double> x = {1.0, 2.0, 3.0, 4.0};
-    std::vector<double> sinY = {0.84, 0.91, 0.14, -0.76};
-    std::vector<double> cosY = {0.54, -0.42, -0.99, -0.65};
-
-    std::vector<long> figsize = {10, 5};
-    auto [fig, axes] = plt.subplots(1, 2, figsize);
-
-    axes[0].plot(x, sinY, "b");
-    axes[0].set_title("Sine");
-    axes[0].grid();
-
-    axes[1].plot(x, cosY, "r");
-    axes[1].set_title("Cosine");
-    axes[1].grid();
-
-    fig.suptitle("Trig Functions");
     fig.tight_layout();
     plt.show();
 
@@ -129,95 +103,56 @@ int main() {
 
 ---
 
-## Axes Methods
+## Examples
 
-| Method | Description |
-|--------|-------------|
-| `plot(x, y, fmt)` | Line plot |
-| `scatter(x, y, fmt)` | Scatter plot |
-| `bar(x, height, fmt)` | Bar chart |
-| `barh(y, width, fmt)` | Horizontal bar chart |
-| `errorbar(config)` | Error bar plot |
-| `fill_between(x, y1, y2)` | Fill between two lines |
-| `step(x, y, fmt)` | Step plot |
-| `stem(x, y, fmt)` | Stem plot |
-| `loglog(x, y, fmt)` | Log-log plot |
-| `semilogx(x, y, fmt)` | Semi-log x plot |
-| `semilogy(x, y, fmt)` | Semi-log y plot |
-| `pie(x, labels, colors)` | Pie chart |
-| `set_title(title)` | Set axes title |
-| `set_xlabel(label)` | Set x label |
-| `set_ylabel(label)` | Set y label |
-| `set_xlim(left, right)` | Set x limits |
-| `set_ylim(bottom, top)` | Set y limits |
-| `set_aspect(aspect)` | Set aspect ratio |
-| `grid(flag)` | Toggle grid |
+| Example | Description |
+|---------|-------------|
+| `plot_example` | Basic line plots |
+| `subplots_example` | Multiple subplots |
+| `subplot2grid_example` | Custom grid layout |
+| `step_example` | Step plots with where parameter |
+| `loglog_example` | Log-log scale |
+| `semilogx_example` | Semi-log x scale |
+| `semilogy_example` | Semi-log y scale |
+| `errorbar_example` | Error bars with asymmetric errors |
+| `scatter_example` | Scatter plots with colormap |
+| `fill_example` | Fill polygons and between curves |
+| `twinx_example` | Dual y-axis |
+| `twiny_example` | Dual x-axis |
 
 ---
 
-## Figure Methods
+## Vec — numpy-like vector
 
-| Method | Description |
-|--------|-------------|
-| `suptitle(title)` | Set figure title |
-| `save(filename, dpi)` | Save figure to file |
-| `tight_layout()` | Adjust subplot spacing |
-| `clf()` | Clear figure |
-
----
-
-## Pyplot Methods
-
-| Method | Description |
-|--------|-------------|
-| `show(block)` | Display plots |
-| `plot(x, y, fmt)` | Plot on current axes |
-| `figure(config)` | Create new figure |
-| `subplots(nrows, ncols, figsize)` | Create subplots |
-| `subplot2grid(config)` | Create subplot at grid location |
-| `subplot(nrows, ncols, num)` | Select subplot |
-| `tight_layout()` | Adjust layout |
-| `clf()` | Clear figure |
-| `cla()` | Clear axes |
-| `close()` | Close figure |
-| `close(fig)` | Close specific figure |
-| `title(t)` | Set title |
-| `grid(flag)` | Toggle grid |
-| `sca(ax)` | Set current axes |
-| `get_fignums()` | Get open figure numbers |
-| `get_figlabels()` | Get open figure labels |
-| `fignum_exists(num)` | Check if figure exists |
-
----
-
-## Configuration Structs
+`Vec` is a `std::vector<double>` subclass with element-wise operators:
 
 ```cpp
-// Figure configuration
-plt.figure({
-    .num     = 1,
-    .figsize = {10, 8},
-    .dpi     = 100.0f,
-    .label   = "my_figure"
-});
+using matplotlibcpp::Vec;
 
-// Errorbar configuration
-axes[0].errorbar({
-    .x       = x,
-    .y       = y,
-    .yerr    = errors,
-    .fmt     = "bo",
-    .ecolor  = "red",
-    .capsize = 5.0
-});
+Vec x = matplotlibcpp::linspace(0, 10, 100);
+Vec y1 = x * 2.0;          // element-wise scalar multiply
+Vec y2 = x + 1.0;          // element-wise scalar add
+Vec y3 = y1 - y2;          // element-wise vector subtract
+Vec y4 = y1 * y2;          // element-wise vector multiply
 
-// subplot2grid configuration
-auto ax = plt.subplot2grid({
-    .shape   = {3, 3},
-    .loc     = {0, 0},
-    .colspan = 3
+// boolean masks for fill_between where=
+auto mask = y1 > y2;       // returns std::vector<bool>
+
+axes[0].fill_between({
+    .x     = x,
+    .y1    = y1,
+    .y2    = y2,
+    .where = y1 > y2,
+    .alpha = 0.3
 });
 ```
+
+---
+
+## API Reference
+
+See [docs/API.md](docs/API.md) for the full list of methods, config structs,
+type aliases, enums, and helper functions.
 
 ---
 

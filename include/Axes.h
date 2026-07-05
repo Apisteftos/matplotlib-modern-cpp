@@ -69,7 +69,7 @@ public:
 
 
     /**
-    * @brief Plots a line graph.
+    * @brief Plots a graph.
     * @param config plot configuration
     * @throws std::runtime_error if plot fails
     */
@@ -192,85 +192,77 @@ public:
 
 
     /**
-     * @brief Plots a line graph.
-     * @param config plot configuration
-     * @throws std::runtime_error if plot fails
-     */
+    * @brief Plots an error bar graph.
+    * @param config errorbar configuration
+    * @throws std::runtime_error if errorbar fails
+    */
     void errorbar(const ErrorbarConfig& config) {
         detail::errorbarImpl(ax_.get(), config);
     }
 
 
     /**
-     * @brief Plots a line graph.
-     * @param config plot configuration
-     * @throws std::runtime_error if plot fails
-     */
+    * @brief Plots a scatter graph.
+    * @param config scatter configuration
+    * @throws std::runtime_error if scatter fails
+    */
     void scatter(const ScatterConfig& config) {
         detail::scatterImpl(ax_.get(), config);
     }
 
 
-    void step(const std::vector<double>& x, const std::vector<double>& y, const std::string& fmt = "b") {
-        
-        PyPtr xarray(toNumpy(x));
-        PyPtr yarray(toNumpy(y));
-        
-        PyObject_CallMethod(ax_.get(), "step", "OOs", xarray.get(), yarray.get(), fmt.c_str());
-        
-    }
 
     /**
-     * @brief Plots a step graph.
-     * @param config step configuration
-     * @throws std::runtime_error if step fails
-     */
+    * @brief Plots a log-log graph.
+    * @param config loglog configuration
+    * @throws std::runtime_error if loglog fails
+    */
     void loglog(const LogLogConfig& config) {
         detail::loglogImpl(ax_.get(), config);
     }
 
     /**
-     * @brief Plots a step graph.
-     * @param config step configuration
-     * @throws std::runtime_error if step fails 
-     */
+    * @brief Plots a semi-log x graph.
+    * @param config semilogx configuration
+    * @throws std::runtime_error if semilogx fails
+    */
     void semilogx(const SemiLogxConfig& config) {
         detail::semilogxImpl(ax_.get(), config);
     }
 
     /**
-     * @brief Plots a step graph.
-     * @param config step configuration
-     * @throws std::runtime_error if step fails 
-     */
+    * @brief Plots a semi-log y graph.
+    * @param config semilogy configuration
+    * @throws std::runtime_error if semilogy fails
+    */
     void semilogy(const SemiLogyConfig& config) {
         detail::semilogyImpl(ax_.get(), config);
     }
 
 
     /**
-     * @brief Fills a polygon.
-     * @param config fill configuration
-     * @throws std::runtime_error if fill fails
-     */
+    * @brief Fills a closed polygon.
+    * @param config fill configuration
+    * @throws std::runtime_error if fill fails
+    */
     void fill(const FillConfig& config) {
         detail::fillImpl(ax_.get(), config);
     }
 
     /**
-     * @brief Fills a polygon.
-     * @param config fill configuration
-     * @throws std::runtime_error if fill fails
-     */
+    * @brief Fills the area between two horizontal curves.
+    * @param config fill_between configuration
+    * @throws std::runtime_error if fill_between fails
+    */
     void fill_between(const FillBetweenConfig& config) {
         detail::fillBetweenImpl(ax_.get(), config);
     }
 
     /**
-     * @brief Fills a polygon.
-     * @param config fill configuration
-     * @throws std::runtime_error if fill fails 
-     */
+    * @brief Fills the area between two vertical curves.
+    * @param config fill_betweenx configuration
+    * @throws std::runtime_error if fill_betweenx fails
+    */
     void fill_betweenx(const FillBetweenxConfig& config) {
         detail::fillBetweenxImpl(ax_.get(), config);
     }
@@ -342,7 +334,11 @@ public:
     
     }
 
-
+    /**
+    * @brief Creates a twin axes sharing the x-axis.
+    * @return Axes new axes sharing x-axis
+    * @throws std::runtime_error if twinx fails
+    */
     Axes twinx() {
 
         PyPtr args(PyTuple_New(0));
@@ -357,7 +353,11 @@ public:
 
     }
 
-
+    /**
+    * @brief Creates a twin axes sharing the y-axis.
+    * @return Axes new axes sharing y-axis
+    * @throws std::runtime_error if twiny fails
+    */
     Axes twiny() {
 
         PyPtr args(PyTuple_New(0));
@@ -394,9 +394,9 @@ public:
     }
 
     /**
-    * @brief Plots a step graph.
-    * @param config step configuration
-    * @throws std::runtime_error if step fails
+    * @brief Adds a legend to the axes.
+    * @param config legend configuration
+    * @throws std::runtime_error if legend fails
     */
     void legend(const LegendConfig& config = {}) {
         detail::legendImpl(ax_.get(), config);

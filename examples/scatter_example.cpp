@@ -27,13 +27,11 @@ int main() {
     for (int i = 0; i < 100; ++i)
         sizes[i] = randint(rng);
 
-    printf("sizes[0]=%d\n", sizes[0]);
 
     Vec sizes_d(100);
     for (int i = 0; i < 100; ++i)
         sizes_d[i] = static_cast<double>(sizes[i]);
 
-    printf("sizes_d[0]=%f sizes_d[1]=%f\n", sizes_d[0], sizes_d[1]);
 
 
     std::uniform_real_distribution<double> rand(0.0, 1.0);

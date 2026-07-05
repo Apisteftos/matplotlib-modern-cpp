@@ -546,64 +546,64 @@ public:
     }
 
     /**
-    * @brief Plots a step graph.
-    * @param config step configuration
-    * @throws std::runtime_error if step fails
+    * @brief Adds a legend to the axes.
+    * @param config legend configuration
+    * @throws std::runtime_error if legend fails
     */
     void legend(const LegendConfig& config = {}) {
         detail::legendImpl(Interpreter::getInstance().getPyplot(), config);
     }   
 
     /**
-     * @brief Plots a step graph.
-     * @param config step configuration
-     * @throws std::runtime_error if step fails 
-     */
+    * @brief Plots a log-log graph.
+    * @param config loglog configuration
+    * @throws std::runtime_error if loglog fails
+    */
     void loglog(const LogLogConfig& config) {
         detail::loglogImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
     /**
-     * @brief Plots a step graph.
-     * @param config step configuration
-     * @throws std::runtime_error if step fails 
-     */
+    * @brief Plots a semi-log x graph.
+    * @param config semilogx configuration
+    * @throws std::runtime_error if semilogx fails
+    */
     void semilogx(const SemiLogxConfig& config) {
         detail::semilogxImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
     /**
-     * @brief Fills a polygon.
-     * @param config fill configuration
-     * @throws std::runtime_error if fill fails 
-     */
+    * @brief Fills a closed polygon.
+    * @param config fill configuration
+    * @throws std::runtime_error if fill fails
+    */
     void fill(const FillConfig& config) {
         detail::fillImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
     /**
-     * @brief Fills a polygon.
-     * @param config fill configuration
-     * @throws std::runtime_error if fill fails 
-     */
+    * @brief Fills the area between two horizontal curves.
+    * @param config fill_between configuration
+    * @throws std::runtime_error if fill_between fails
+    */
     void fill_between(const FillBetweenConfig& config) {
         detail::fillBetweenImpl(Interpreter::getInstance().getPyplot(), config);
     }   
 
     /**
-     * @brief Fills a polygon.
-     * @param config fill configuration
-     * @throws std::runtime_error if fill fails     
-     */
+    * @brief Fills the area between two vertical curves.
+    * @param config fill_betweenx configuration
+    * @throws std::runtime_error if fill_betweenx fails
+    */
     void fill_betweenx(const FillBetweenxConfig& config) {
         detail::fillBetweenxImpl(Interpreter::getInstance().getPyplot(), config);
     }   
 
     /**
-     * @brief Plots a line graph.
-     * @param config plot configuration
-     * @throws std::runtime_error if plot fails
-     */
+    * @brief Plots a scatter graph.
+    * @param config scatter configuration
+    * @throws std::runtime_error if scatter fails
+    */
     void scatter(const ScatterConfig& config) {
         detail::scatterImpl(Interpreter::getInstance().getPyplot(), config);
     }
