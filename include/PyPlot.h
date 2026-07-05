@@ -197,6 +197,85 @@ public:
     }
 
 
+    /**
+    * @brief Calls subplot_mosaic() function.
+    * @param config subplot_mosaic configuration
+    * @throws std::runtime_error if subplot_mosaic fails
+    */
+    std::pair<Figure, std::map<std::string, Axes>> subplot_mosaic(const SubplotMosaicConfig& config) {
+        
+            PyPtr args(PyTuple_New(1));
+            PyTuple_SetItem(args.get(), 0, mosaicValueToPython(config.mosaic));
+
+            PyPtr kwargs(PyDict_New());
+
+
+            if (!config.figsize.empty()) {
+                PyPtr fs(PyTuple_New(2));
+                PyTuple_SetItem(fs.get(), 0, PyLong_FromLong(config.figsize[0]));
+                PyTuple_SetItem(fs.get(), 1, PyLong_FromLong(config.figsize[1]));
+                PyDict_SetItemString(kwargs.get(), "figsize", fs.get());
+            }
+
+            if (config.sharex.has_value())
+                PyDict_SetItemString(kwargs.get(), "sharex",
+                    *config.sharex ? Py_True : Py_False);
+            if (config.sharey.has_value())
+                PyDict_SetItemString(kwargs.get(), "sharey",                
+                    *config.sharey ? Py_True : Py_False);
+            if (config.width_ratios.has_value()) {
+                PyPtr w_ratios(PyList_New(config.width_ratios->size()));
+                for (size_t i = 0; i < config.width_ratios->size(); ++i)
+                    PyList_SetItem(w_ratios.get(), i, PyFloat_FromDouble(config.width_ratios->at(i)));
+                PyDict_SetItemString(kwargs.get(), "width_ratios", w_ratios.get());
+            }
+            if (config.height_ratios.has_value()) {
+                PyPtr h_ratios(PyList_New(config.height_ratios->size()));
+                for (size_t i = 0; i < config.height_ratios->size(); ++i)
+                    PyList_SetItem(h_ratios.get(), i, PyFloat_FromDouble(config.height_ratios->at(i)));
+                PyDict_SetItemString(kwargs.get(), "height_ratios", h_ratios.get());
+            }   
+            
+            if (config.empty_sentinel.has_value())
+                PyDict_SetItemString(kwargs.get(), "empty_sentinel",
+                    PyUnicode_FromString(config.empty_sentinel.value().c_str()));
+
+            detail::kwargsFigImpl(kwargs.get(), config);
+
+            PyPtr subplot_mosaic(PyObject_GetAttrString(
+                Interpreter::getInstance().getPyplot(), "subplot_mosaic"));
+            checkAttr(subplot_mosaic.get(), "subplot_mosaic");
+
+            PyPtr res(PyObject_Call(subplot_mosaic.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "subplot_mosaic");
+
+
+
+            PyObject* fig  = PyTuple_GetItem(res.get(), 0);
+            PyObject* axd  = PyTuple_GetItem(res.get(), 1);
+
+            Py_INCREF(fig);
+
+            // 2D numpy array
+            std::map<std::string, Axes> axes_map;
+            PyObject* keys = PyDict_Keys(axd);
+            Py_ssize_t n   = PyList_Size(keys);
+
+            for (Py_ssize_t i = 0; i < n; ++i) {
+                PyObject* key = PyList_GetItem(keys, i);  
+                PyObject* ax  = PyDict_GetItem(axd, key); 
+                Py_INCREF(ax);
+                std::string label = PyUnicode_AsUTF8(key);
+                axes_map.emplace(label, Axes(ax));
+            }
+            Py_DECREF(keys);
+
+            return std::make_pair(Figure(fig), std::move(axes_map));
+
+
+    }
+
+
 
     /**
      * @brief Calls tight_layout() function.
@@ -606,6 +685,15 @@ public:
     */
     void scatter(const ScatterConfig& config) {
         detail::scatterImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+    /**
+    * @brief Plots a bar graph.
+    * @param config bar configuration
+    * @throws std::runtime_error if bar fails
+    */
+    void bar(const BarConfig& config) {
+        detail::barImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
 

@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
+## [0.9.0] - 05/07/2026
+
+### Added
+- `subplot_mosaic()` — `SubplotMosaicConfig` with string and 2D list mosaic layout
+- `MosaicValue` — `std::variant<std::string, std::vector<std::vector<std::string>>>`
+- `mosaicValueToPython()` — converts MosaicValue to Python string or list of lists
+- `bar()` — `BarConfig` with `BarXValue` (float/Vec/categorical strings),
+  `BarValue` (float/Vec), `BarAlign` enum
+- `barXValueToPython()`, `barValueToPython()` converters
+- subplot_mosaic C++ and Python examples
+- subplot_mosaic example in the CMakeLists.txt
+
+### Fixed
+- `Axes` default constructor added — required for `std::map<std::string, Axes>`
+  (`operator[]` needs default-constructible value type)
+
+
 ## [0.8.0] - 04/07/2026
 
 ### Added
@@ -21,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - `ColorValue` — `std::variant<std::string, Vec>` for marker color
 - `LinewidthsValue` — `std::variant<double, Vec>` for linewidths
 - `sizeInPointsValueToPython()`, `colorValueToPython()`, `linewidthsToPython()`
+
 
 ### Changed
 - updated the README.md file

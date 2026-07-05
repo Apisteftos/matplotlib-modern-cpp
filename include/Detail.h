@@ -14,7 +14,14 @@
 #include "Helper.h"
 
 
+#include <map>
+#include <string>
+
+
 namespace matplotlibcpp {
+
+    class Axes;
+    class Figure;
 
     namespace detail {
 
@@ -108,6 +115,63 @@ namespace matplotlibcpp {
         }
 
         /**
+        * @brief Shared implementation of figure() function
+        * @param pyObj axes object
+        * @param config plot configuration
+        * @throws std::runtime_error if plot fails
+        */
+        template<typename T>
+        inline void kwargsFigImpl(PyObject* pyObj, const T& config) {
+
+            if (config.alpha)
+                PyDict_SetItemString(pyObj, "alpha",
+                    PyFloat_FromDouble(*config.alpha));
+            if (config.animated)
+                PyDict_SetItemString(pyObj, "animated",
+                    *config.animated ? Py_True : Py_False);
+            if (config.clip_on)
+                PyDict_SetItemString(pyObj, "clip_on",
+                    PyUnicode_FromString(config.clip_on->c_str()));
+            if (config.dpi)
+                PyDict_SetItemString(pyObj, "dpi",
+                    PyFloat_FromDouble(*config.dpi));
+            if (config.edgecolor)
+                PyDict_SetItemString(pyObj, "edgecolor",
+                    PyUnicode_FromString(config.edgecolor->c_str()));
+            if (config.facecolor)
+                PyDict_SetItemString(pyObj, "facecolor",
+                    PyUnicode_FromString(config.facecolor->c_str()));
+            if (config.figheight)
+                PyDict_SetItemString(pyObj, "figheight",
+                    PyFloat_FromDouble(*config.figheight));
+            if (config.figwidth)
+                PyDict_SetItemString(pyObj, "figwidth",
+                    PyFloat_FromDouble(*config.figwidth));
+            if (config.frameon)
+                PyDict_SetItemString(pyObj, "frameon",
+                    *config.frameon ? Py_True : Py_False);
+            if (config.gid)
+                PyDict_SetItemString(pyObj, "gid",
+                    PyUnicode_FromString(config.gid->c_str()));
+            if (config.mouseover)
+                PyDict_SetItemString(pyObj, "mouseover",
+                    *config.mouseover ? Py_True : Py_False);
+            if (config.rasterized)
+                PyDict_SetItemString(pyObj, "rasterized",
+                    *config.rasterized ? Py_True : Py_False);
+            if (config.url)
+                PyDict_SetItemString(pyObj, "url",
+                    PyUnicode_FromString(config.url->c_str()));
+            if (config.visible)
+                PyDict_SetItemString(pyObj, "visible",
+                    *config.visible ? Py_True : Py_False);
+            if (config.zorder)
+                PyDict_SetItemString(pyObj, "zorder",
+                    PyFloat_FromDouble(*config.zorder));
+
+        }
+
+        /**
         * @brief Shared implementation of plot() function
         * @param pyObj axes object
         * @param config plot configuration
@@ -159,8 +223,13 @@ namespace matplotlibcpp {
 
         }
 
-
-
+    
+        /**
+        * @brief Shared implementation of step() function
+        * @param pyObj axes object
+        * @param config step configuration
+        * @throws std::runtime_error if step fails
+        */
         inline void stepImpl(PyObject* pyObj, const StepConfig& config) {
 
 
@@ -700,6 +769,37 @@ namespace matplotlibcpp {
 
             PyPtr res(PyObject_Call(scatter.get(), args.get(), kwargs.get()));
             checkResult(res.get(), "scatter");
+        }
+
+
+
+
+        inline void barImpl(PyObject* pyObj, const BarConfig& config) {
+
+            PyPtr args(PyTuple_New(2));
+            PyTuple_SetItem(args.get(), 0, barXValueToPython(config.x));
+            PyTuple_SetItem(args.get(), 1, barValueToPython(config.height));
+
+            PyPtr kwargs(PyDict_New());
+            
+            if (config.width.has_value())
+                PyDict_SetItemString(kwargs.get(), "width",
+                    barValueToPython(config.width.value()));
+            if (config.bottom.has_value())
+                PyDict_SetItemString(kwargs.get(), "bottom",
+                    barValueToPython(config.bottom.value()));
+            if (config.align.has_value())
+                PyDict_SetItemString(kwargs.get(), "align",
+                    PyUnicode_FromString(config.align.value().c_str()));
+
+            kwargsImpl(kwargs.get(), config);
+
+            PyPtr bar(PyObject_GetAttrString(pyObj, "bar"));
+            checkAttr(bar.get(), "bar");
+
+            PyPtr res(PyObject_Call(bar.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "bar");
+
         }
 
 

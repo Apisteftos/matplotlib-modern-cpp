@@ -71,6 +71,12 @@ namespace matplotlibcpp {
         Mid
     };
 
+    // align enum
+    enum class BarAlign {
+        Center,
+        Edge
+    };
+
     
     // =============================================================================
     // Free functions converting enums to strings
@@ -168,6 +174,18 @@ namespace matplotlibcpp {
             case Step::Mid: return "mid";
         }
         return "mid";
+    }
+
+    /**
+     * @brief Converts BarAlign enum to string
+     * @param a default is BarAlign::Center
+     */
+    inline const char* toString(BarAlign a) {
+        switch (a) {
+            case BarAlign::Center: return "center";
+            case BarAlign::Edge:   return "edge";
+        }
+        return "center";
     }
 
 
@@ -339,6 +357,35 @@ namespace matplotlibcpp {
         std::string, 
         Vec
     >;
+
+
+    // mosaic parameters
+    using MosaicValue = std::variant<
+        std::string,                             
+        std::vector<std::vector<std::string>>     
+    >;
+
+    // fig_kw parameters
+    using SizeInchesValue = std::variant<
+        std::pair<double, double>,
+        double
+    >;
+
+
+    // bar parameters
+    using BarXValue = std::variant<
+        double,
+        Vec, 
+        std::vector<std::string> 
+    >;
+
+    // bar parameters
+    using BarValue = std::variant<
+        double,
+        Vec
+    >;
+
+
 
     // =============================================================================
     // Structs for matplotlib.pyplot.plot() 
@@ -790,8 +837,67 @@ namespace matplotlibcpp {
 
 
 
-    struct subplotMosaicConfig {
-    
+    struct SubplotMosaicConfig {
+        
+        MosaicValue mosaic;
+        std::vector<long> figsize                           = {10, 10};
+        
+
+        // optional
+        std::optional<bool> sharex                          = false; 
+        std::optional<bool> sharey                          = false;
+        std::optional<std::vector<double>> width_ratios     = std::nullopt;
+        std::optional<std::vector<double>> height_ratios    = std::nullopt;
+        std::optional<std::string> empty_sentinel           = "empty";
+
+        
+        // fig_kw
+        std::optional<double> alpha                         = std::nullopt;
+        std::optional<double> animated                      = std::nullopt;
+        std::optional<std::string> clip_on                  = std::nullopt;
+        std::optional<double> dpi                           = std::nullopt;
+        std::optional<std::string> edgecolor                = std::nullopt;
+        std::optional<std::string> facecolor                = std::nullopt;
+        std::optional<double> figheight                     = std::nullopt;
+        std::optional<double> figwidth                      = std::nullopt;
+        std::optional<bool> frameon                         = std::nullopt;
+        std::optional<std::string> gid                      = std::nullopt;
+        std::optional<bool> mouseover                       = std::nullopt;
+        std::optional<bool> rasterized                      = std::nullopt;
+        std::optional<std::string> url                      = std::nullopt; 
+        std::optional<bool> visible                         = std::nullopt;
+        std::optional<double> zorder                        = std::nullopt;
+
+
+    };
+
+
+    struct BarConfig {
+
+        BarXValue x;
+        BarValue height;
+        
+
+        // optional
+        std::optional<BarValue> width               = 0.8;
+        std::optional<BarValue> bottom              = 0.0;
+        std::optional<std::string> align            = toString(BarAlign::Center);
+        
+
+        // kwargs
+        std::optional<std::string> color            = std::nullopt;
+        std::optional<std::string> label            = std::nullopt;
+        std::optional<double> alpha                 = std::nullopt;
+        std::optional<double> linewidth             = std::nullopt;
+        std::optional<std::string> linestyle        = std::nullopt;
+        std::optional<std::string> marker           = std::nullopt;
+        std::optional<double> markersize            = std::nullopt;
+        std::optional<std::string> markerfacecolor  = std::nullopt;
+        std::optional<std::string> markeredgecolor  = std::nullopt;
+        std::optional<double> markeredgewidth       = std::nullopt;
+        std::optional<std::string> drawstyle        = std::nullopt;
+        std::optional<std::string> fillstyle        = std::nullopt;
+
     };
 
 

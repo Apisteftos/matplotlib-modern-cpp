@@ -15,6 +15,7 @@
 #include "pythonrun.h"
 #include "Detail.h"
 
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -28,6 +29,7 @@ private:
 
 public:
 
+    Axes() : ax_(nullptr) {}
     explicit Axes(PyObject* ax) : ax_(ax) {}
 
     PyObject* get_axes() const { return ax_.get(); }
@@ -267,14 +269,16 @@ public:
         detail::fillBetweenxImpl(ax_.get(), config);
     }
 
-
-    void bar(const std::vector<double>& x, const std::vector<double>& height, const std::string& fmt = "b") {
-        PyPtr xarray(toNumpy(x));
-        PyPtr heightarray(toNumpy(height));
-        
-        PyObject_CallMethod(ax_.get(), "bar", "OOs", xarray.get(), heightarray.get(), fmt.c_str());
-        
+    /**
+    * @brief Plots a bar graph.
+    * @param config bar configuration
+    * @throws std::runtime_error if bar fails
+    */
+    void bar(const BarConfig& config) {
+        detail::barImpl(ax_.get(), config);
     }
+        
+        
 
     void barh(const std::vector<double>& y, const std::vector<double>& width, const std::string& fmt = "b") {
 

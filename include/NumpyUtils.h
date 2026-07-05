@@ -260,6 +260,69 @@ namespace matplotlibcpp {
         }, cv);
     }
 
+
+    /** @brief Converts a MosaicValue to a Python object
+     * @param mv input MosaicValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* mosaicValueToPython(const MosaicValue& mv) {
+    return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            // 1D list form
+            if constexpr (std::is_same_v<T, std::string>) {
+                return PyUnicode_FromString(val.c_str());
+            } else {
+                // 2D list form — list of lists of strings
+                PyObject* outer = PyList_New(val.size());
+                for (size_t i = 0; i < val.size(); ++i) {
+                    PyObject* inner = PyList_New(val[i].size());
+                    for (size_t j = 0; j < val[i].size(); ++j)
+                        PyList_SetItem(inner, j,
+                            PyUnicode_FromString(val[i][j].c_str()));
+                    PyList_SetItem(outer, i, inner);
+                }
+                return outer;
+            }
+        }, mv);
+    }
+
+
+    /** 
+     * @brief Converts a BarXValue in points to a Python object
+     * @param bv input BarXValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* barXValueToPython(const BarXValue& bx) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>) {
+                return PyFloat_FromDouble(val);
+            } else if constexpr (std::is_same_v<T, Vec>) {
+                return toNumpy(val);
+            } else {
+                return toStringList(val);
+            }
+        }, bx);
+    }
+
+    
+    /** 
+     * @brief Converts a BarValue in points to a Python object
+     * @param bv input BarValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* barValueToPython(const BarValue& bv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>) {
+                return PyFloat_FromDouble(val);
+            } else {
+                return toNumpy(val);
+            }
+        }, bv);
+    }
+
+
     
 
     /** @brief Scalar multiplication operator

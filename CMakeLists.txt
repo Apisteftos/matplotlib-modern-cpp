@@ -44,4 +44,5 @@ add_plot_executable(semilogy semilogy_example.cpp)
 add_plot_executable(fill fill_example.cpp)
 add_plot_executable(errorbar errorbar_example.cpp)
 add_plot_executable(scatter scatter_example.cpp)
+add_plot_executable(subplots_mosaic subplots_mosaic.cpp)
 

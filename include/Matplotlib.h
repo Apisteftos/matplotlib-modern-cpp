@@ -14,7 +14,6 @@
 #include "AxesGrid.h"
 #include "Figure.h"
 #include "Configs.h"
-#include "Subplot2Grid.h"
 #include "PyPlot.h"
 #include "Helper.h"
 #include "Detail.h"
