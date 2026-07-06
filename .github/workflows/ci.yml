@@ -22,6 +22,10 @@ jobs:
     - name: Configure
       run: cmake -B build -DCMAKE_CXX_COMPILER=g++-14
 
+    - name: Configure with ASan
+      run: cmake -B build -DCMAKE_CXX_COMPILER=g++-14 
+          -DCMAKE_CXX_FLAGS="-fsanitize=address"
+
     - name: Build
       run: cmake --build build --parallel
 
