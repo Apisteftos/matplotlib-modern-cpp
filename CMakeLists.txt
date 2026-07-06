@@ -22,6 +22,10 @@ set(COMMON_INCLUDES
 )
 
 
+# =============================================================================
+# EXECUTABLE EXAMPLES
+# =============================================================================
+
 function(add_plot_executable target source)
     add_executable(${target} examples/${source})
     target_include_directories(${target} PRIVATE ${COMMON_INCLUDES})
@@ -45,4 +49,19 @@ add_plot_executable(fill fill_example.cpp)
 add_plot_executable(errorbar errorbar_example.cpp)
 add_plot_executable(scatter scatter_example.cpp)
 add_plot_executable(subplot_mosaic subplot_mosaic_example.cpp)
+
+
+
+# =============================================================================
+# Tests
+# =============================================================================
+function(add_test_executable target source)
+    add_executable(${target} tests/${source})
+    target_include_directories(${target} PRIVATE ${COMMON_INCLUDES})
+    target_link_libraries(${target} PRIVATE ${Python3_LIBRARIES})
+    add_test(NAME ${target} COMMAND ${target})
+endfunction()
+
+enable_testing()
+add_test_executable(test_basic test_basic.cpp)
 
