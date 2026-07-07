@@ -49,9 +49,6 @@ namespace matplotlibcpp {
             if (config.linestyle)
                 PyDict_SetItemString(kwargs, "linestyle",
                     PyUnicode_FromString(config.linestyle->c_str()));
-            if (config.marker)
-                PyDict_SetItemString(kwargs, "marker",
-                    PyUnicode_FromString(config.marker->c_str()));
             if (config.markersize)
                 PyDict_SetItemString(kwargs, "markersize",
                     PyFloat_FromDouble(*config.markersize));
