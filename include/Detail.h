@@ -599,7 +599,7 @@ namespace matplotlibcpp {
             PyPtr kwargs(PyDict_New());
          
             
-            kwargsImpl(kwargs.get(), config);
+            kwardsPolygonImpl(kwargs.get(), config);
 
             PyPtr fill(PyObject_GetAttrString(pyObj, "fill_between"));
             checkAttr(fill.get(), "fill_between");
@@ -626,7 +626,7 @@ namespace matplotlibcpp {
             
         
             
-            kwargsImpl(kwargs.get(), config);
+            kwardsPolygonImpl(kwargs.get(), config);
            
             PyDict_SetItemString(kwargs.get(), "interpolate",
                     config.interpolate ? Py_True : Py_False);

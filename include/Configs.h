@@ -789,19 +789,17 @@ namespace matplotlibcpp {
         std::optional<std::vector<bool>> where    = std::nullopt;
         std::optional<std::string> step = toString(Step::Mid);
 
-        // kwargs
-        std::optional<std::string> color          = std::nullopt;
-        std::optional<std::string> label          = std::nullopt;
-        std::optional<double> alpha               = std::nullopt;
-        std::optional<double> linewidth           = std::nullopt;
-        std::optional<std::string> linestyle      = std::nullopt;
-        std::optional<std::string> marker         = std::nullopt;
-        std::optional<double> markersize          = std::nullopt;
-        std::optional<std::string> markerfacecolor = std::nullopt;
-        std::optional<std::string> markeredgecolor = std::nullopt;
-        std::optional<double> markeredgewidth     = std::nullopt;
-        std::optional<std::string> drawstyle      = std::nullopt;
-        std::optional<std::string> fillstyle      = std::nullopt;
+        // **kwargs polygon properties 
+        std::optional<std::string> color            = std::nullopt;
+        std::optional<std::string> facecolor        = std::nullopt;
+        std::optional<std::string> edgecolor        = std::nullopt;
+        std::optional<std::string> label            = std::nullopt;
+        std::optional<double> alpha                 = std::nullopt;
+        std::optional<double> linewidth             = std::nullopt;
+        std::optional<std::string> linestyle        = std::nullopt;
+        std::optional<std::string> hatch            = std::nullopt;
+        std::optional<bool> fill                    = std::nullopt;
+        std::optional<double> zorder                = std::nullopt;
         
     };
 
@@ -818,18 +816,16 @@ namespace matplotlibcpp {
 
 
         // kwargs
-        std::optional<std::string> color          = std::nullopt;
-        std::optional<std::string> label          = std::nullopt;
-        std::optional<double> alpha               = std::nullopt;
-        std::optional<double> linewidth           = std::nullopt;
-        std::optional<std::string> linestyle      = std::nullopt;
-        std::optional<std::string> marker         = std::nullopt;
-        std::optional<double> markersize          = std::nullopt;
-        std::optional<std::string> markerfacecolor = std::nullopt;
-        std::optional<std::string> markeredgecolor = std::nullopt;
-        std::optional<double> markeredgewidth     = std::nullopt;
-        std::optional<std::string> drawstyle      = std::nullopt;
-        std::optional<std::string> fillstyle      = std::nullopt;
+        std::optional<std::string> color            = std::nullopt;
+        std::optional<std::string> facecolor        = std::nullopt;
+        std::optional<std::string> edgecolor        = std::nullopt;
+        std::optional<std::string> label            = std::nullopt;
+        std::optional<double> alpha                 = std::nullopt;
+        std::optional<double> linewidth             = std::nullopt;
+        std::optional<std::string> linestyle        = std::nullopt;
+        std::optional<std::string> hatch            = std::nullopt;
+        std::optional<bool> fill                    = std::nullopt;
+        std::optional<double> zorder                = std::nullopt;
 
     };
 

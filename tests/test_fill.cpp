@@ -65,16 +65,16 @@ void test_fill_between() {
         .interpolate = true,
         .where = y1 > y2,
         .step = "post",
+        .color = "blue",
+        .facecolor = "red",
+        .edgecolor = "green",
         .label = "Test between",
         .alpha = 0.3,
         .linewidth = 2.0,
         .linestyle = "--",
-        .markersize = 10.0,
-        .markerfacecolor = "red",
-        .markeredgecolor = "green",
-        .markeredgewidth = 2.0,
-        .drawstyle = "steps-post",
-        .fillstyle = "full"
+        .hatch = "/",
+        .fill = true,
+        .zorder = 9
         
     });
     plt.close("all");
@@ -95,16 +95,15 @@ void test_fill_betweenx() {
         .where = x1 > x2,
         .step = "post",
         .color = "blue",
+        .facecolor = "red",
+        .edgecolor = "green",
         .label = "Test betweenx",
         .alpha = 0.3,
         .linewidth = 2.0,
         .linestyle = "--",
-        .markersize = 10.0,
-        .markerfacecolor = "red",
-        .markeredgecolor = "green",
-        .markeredgewidth = 2.0,
-        .drawstyle = "steps-post",
-        .fillstyle = "full"
+        .hatch = "/",
+        .fill = true,
+        .zorder = 7
     });
 
 }
