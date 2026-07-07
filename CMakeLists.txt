@@ -64,4 +64,5 @@ endfunction()
 
 enable_testing()
 add_test_executable(test_basic test_basic.cpp)
+add_test_executable(test_fill test_fill.cpp)
 
