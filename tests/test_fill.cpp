@@ -92,6 +92,7 @@ void test_fill_betweenx() {
         .y     = y,
         .x1    = x1,
         .x2    = x2,
+        .interpolate = true,
         .where = x1 > x2,
         .step = "post",
         .color = "blue",

@@ -597,11 +597,7 @@ namespace matplotlibcpp {
             PyTuple_SetItem(args.get(), 2, dataValueToNumpy(config.y2));
 
             PyPtr kwargs(PyDict_New());
-            
-            if (config.fmt.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "fmt",
-                    PyUnicode_FromString(config.fmt.value().c_str()));
-            }   
+         
             
             kwargsImpl(kwargs.get(), config);
 
@@ -628,10 +624,7 @@ namespace matplotlibcpp {
 
             PyPtr kwargs(PyDict_New());
             
-            if (config.fmt.has_value()) {
-                PyDict_SetItemString(kwargs.get(), "fmt",
-                    PyUnicode_FromString(config.fmt.value().c_str()));
-            }   
+        
             
             kwargsImpl(kwargs.get(), config);
            
