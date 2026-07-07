@@ -423,6 +423,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha               = std::nullopt;
         std::optional<double> linewidth           = std::nullopt;
         std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
         std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
@@ -462,6 +463,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha               = std::nullopt;
         std::optional<double> linewidth           = std::nullopt;
         std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
         std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
@@ -500,6 +502,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha                 = std::nullopt;
         std::optional<double> linewidth             = std::nullopt;
         std::optional<std::string> linestyle        = std::nullopt;
+        std::optional<std::string> marker           = std::nullopt;
         std::optional<double> markersize            = std::nullopt;
         std::optional<std::string> markerfacecolor  = std::nullopt;
         std::optional<std::string> markeredgecolor  = std::nullopt;
@@ -524,6 +527,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha               = std::nullopt;
         std::optional<double> linewidth           = std::nullopt;
         std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
         std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
@@ -661,6 +665,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha               = std::nullopt;
         std::optional<double> linewidth           = std::nullopt;
         std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
         std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
@@ -688,6 +693,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha               = std::nullopt;
         std::optional<double> linewidth           = std::nullopt;
         std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
         std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
@@ -714,6 +720,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha               = std::nullopt;
         std::optional<double> linewidth           = std::nullopt;
         std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
         std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
@@ -740,6 +747,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha               = std::nullopt;
         std::optional<double> linewidth           = std::nullopt;
         std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
         std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
@@ -787,6 +795,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha               = std::nullopt;
         std::optional<double> linewidth           = std::nullopt;
         std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
         std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
@@ -814,6 +823,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha               = std::nullopt;
         std::optional<double> linewidth           = std::nullopt;
         std::optional<std::string> linestyle      = std::nullopt;
+        std::optional<std::string> marker         = std::nullopt;
         std::optional<double> markersize          = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
@@ -878,6 +888,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha                 = std::nullopt;
         std::optional<double> linewidth             = std::nullopt;
         std::optional<std::string> linestyle        = std::nullopt;
+        std::optional<std::string> marker           = std::nullopt;
         std::optional<double> markersize            = std::nullopt;
         std::optional<std::string> markerfacecolor  = std::nullopt;
         std::optional<std::string> markeredgecolor  = std::nullopt;
