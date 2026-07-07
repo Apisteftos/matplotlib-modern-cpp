@@ -786,7 +786,6 @@ namespace matplotlibcpp {
 
         
         // optional
-        std::optional<std::string> fmt = std::nullopt;
         std::optional<std::vector<bool>> where    = std::nullopt;
         std::optional<std::string> step = toString(Step::Mid);
 
@@ -814,7 +813,6 @@ namespace matplotlibcpp {
         bool interpolate = false;
 
         // optional
-        std::optional<std::string> fmt = std::nullopt;
         std::optional<std::vector<bool>> where    = std::nullopt;
         std::optional<std::string> step = toString(Step::Mid);
 
