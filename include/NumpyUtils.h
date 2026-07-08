@@ -157,19 +157,6 @@ namespace matplotlibcpp {
     }
 
 
-    /**
-    * @brief Converts a Clim to a Python tuple
-    * @param c input Clim
-    * @return PyObject* Python tuple
-    */
-    inline PyObject* climToTuple(const Clim& c) {
-        PyObject* t = PyTuple_New(2);
-        PyTuple_SetItem(t, 0, PyFloat_FromDouble(c.vmin));
-        PyTuple_SetItem(t, 1, PyFloat_FromDouble(c.vmax));
-        return t;
-    }
-
-
     /** 
     *@brief Converts a LimValue to a Python object
     * @param val input LimValue
@@ -402,18 +389,20 @@ namespace matplotlibcpp {
     }
 
 
-    /** 
-     * @brief Converts a pair<double, double> to a Python tuple
-     * @param first first element
-     * @param second second element
-     * @return PyObject* Python tuple
-     */
-    inline PyObject* pairToTuple(double first, double second) {
-        PyObject* tuple = PyTuple_New(2);
-        PyTuple_SetItem(tuple, 0, PyFloat_FromDouble(first));
-        PyTuple_SetItem(tuple, 1, PyFloat_FromDouble(second));
-        return tuple;
+
+
+    /**
+    * @brief Converts a Clim to a Python tuple
+    * @param c input Clim
+    * @return PyObject* Python tuple
+    */
+    inline PyObject* climToTuple(const Clim& c) {
+        PyObject* t = PyTuple_New(2);
+        PyTuple_SetItem(t, 0, PyFloat_FromDouble(c.vmin));
+        PyTuple_SetItem(t, 1, PyFloat_FromDouble(c.vmax));
+        return t;
     }
+
 
 
     

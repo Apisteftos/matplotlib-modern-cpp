@@ -4,10 +4,11 @@ A modern C++23 header-only plotting library wrapping Python's matplotlib,
 featuring RAII-based Axes and Figure classes, fixed API compatibility with
 Python 3.12+ and numpy, and a clean CMake build system.
 
-![Version](https://img.shields.io/badge/version-0.9.0-blue)
+![Version](https://img.shields.io/github/v/tag/Apisteftos/matplotlib-modern-cpp?label=version)
 ![C++23](https://img.shields.io/badge/C%2B%2B-23-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Platform](https://img.shields.io/badge/platform-Linux-lightgrey)
+![Last commit](https://img.shields.io/github/last-commit/Apisteftos/matplotlib-modern-cpp)
 ![CI](https://github.com/Apisteftos/matplotlib-modern-cpp/actions/workflows/ci.yml/badge.svg)
 
 ---

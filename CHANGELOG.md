@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
+## [0.10.0] - 08/07/2026
+
+### Added
+- `Clim` general reusable struct — `{vmin, vmax}` for colormap limits
+- `climToTuple()` — Clim to Python tuple converter
+- `pairToTuple<T1,T2>()` — generic pair to Python tuple
+- `kwardsFillBetweenImpl` — shared kwargs for fill_between/fill_betweenx
+- `test_basic.cpp` — unit tests for core functionality
+- `test_fill.cpp` — comprehensive fill_between/fill_betweenx unit tests
+- `fillBetweenValueToPython()` — converts FillBetweenValue to Python bool or numpy array
+- `linewidthValueToPython()` — converts LinewidthValue to Python float or numpy array
+- Full PolyCollection kwargs in `FillBetweenConfig` and `FillBetweenxConfig`
+- CI `CI` workflow with AddressSanitizer and ci.yml configuration file
+- test executable function in `CMakeLists.txt` with test_basic and test_fill
+
+### Fixed
+- fill_between/fill_betweenx examples — removed conflicting color+array+cmap
+- Missing `plt.close("all")` in fill examples
+- Duplicate `cmake -B build` in CI workflow
+
+
 ## [0.9.0] - 05/07/2026
 
 ### Added
