@@ -1,9 +1,11 @@
 #include "../include/Matplotlib.h"
+#include "Configs.h"
 #include <iostream>
 #include <print>
 
 
 using matplotlibcpp::Vec;
+using matplotlibcpp::Clim;
 
 // ============================================================
 // Test helpers
@@ -65,19 +67,55 @@ void test_fill_between() {
         .interpolate = true,
         .where = y1 > y2,
         .step = "post",
-        .color = "blue",
-        .facecolor = "red",
-        .edgecolor = "green",
-        .label = "Test between",
         .alpha = 0.3,
-        .linewidth = 2.0,
-        .linestyle = "--",
-        .hatch = "/",
-        .fill = true,
-        .zorder = 9
+        .animated = true,
+        .array = y1,
+        .clim = Clim{-1.0, 1.0},
+        .clip_on = true,
+        .color = "blue"
         
     });
     plt.close("all");
+
+    auto [fig2, axes2] = plt.subplots();
+    axes2[0].fill_between({
+        .x     = x,
+        .y1    = y1,
+        .y2    = y2,
+        .interpolate = true,
+        .where = y1 > y2,
+        .cmap = "viridis",
+        .edgecolor = "green",
+        .facecolor = "red",
+        .gid = "fill-between-1",
+        .hatch = "+",
+        .in_layout = true,
+        .label = "y1 > y2"
+        
+    });
+    plt.close("all");
+
+    auto [fig3, axes3] = plt.subplots();
+    axes3[0].fill_between({
+        .x     = x,
+        .y1    = y1,
+        .y2    = y2,
+        .interpolate = true,
+        .where = y1 > y2,
+        .linestyle = "--",
+        .linewidth = 2.0,
+        .mouseover = true,
+        .pickradius = 0.5,
+        .rasterized = true,
+        .snap = true,
+        .url = "https://matplotlib.org",
+        .visible = true,
+        .zorder = 7
+        
+    });
+    plt.close("all");
+
+
 }
 
 
@@ -93,18 +131,53 @@ void test_fill_betweenx() {
         .x2    = x2,
         .interpolate = true,
         .where = x1 > x2,
-        .step = "post",
-        .color = "blue",
-        .facecolor = "red",
-        .edgecolor = "green",
-        .label = "Test betweenx",
-        .alpha = 0.3,
-        .linewidth = 2.0,
-        .linestyle = "--",
-        .hatch = "/",
-        .fill = true,
-        .zorder = 7
+        .step = "mid",
+        .alpha = 0.8,
+        .animated = true,
+        .array = x1,
+        .clim = Clim{-0.9, 0.9},
+        .clip_on = true,
     });
+    plt.close("all");
+
+
+    auto [fig2, axes2] = plt.subplots();
+    axes2[0].fill_betweenx({
+        .y     = y,
+        .x1    = x1,
+        .x2    = x2,
+        .interpolate = true,
+        .where = x1 > x2,
+        .cmap = "magma",
+        .edgecolor = "black",
+        .facecolor = "yellow",
+        .gid = "fill-betweenx-2",
+        .hatch = "+",
+        .in_layout = true,
+        .label = "x1 > x2"
+        
+    });
+    plt.close("all");
+
+    auto [fig3, axes3] = plt.subplots();
+    axes3[0].fill_betweenx({
+        .y     = y,
+        .x1    = x1,
+        .x2    = x2,
+        .interpolate = true,
+        .where = x1 > x2,
+        .linestyle = "-.",
+        .linewidth = 2.4,
+        .mouseover = true,
+        .pickradius = 0.6,
+        .rasterized = true,
+        .snap = true,
+        .url = "https://whatever.com",
+        .visible = true,
+        .zorder = 8
+        
+    });
+    plt.close("all");
 
 }
 

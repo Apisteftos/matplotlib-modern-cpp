@@ -386,6 +386,32 @@ namespace matplotlibcpp {
     >;
 
 
+    // fill_between parameters
+    using FillBetweenValue = std::variant<
+        bool,
+        std::vector<bool>
+    >;
+
+    // fill_between parameters
+    using LinewidthValue = std::variant<
+        double,
+        std::vector<double>
+    >;
+
+
+    // =============================================================================
+    // General reusable structs
+    // =============================================================================
+
+    /**
+    * @brief Color limits for colormap normalization
+    * @note: .clim = {vmin, vmax}
+    */
+    struct Clim {
+        double vmin;
+        double vmax;
+    };
+
 
     // =============================================================================
     // Structs for matplotlib.pyplot.plot() 
@@ -781,25 +807,37 @@ namespace matplotlibcpp {
     struct FillBetweenConfig {
         std::vector<double> x;
         DataValue y1;
-        DataValue y2 = 0.0;
-        bool interpolate = false;
+        DataValue y2                                     = 0.0;
+        bool interpolate                                 = false;   
 
         
         // optional
-        std::optional<std::vector<bool>> where    = std::nullopt;
-        std::optional<std::string> step = toString(Step::Mid);
+        std::optional<std::vector<bool>> where          = std::nullopt;
+        std::optional<std::string> step                 = toString(Step::Mid);
 
-        // **kwargs polygon properties 
-        std::optional<std::string> color            = std::nullopt;
-        std::optional<std::string> facecolor        = std::nullopt;
-        std::optional<std::string> edgecolor        = std::nullopt;
-        std::optional<std::string> label            = std::nullopt;
-        std::optional<double> alpha                 = std::nullopt;
-        std::optional<double> linewidth             = std::nullopt;
-        std::optional<std::string> linestyle        = std::nullopt;
-        std::optional<std::string> hatch            = std::nullopt;
-        std::optional<bool> fill                    = std::nullopt;
-        std::optional<double> zorder                = std::nullopt;
+        // **kwargs between properties
+        std::optional<double> alpha                     = std::nullopt;
+        std::optional<FillBetweenValue> animated        = std::nullopt;
+        std::optional<Vec> array                        = std::nullopt;
+        std::optional<Clim> clim                        = std::nullopt;
+        std::optional<bool> clip_on                     = std::nullopt;
+        std::optional<std::string> cmap                 = std::nullopt;
+        std::optional<std::string> color                = std::nullopt;
+        std::optional<std::string> edgecolor            = std::nullopt;
+        std::optional<std::string> facecolor            = std::nullopt;
+        std::optional<std::string> gid                  = std::nullopt;
+        std::optional<std::string> hatch                = std::nullopt;
+        std::optional<bool> in_layout                   = std::nullopt;
+        std::optional<std::string> label                = std::nullopt;
+        std::optional<std::string> linestyle            = std::nullopt;
+        std::optional<LinewidthValue> linewidth         = std::nullopt;
+        std::optional<bool> mouseover                   = std::nullopt;
+        std::optional<double> pickradius                = std::nullopt;
+        std::optional<bool> rasterized                  = std::nullopt;
+        std::optional<bool> snap                        = std::nullopt;
+        std::optional<std::string> url                  = std::nullopt;
+        std::optional<bool> visible                     = std::nullopt;
+        std::optional<double> zorder                    = std::nullopt;
         
     };
 
@@ -815,17 +853,29 @@ namespace matplotlibcpp {
         std::optional<std::string> step = toString(Step::Mid);
 
 
-        // kwargs
-        std::optional<std::string> color            = std::nullopt;
-        std::optional<std::string> facecolor        = std::nullopt;
-        std::optional<std::string> edgecolor        = std::nullopt;
-        std::optional<std::string> label            = std::nullopt;
-        std::optional<double> alpha                 = std::nullopt;
-        std::optional<double> linewidth             = std::nullopt;
-        std::optional<std::string> linestyle        = std::nullopt;
-        std::optional<std::string> hatch            = std::nullopt;
-        std::optional<bool> fill                    = std::nullopt;
-        std::optional<double> zorder                = std::nullopt;
+        // **kwargs between properties
+        std::optional<double> alpha                     = std::nullopt;
+        std::optional<FillBetweenValue> animated        = std::nullopt;
+        std::optional<Vec> array                        = std::nullopt;
+        std::optional<Clim> clim                        = std::nullopt;
+        std::optional<bool> clip_on                     = std::nullopt;
+        std::optional<std::string> cmap                 = std::nullopt;
+        std::optional<std::string> color                = std::nullopt;
+        std::optional<std::string> edgecolor            = std::nullopt;
+        std::optional<std::string> facecolor            = std::nullopt;
+        std::optional<std::string> gid                  = std::nullopt;
+        std::optional<std::string> hatch                = std::nullopt;
+        std::optional<bool> in_layout                   = std::nullopt;
+        std::optional<std::string> label                = std::nullopt;
+        std::optional<std::string> linestyle            = std::nullopt;
+        std::optional<LinewidthValue> linewidth         = std::nullopt;
+        std::optional<bool> mouseover                   = std::nullopt;
+        std::optional<double> pickradius                = std::nullopt;
+        std::optional<bool> rasterized                  = std::nullopt;
+        std::optional<bool> snap                        = std::nullopt;
+        std::optional<std::string> url                  = std::nullopt;
+        std::optional<bool> visible                     = std::nullopt;
+        std::optional<double> zorder                    = std::nullopt;
 
     };
 

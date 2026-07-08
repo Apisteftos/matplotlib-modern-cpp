@@ -114,6 +114,82 @@ namespace matplotlibcpp {
 
         }
 
+
+        template<typename T>
+        inline void kwardsFillBetweenImpl(PyObject* pyObj, const T& config) {
+
+             if (config.alpha.has_value())
+                PyDict_SetItemString(pyObj, "alpha",
+                    PyFloat_FromDouble(*config.alpha));
+            if (config.animated.has_value())
+                PyDict_SetItemString(pyObj, "animated",
+                    fillBetweenValueToPython(*config.animated));
+            if (config.array.has_value())
+                PyDict_SetItemString(pyObj, "array",
+                    toNumpy(*config.array));
+            if (config.clim.has_value()) {
+                PyObject* t = climToTuple(*config.clim);
+                PyDict_SetItemString(pyObj, "clim", t);
+                Py_DECREF(t);
+            }
+            if (config.clip_on.has_value())
+                PyDict_SetItemString(pyObj, "clip_on",
+                    *config.clip_on ? Py_True : Py_False);
+            if (config.cmap.has_value())
+                PyDict_SetItemString(pyObj, "cmap",
+                    PyUnicode_FromString(config.cmap.value().c_str()));
+            if (config.color.has_value())
+                PyDict_SetItemString(pyObj, "color",
+                    PyUnicode_FromString(config.color.value().c_str()));
+            if (config.edgecolor.has_value())
+                PyDict_SetItemString(pyObj, "edgecolor",
+                    PyUnicode_FromString(config.edgecolor.value().c_str()));
+            if (config.facecolor.has_value())
+                PyDict_SetItemString(pyObj, "facecolor",
+                    PyUnicode_FromString(config.facecolor.value().c_str()));
+            if (config.gid.has_value())
+                PyDict_SetItemString(pyObj, "gid",
+                    PyUnicode_FromString(config.gid.value().c_str()));
+            if (config.hatch.has_value())
+                PyDict_SetItemString(pyObj, "hatch",
+                    PyUnicode_FromString(config.hatch.value().c_str()));
+            if (config.in_layout.has_value())
+                PyDict_SetItemString(pyObj, "in_layout",
+                    *config.in_layout ? Py_True : Py_False);
+            if (config.label.has_value())
+                PyDict_SetItemString(pyObj, "label",
+                    PyUnicode_FromString(config.label.value().c_str()));
+            if (config.linestyle.has_value())
+                PyDict_SetItemString(pyObj, "linestyle",
+                    PyUnicode_FromString(config.linestyle.value().c_str()));
+            if (config.linewidth.has_value())
+                PyDict_SetItemString(pyObj, "linewidth",
+                    linewidthValueToPython(*config.linewidth));
+            if (config.mouseover.has_value())
+                PyDict_SetItemString(pyObj, "mouseover",
+                    *config.mouseover ? Py_True : Py_False);
+            if (config.pickradius.has_value())
+                PyDict_SetItemString(pyObj, "pickradius",
+                    PyFloat_FromDouble(*config.pickradius));
+            if (config.rasterized.has_value())
+                PyDict_SetItemString(pyObj, "rasterized",
+                    *config.rasterized ? Py_True : Py_False);
+            if (config.snap.has_value())
+                PyDict_SetItemString(pyObj, "snap",
+                    *config.snap ? Py_True : Py_False);
+            if (config.url.has_value())
+                PyDict_SetItemString(pyObj, "url",
+                    PyUnicode_FromString(config.url.value().c_str()));
+            if (config.visible.has_value())
+                PyDict_SetItemString(pyObj, "visible",
+                    *config.visible ? Py_True : Py_False);
+            if (config.zorder.has_value())
+                PyDict_SetItemString(pyObj, "zorder",
+                    PyFloat_FromDouble(*config.zorder));
+        }
+
+
+
         /**
         * @brief Shared implementation of figure() function
         * @param pyObj axes object
@@ -599,7 +675,7 @@ namespace matplotlibcpp {
             PyPtr kwargs(PyDict_New());
          
             
-            kwardsPolygonImpl(kwargs.get(), config);
+            kwardsFillBetweenImpl(kwargs.get(), config);
 
             PyPtr fill(PyObject_GetAttrString(pyObj, "fill_between"));
             checkAttr(fill.get(), "fill_between");
@@ -626,7 +702,7 @@ namespace matplotlibcpp {
             
         
             
-            kwardsPolygonImpl(kwargs.get(), config);
+            kwardsFillBetweenImpl(kwargs.get(), config);
            
             PyDict_SetItemString(kwargs.get(), "interpolate",
                     config.interpolate ? Py_True : Py_False);

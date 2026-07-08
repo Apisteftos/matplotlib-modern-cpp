@@ -76,6 +76,39 @@ namespace matplotlibcpp {
         return array;
     }
 
+
+    /** 
+     * @brief Converts a pair<T1, T2> to a Python tuple
+     * @tparam T1 first element type
+     * @tparam T2 second element type
+     * @param p input pair
+     * @return PyObject* Python tuple
+     */
+    template<typename T1, typename T2>
+    inline PyObject* pairToTuple(const std::pair<T1, T2>& p) {
+        PyObject* tuple = PyTuple_New(2);
+        
+        // first element (double, int, string)
+        if constexpr (std::is_same_v<T1, double>)
+            PyTuple_SetItem(tuple, 0, PyFloat_FromDouble(p.first));
+        else if constexpr (std::is_integral_v<T1>)
+            PyTuple_SetItem(tuple, 0, PyLong_FromLong(p.first));
+        else if constexpr (std::is_same_v<T1, std::string>)
+            PyTuple_SetItem(tuple, 0, PyUnicode_FromString(p.first.c_str()));
+
+        // second element (double, int, string)
+        if constexpr (std::is_same_v<T2, double>)
+            PyTuple_SetItem(tuple, 1, PyFloat_FromDouble(p.second));
+        else if constexpr (std::is_integral_v<T2>)
+            PyTuple_SetItem(tuple, 1, PyLong_FromLong(p.second));
+        else if constexpr (std::is_same_v<T2, std::string>)
+            PyTuple_SetItem(tuple, 1, PyUnicode_FromString(p.second.c_str()));
+
+        return tuple;
+    }
+
+
+
     /**
     * @brief Converts a std::vector<bool> to a numpy bool array
     * @param v input vector
@@ -121,6 +154,19 @@ namespace matplotlibcpp {
                 return list;
             }
         }, ev);
+    }
+
+
+    /**
+    * @brief Converts a Clim to a Python tuple
+    * @param c input Clim
+    * @return PyObject* Python tuple
+    */
+    inline PyObject* climToTuple(const Clim& c) {
+        PyObject* t = PyTuple_New(2);
+        PyTuple_SetItem(t, 0, PyFloat_FromDouble(c.vmin));
+        PyTuple_SetItem(t, 1, PyFloat_FromDouble(c.vmax));
+        return t;
     }
 
 
@@ -320,6 +366,53 @@ namespace matplotlibcpp {
                 return toNumpy(val);
             }
         }, bv);
+    }
+
+    /** 
+     * @brief Converts a FillBetweenValue either in bool or vector<bool> to a Python object
+     * @param fbv input FillBetweenValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* fillBetweenValueToPython(const FillBetweenValue& fbv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, bool>) {
+                return val ? Py_True : Py_False;
+            } else if constexpr (std::is_same_v<T, std::vector<bool>>) {
+                return toBoolArray(val);
+            } 
+        }, fbv);
+    }
+
+    
+    /** 
+     * @brief Converts a LinewidthValue either in double or vector<double> to a Python object
+     * @param lwv input LinewidthValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* linewidthValueToPython(const LinewidthValue& lwv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>) {
+                return PyFloat_FromDouble(val);
+            } else {
+                return toNumpy(val);
+            }
+        }, lwv);
+    }
+
+
+    /** 
+     * @brief Converts a pair<double, double> to a Python tuple
+     * @param first first element
+     * @param second second element
+     * @return PyObject* Python tuple
+     */
+    inline PyObject* pairToTuple(double first, double second) {
+        PyObject* tuple = PyTuple_New(2);
+        PyTuple_SetItem(tuple, 0, PyFloat_FromDouble(first));
+        PyTuple_SetItem(tuple, 1, PyFloat_FromDouble(second));
+        return tuple;
     }
 
 
