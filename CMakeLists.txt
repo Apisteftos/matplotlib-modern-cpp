@@ -49,6 +49,7 @@ add_plot_executable(fill fill_example.cpp)
 add_plot_executable(errorbar errorbar_example.cpp)
 add_plot_executable(scatter scatter_example.cpp)
 add_plot_executable(subplot_mosaic subplot_mosaic_example.cpp)
+add_plot_executable(bar bar_example.cpp)
 
 
 
@@ -65,4 +66,5 @@ endfunction()
 enable_testing()
 add_test_executable(test_basic test_basic.cpp)
 add_test_executable(test_fill test_fill.cpp)
+add_test_executable(test_bar test_bar.cpp)
 

@@ -25,6 +25,8 @@ namespace matplotlibcpp {
 
     namespace detail {
 
+        
+
 
         /**
         * @brief Applies kwargs to plot() function        
@@ -79,51 +81,51 @@ namespace matplotlibcpp {
         * @throws std::runtime_error if fill fails
         */
         template<typename T>
-        inline void kwardsPolygonImpl(PyObject* pyObj, const T& config) {
+        inline void kwargsPolygonImpl(PyObject* pyObj, const T& config) {
 
-            if (config.color)
-                PyDict_SetItemString(pyObj, "color",
-                    PyUnicode_FromString(config.color->c_str()));
-            if (config.facecolor)
-                PyDict_SetItemString(pyObj, "facecolor",
-                    PyUnicode_FromString(config.facecolor->c_str()));
-            if (config.edgecolor)
+            if (config.color.has_value())
+                PyDict_SetItemString(pyObj, "color", 
+            PyUnicode_FromString(config.color->c_str()));
+            if (config.facecolor.has_value())
+                PyDict_SetItemString(pyObj, "facecolor", 
+            PyUnicode_FromString(config.facecolor->c_str()));
+            if (config.edgecolor.has_value())
                 PyDict_SetItemString(pyObj, "edgecolor",
-                    PyUnicode_FromString(config.edgecolor->c_str()));
-            if (config.label)
-                PyDict_SetItemString(pyObj, "label",
-                    PyUnicode_FromString(config.label->c_str()));
-            if (config.alpha)
-                PyDict_SetItemString(pyObj, "alpha",
-                    PyFloat_FromDouble(*config.alpha));
-            if (config.linewidth)
+            PyUnicode_FromString(config.edgecolor->c_str()));
+            if (config.label.has_value())
+                PyDict_SetItemString(pyObj, "label",                
+            PyUnicode_FromString(config.label->c_str()));
+            if (config.alpha.has_value())
+                PyDict_SetItemString(pyObj, "alpha",                
+            PyFloat_FromDouble(*config.alpha));
+            if (config.linewidth.has_value())
                 PyDict_SetItemString(pyObj, "linewidth",
-                    PyFloat_FromDouble(*config.linewidth));
-            if (config.linestyle)
-                PyDict_SetItemString(pyObj, "linestyle",
-                    PyUnicode_FromString(config.linestyle->c_str()));
-            if (config.hatch)
+            PyFloat_FromDouble(*config.linewidth));
+            if (config.linestyle.has_value())
+                PyDict_SetItemString(pyObj, "linestyle",                
+            PyUnicode_FromString(config.linestyle->c_str()));
+            if (config.hatch.has_value())
                 PyDict_SetItemString(pyObj, "hatch",
-                    PyUnicode_FromString(config.hatch->c_str()));
-            if (config.fill)
-                PyDict_SetItemString(pyObj, "fill",
-                    *config.fill ? Py_True : Py_False);
-            if (config.zorder)
+            PyUnicode_FromString(config.hatch->c_str()));
+            if (config.fill.has_value())
+                PyDict_SetItemString(pyObj, "fill",                
+            *config.fill ? Py_True : Py_False);
+            if (config.zorder.has_value())
                 PyDict_SetItemString(pyObj, "zorder",
-                    PyFloat_FromDouble(*config.zorder));    
-
+            PyFloat_FromDouble(*config.zorder));
+             
         }
 
 
         template<typename T>
-        inline void kwardsFillBetweenImpl(PyObject* pyObj, const T& config) {
+        inline void kwargsFillBetweenImpl(PyObject* pyObj, const T& config) {
 
              if (config.alpha.has_value())
                 PyDict_SetItemString(pyObj, "alpha",
                     PyFloat_FromDouble(*config.alpha));
             if (config.animated.has_value())
-                PyDict_SetItemString(pyObj, "animated",
-                    fillBetweenValueToPython(*config.animated));
+                    PyDict_SetItemString(pyObj, "animated",
+                        *config.animated ? Py_True : Py_False);
             if (config.array.has_value())
                 PyDict_SetItemString(pyObj, "array",
                     toNumpy(*config.array));
@@ -189,6 +191,130 @@ namespace matplotlibcpp {
         }
 
 
+        /**
+        * @brief Shared implementation of bar() and barh() functions
+        * @param pyObj axes object
+        * @param config bar configuration
+        * @throws std::runtime_error if bar fails
+        */
+        template<typename T>
+        inline void kwargsBarImpl(PyObject* pyObj, const T& config) {
+            if (config.align.has_value())
+                PyDict_SetItemString(pyObj, "align",
+                    PyUnicode_FromString(config.align->c_str()));
+            if (config.xerr.has_value())
+                PyDict_SetItemString(pyObj, "xerr",
+                    errorValueToNumpy(*config.xerr));
+            if (config.yerr.has_value())
+                PyDict_SetItemString(pyObj, "yerr",
+                    errorValueToNumpy(*config.yerr));   
+            if (config.color.has_value())
+                PyDict_SetItemString(pyObj, "color",
+                    PyUnicode_FromString(config.color->c_str()));
+            if (config.facecolor.has_value())
+                PyDict_SetItemString(pyObj, "facecolor",
+                    PyUnicode_FromString(config.facecolor->c_str()));
+            if (config.edgecolor.has_value())
+                PyDict_SetItemString(pyObj, "edgecolor",
+                    PyUnicode_FromString(config.edgecolor->c_str()));
+            if (config.linewidth.has_value())
+                PyDict_SetItemString(pyObj, "linewidth",
+                    linewidthValueToPython(*config.linewidth));
+            if (config.tick_label.has_value())
+                PyDict_SetItemString(pyObj, "tick_label",
+                    tickLabelValueToPython(*config.tick_label));
+            if (config.label.has_value())
+                PyDict_SetItemString(pyObj, "label",
+                    PyUnicode_FromString(config.label->c_str()));
+            if (config.ecolor.has_value())
+                PyDict_SetItemString(pyObj, "ecolor",
+                    PyUnicode_FromString(config.ecolor->c_str()));
+            if (config.capsize.has_value())
+                PyDict_SetItemString(pyObj, "capsize",
+                    PyFloat_FromDouble(*config.capsize));
+            if (config.log.has_value())
+                PyDict_SetItemString(pyObj, "log",
+                    *config.log ? Py_True : Py_False);
+
+        }
+
+
+        /**
+         * @brief Shared implementation of rectangle() function
+         * @param pyObj axes object
+         * @param config rectangle configuration
+         * @throws std::runtime_error if rectangle fails
+         */
+        template<typename T>
+        inline void kwargsRectangleImpl(PyObject* pyObj, const T& config) {
+
+            
+            if (config.alpha.has_value())
+                PyDict_SetItemString(pyObj, "alpha",
+                    PyFloat_FromDouble(*config.alpha));
+            if (config.animated.has_value())
+                PyDict_SetItemString(pyObj, "animated",
+                    *config.animated ? Py_True : Py_False);
+            if (config.antialiased.has_value())
+                PyDict_SetItemString(pyObj, "antialiased",
+                    *config.antialiased ? Py_True : Py_False);
+            if (config.bounds.has_value())
+                PyDict_SetItemString(pyObj, "bounds",
+                    PyUnicode_FromString(config.bounds->c_str()));
+            if (config.capstyle.has_value())
+                PyDict_SetItemString(pyObj, "capstyle",
+                    PyUnicode_FromString(config.capstyle->c_str()));
+            if (config.clip_on.has_value())
+                PyDict_SetItemString(pyObj, "clip_on",
+                    *config.clip_on ? Py_True : Py_False);
+            if (config.edgegapcolor.has_value())
+                PyDict_SetItemString(pyObj, "edgegapcolor",
+                    PyUnicode_FromString(config.edgegapcolor->c_str()));
+            if (config.fill.has_value())
+                PyDict_SetItemString(pyObj, "fill",
+                    *config.fill ? Py_True : Py_False);
+            if (config.gid.has_value())
+                PyDict_SetItemString(pyObj, "gid",
+                    PyUnicode_FromString(config.gid->c_str()));
+            if (config.hatch.has_value())
+                PyDict_SetItemString(pyObj, "hatch",
+                    PyUnicode_FromString(config.hatch->c_str()));
+            if (config.in_layout.has_value())
+                PyDict_SetItemString(pyObj, "in_layout",
+                    *config.in_layout ? Py_True : Py_False);
+            if (config.joinstyle.has_value())
+                PyDict_SetItemString(pyObj, "joinstyle",
+                    PyUnicode_FromString(config.joinstyle->c_str()));
+            if (config.linestyle.has_value())
+                PyDict_SetItemString(pyObj, "linestyle",
+                    PyUnicode_FromString(config.linestyle->c_str()));
+            if (config.mouseover.has_value())
+                PyDict_SetItemString(pyObj, "mouseover",
+                    *config.mouseover ? Py_True : Py_False);
+            if (config.rasterized.has_value())
+                PyDict_SetItemString(pyObj, "rasterized",
+                    *config.rasterized ? Py_True : Py_False);
+            if (config.snap.has_value())
+                PyDict_SetItemString(pyObj, "snap",
+                    *config.snap ? Py_True : Py_False);
+            if (config.url.has_value())
+                PyDict_SetItemString(pyObj, "url",
+                    PyUnicode_FromString(config.url->c_str()));
+            if (config.visible.has_value())
+                PyDict_SetItemString(pyObj, "visible",
+                    *config.visible ? Py_True : Py_False);
+            if (config.xy.has_value())
+                PyDict_SetItemString(pyObj, "xy",
+                    xyToTuple(config.xy.value()));
+            if (config.zorder.has_value())
+                PyDict_SetItemString(pyObj, "zorder",                
+                    PyFloat_FromDouble(config.zorder.value())); 
+
+
+        }
+
+
+
 
         /**
         * @brief Shared implementation of figure() function
@@ -246,6 +372,123 @@ namespace matplotlibcpp {
                     PyFloat_FromDouble(*config.zorder));
 
         }
+
+
+        /**
+        * @brief Shared implementation of text() function
+        * @param pyObj axes object
+        * @param config text configuration
+        * @throws std::runtime_error if text fails
+        */
+        template<typename T>
+        inline void kwargsTextImpl(PyObject* pyObj, const T& config) {
+
+            if (config.alpha.has_value())
+                PyDict_SetItemString(pyObj, "alpha",
+                    PyFloat_FromDouble(config.alpha.value()));
+            if (config.animated.has_value())
+                PyDict_SetItemString(pyObj, "animated",
+                    config.animated.value() ? Py_True : Py_False);
+            if (config.antialiased.has_value())
+                PyDict_SetItemString(pyObj, "antialiased",
+                    config.antialiased.value() ? Py_True : Py_False);
+            if (config.clip_on.has_value())
+                PyDict_SetItemString(pyObj, "clip_on",
+                    config.clip_on.value() ? Py_True : Py_False);
+            if (config.color.has_value())
+                PyDict_SetItemString(pyObj, "color",
+                    PyUnicode_FromString(config.color.value().c_str()));
+            if (config.fontFamily.has_value())
+                PyDict_SetItemString(pyObj, "fontFamily",
+                    PyUnicode_FromString(config.fontFamily.value().c_str()));
+            if (config.fontSize.has_value())
+                PyDict_SetItemString(pyObj, "fontSize",
+                    fontSizeValueToPython(config.fontSize.value()));
+            if (config.fontStretch.has_value())
+                PyDict_SetItemString(pyObj, "fontStretch",
+                    fontStretchValueToPython(config.fontStretch.value()));
+            if (config.fontStyle.has_value())
+                PyDict_SetItemString(pyObj, "fontStyle",
+                    PyUnicode_FromString(config.fontStyle.value().c_str()));
+            if (config.fontVariant.has_value())
+                PyDict_SetItemString(pyObj, "fontVariant",
+                    PyUnicode_FromString(config.fontVariant.value().c_str()));
+            if (config.fontWeight.has_value())
+                PyDict_SetItemString(pyObj, "fontWeight",
+                    fontWeightValueToPython(config.fontWeight.value()));
+            if (config.in_layout.has_value())
+                PyDict_SetItemString(pyObj, "in_layout",                
+                    config.in_layout.value() ? Py_True : Py_False);
+            if (config.label.has_value())
+                PyDict_SetItemString(pyObj, "label",
+                    PyUnicode_FromString(config.label.value().c_str()));
+            if (config.language.has_value())
+                PyDict_SetItemString(pyObj, "language",
+                    PyUnicode_FromString(config.language.value().c_str()));
+            if (config.linespacing.has_value())
+                PyDict_SetItemString(pyObj, "linespacing",
+                    lineSpacingValueToPython(config.linespacing.value()));
+            if (config.math_fontfamily.has_value())
+                PyDict_SetItemString(pyObj, "math_fontfamily",
+                    PyUnicode_FromString(config.math_fontfamily.value().c_str()));
+            if (config.mouseover.has_value())
+                PyDict_SetItemString(pyObj, "mouseover",
+                    config.mouseover.value() ? Py_True : Py_False);
+            if (config.multialignment.has_value())
+                PyDict_SetItemString(pyObj, "multialignment",
+                    PyUnicode_FromString(config.multialignment.value().c_str()));
+            if (config.parse_math.has_value())
+                PyDict_SetItemString(pyObj, "parse_math",
+                    PyUnicode_FromString(config.parse_math.value().c_str()));
+            if (config.position.has_value())
+                PyDict_SetItemString(pyObj, "position",
+                    positionToTuple(config.position.value()));
+            if (config.rasterized.has_value())
+                PyDict_SetItemString(pyObj, "rasterized",
+                    config.rasterized.value() ? Py_True : Py_False);
+            if (config.rotation.has_value())
+                PyDict_SetItemString(pyObj, "rotation",
+                    rotationValueToPython(config.rotation.value()));
+            if (config.rotation_mode.has_value())
+                PyDict_SetItemString(pyObj, "rotation_mode",
+                    PyUnicode_FromString(config.rotation_mode.value().c_str()));
+            if (config.sketch_params.has_value())
+                PyDict_SetItemString(pyObj, "sketch_params",
+                    sketchParamsToPython(config.sketch_params.value()));
+            if (config.snap.has_value())
+                PyDict_SetItemString(pyObj, "snap",
+                    config.snap.value() ? Py_True : Py_False);
+            if (config.text.has_value())
+                PyDict_SetItemString(pyObj, "text",
+                    PyUnicode_FromString(config.text.value().c_str()));
+            if (config.transform_rotates_text.has_value())
+                PyDict_SetItemString(pyObj, "transform_rotates_text",
+                    config.transform_rotates_text.value() ? Py_True : Py_False);
+            if (config.url.has_value())
+                PyDict_SetItemString(pyObj, "url",
+                    PyUnicode_FromString(config.url.value().c_str()));
+            if (config.verticalalignment.has_value())
+                PyDict_SetItemString(pyObj, "verticalalignment",
+                    PyUnicode_FromString(config.verticalalignment.value().c_str()));
+            if (config.visible.has_value())
+                PyDict_SetItemString(pyObj, "visible",
+                    config.visible.value() ? Py_True : Py_False);
+            if (config.wrap.has_value())
+                PyDict_SetItemString(pyObj, "wrap",
+                    config.wrap.value() ? Py_True : Py_False);
+            if (config.x.has_value())
+                PyDict_SetItemString(pyObj, "x",
+                    PyFloat_FromDouble(config.x.value()));
+            if (config.y.has_value())
+                PyDict_SetItemString(pyObj, "y",
+                    PyFloat_FromDouble(config.y.value()));
+            if (config.zorder.has_value())
+                PyDict_SetItemString(pyObj, "zorder",                
+                    PyFloat_FromDouble(config.zorder.value()));     
+
+        }
+
+
 
         /**
         * @brief Shared implementation of plot() function
@@ -648,7 +891,7 @@ namespace matplotlibcpp {
 
             PyPtr kwargs(PyDict_New());
             
-            kwardsPolygonImpl(kwargs.get(), config);
+            kwargsPolygonImpl(kwargs.get(), config);
 
 
             PyPtr fill(PyObject_GetAttrString(pyObj, "fill"));
@@ -675,7 +918,7 @@ namespace matplotlibcpp {
             PyPtr kwargs(PyDict_New());
          
             
-            kwardsFillBetweenImpl(kwargs.get(), config);
+            kwargsFillBetweenImpl(kwargs.get(), config);
 
             PyPtr fill(PyObject_GetAttrString(pyObj, "fill_between"));
             checkAttr(fill.get(), "fill_between");
@@ -702,7 +945,7 @@ namespace matplotlibcpp {
             
         
             
-            kwardsFillBetweenImpl(kwargs.get(), config);
+            kwargsFillBetweenImpl(kwargs.get(), config);
            
             PyDict_SetItemString(kwargs.get(), "interpolate",
                     config.interpolate ? Py_True : Py_False);
@@ -842,7 +1085,11 @@ namespace matplotlibcpp {
 
 
 
-
+        /**
+        * @brief Plots a bar graph.
+        * @param config bar configuration
+        * @throws std::runtime_error if bar fails  
+        */
         inline void barImpl(PyObject* pyObj, const BarConfig& config) {
 
             PyPtr args(PyTuple_New(2));
@@ -850,18 +1097,20 @@ namespace matplotlibcpp {
             PyTuple_SetItem(args.get(), 1, barValueToPython(config.height));
 
             PyPtr kwargs(PyDict_New());
-            
+
+
             if (config.width.has_value())
                 PyDict_SetItemString(kwargs.get(), "width",
-                    barValueToPython(config.width.value()));
+                    barValueToPython(*config.width));
             if (config.bottom.has_value())
                 PyDict_SetItemString(kwargs.get(), "bottom",
-                    barValueToPython(config.bottom.value()));
-            if (config.align.has_value())
-                PyDict_SetItemString(kwargs.get(), "align",
-                    PyUnicode_FromString(config.align.value().c_str()));
-
-            kwargsImpl(kwargs.get(), config);
+                    barValueToPython(*config.bottom));
+            
+            // rest of bar kwargs
+            kwargsBarImpl(kwargs.get(), config);
+            
+            // rest of rectangle kwargs
+            kwargsRectangleImpl(kwargs.get(), config);
 
             PyPtr bar(PyObject_GetAttrString(pyObj, "bar"));
             checkAttr(bar.get(), "bar");
@@ -870,6 +1119,148 @@ namespace matplotlibcpp {
             checkResult(res.get(), "bar");
 
         }
+
+
+        inline void barhImpl(PyObject* pyObj, const BarhConfig& config) {
+
+            PyPtr args(PyTuple_New(2));
+            PyTuple_SetItem(args.get(), 0, barYValueToPython(config.y));
+            PyTuple_SetItem(args.get(), 1, barValueToPython(config.width));
+
+            PyPtr kwargs(PyDict_New());
+
+            if (config.height.has_value())
+                PyDict_SetItemString(kwargs.get(), "height",
+                    barValueToPython(*config.height));
+            if (config.left.has_value())
+                PyDict_SetItemString(kwargs.get(), "left",
+                    barValueToPython(*config.left));
+
+            // rest of barh kwargs
+            kwargsBarImpl(kwargs.get(), config);
+            
+
+            // rest of rectangle kwargs
+            kwargsRectangleImpl(kwargs.get(), config);
+
+            PyPtr barh(PyObject_GetAttrString(pyObj, "barh"));
+            checkAttr(barh.get(), "barh");
+
+            PyPtr res(PyObject_Call(barh.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "barh");
+            
+        }
+
+        /**
+        * @brief Shared implementation of set_xticks() function
+        * @param pyObj axes object
+        * @param config set_xticks configuration
+        * @throws std::runtime_error if set_xticks fails
+        */
+        inline void set_xticksImpl(PyObject* pyObj, const XTicksConfig& config) {
+
+            PyPtr args(PyTuple_New(1));
+            PyTuple_SetItem(args.get(), 0, toNumpy(config.ticks));
+
+            PyPtr kwargs(PyDict_New());
+
+            if (config.minor.has_value())
+                PyDict_SetItemString(kwargs.get(), "minor",
+                    config.minor.value() ? Py_True : Py_False);
+            
+            
+            kwargsTextImpl(kwargs.get(), config);
+
+            PyPtr set_xticks(PyObject_GetAttrString(pyObj, "set_xticks"));
+            checkAttr(set_xticks.get(), "set_xticks");
+
+            PyPtr res(PyObject_Call(set_xticks.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "set_xticks");
+            
+
+        }
+
+
+        /**
+        * @brief Shared implementation of set_yticks() function
+        * @param pyObj axes object
+        * @param config set_yticks configuration
+        * @throws std::runtime_error if set_yticks fails
+        */
+        inline void set_yticksImpl(PyObject* pyObj, const YTicksConfig& config) {
+
+            PyPtr args(PyTuple_New(1));
+            PyTuple_SetItem(args.get(), 0, toNumpy(config.ticks));
+
+            PyPtr kwargs(PyDict_New());
+            
+            if (config.minor.has_value())
+                PyDict_SetItemString(kwargs.get(), "minor",
+                    config.minor.value() ? Py_True : Py_False);
+            
+            kwargsTextImpl(kwargs.get(), config);
+
+            PyPtr set_yticks(PyObject_GetAttrString(pyObj, "set_yticks"));
+            checkAttr(set_yticks.get(), "set_yticks");
+
+            PyPtr res(PyObject_Call(set_yticks.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "set_yticks");
+
+        }
+
+
+        /**
+        * @brief Set tick labels — DISCOURAGED by matplotlib.
+        * Prefer set_xticks({.ticks = x, .labels = categories}) instead.
+        * Use only when tick positions are already fixed.   
+        */
+        inline void set_xticklabelsImpl(PyObject* pyObj, const XTickLabelsConfig& config) {
+
+            PyPtr args(PyTuple_New(1));
+            PyTuple_SetItem(args.get(), 0, toStringList(config.labels));
+
+            PyPtr kwargs(PyDict_New());
+            
+            if (config.minor.has_value())
+                PyDict_SetItemString(kwargs.get(), "minor",
+                    config.minor.value() ? Py_True : Py_False);
+            
+         
+
+            PyPtr set_xticklabels(PyObject_GetAttrString(pyObj, "set_xticklabels"));
+            checkAttr(set_xticklabels.get(), "set_xticklabels");
+            
+            PyPtr res(PyObject_Call(set_xticklabels.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "set_xticklabels");
+            
+        }
+
+
+        /**
+        * @brief Set tick labels — DISCOURAGED by matplotlib.
+        * Prefer set_xticks({.ticks = y, .labels = categories}) instead.
+        * Use only when tick positions are already fixed.
+        */
+        inline void set_yticklabelsImpl(PyObject* pyObj, const YTickLabelsConfig& config) {
+
+            PyPtr args(PyTuple_New(1));
+            PyTuple_SetItem(args.get(), 0, toStringList(config.labels));
+
+            PyPtr kwargs(PyDict_New());
+            
+            if (config.minor.has_value())
+                PyDict_SetItemString(kwargs.get(), "minor",
+                    config.minor.value() ? Py_True : Py_False);
+            
+
+            PyPtr set_yticklabels(PyObject_GetAttrString(pyObj, "set_yticklabels"));
+            checkAttr(set_yticklabels.get(), "set_yticklabels");
+            
+            PyPtr res(PyObject_Call(set_yticklabels.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "set_yticklabels");
+            
+        }
+
 
 
         

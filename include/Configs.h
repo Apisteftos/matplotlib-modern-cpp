@@ -379,6 +379,13 @@ namespace matplotlibcpp {
         std::vector<std::string> 
     >;
 
+    // barh parameters
+    using BarYValue = std::variant<
+        double,
+        Vec,
+        std::vector<std::string>
+    >;
+
     // bar parameters
     using BarValue = std::variant<
         double,
@@ -387,15 +394,48 @@ namespace matplotlibcpp {
 
 
     // fill_between parameters
-    using FillBetweenValue = std::variant<
-        bool,
-        std::vector<bool>
-    >;
-
-    // fill_between parameters
     using LinewidthValue = std::variant<
         double,
         std::vector<double>
+    >;
+
+
+    // bar parameters
+    using TickLabelValue = std::variant<
+        std::string,
+        std::vector<std::string>
+    >;
+
+
+    // text parameters
+    using FontSizeValue = std::variant<
+        double,
+        std::vector<std::string>
+    >;
+
+    // text parameters
+    using FontStretchValue = std::variant<
+        int,           
+        std::string    
+    >;
+
+    // text parameters
+    using FontWeightValue = std::variant<
+        int,           
+        std::string    
+    >;
+
+    // text parameters
+    using LineSpacingValue = std::variant<
+        double,         
+        std::string   
+    >;
+
+
+    // text parameters
+    using RotationValue = std::variant<
+        double,         
+        std::string   
     >;
 
 
@@ -411,6 +451,33 @@ namespace matplotlibcpp {
         double vmin;
         double vmax;
     };
+
+    /**
+     * @brief Struct for x, y coordinates 
+     */ 
+    struct XY {
+        double x;
+        double y;
+    };
+
+    /**
+     * @brief Struct for x, y coordinates for the text position
+     */
+    struct Position {
+        double x;
+        double y;
+    };
+
+
+    /**
+    * @brief Struct for sketch parameters
+    */
+    struct SketchParams {
+        double scale       = 1.0;    
+        double length      = 128.0;  
+        double randomness  = 16.0;  
+    };
+    
 
 
     // =============================================================================
@@ -465,20 +532,20 @@ namespace matplotlibcpp {
         DataValue y;
         
         // optional
-        std::optional<ErrorValue> yerr = std::nullopt;
-        std::optional<ErrorValue> xerr = std::nullopt;
-        std::optional<std::string> fmt = std::nullopt;
-        std::optional<std::string> ecolor = std::nullopt;
-        std::optional<double> elinewidth = std::nullopt;
-        std::optional<double> capsize = 0.0;
-        std::optional<double> capthick = std::nullopt;
-        std::optional<bool> barsabove = false;
+        std::optional<ErrorValue> yerr            = std::nullopt;
+        std::optional<ErrorValue> xerr            = std::nullopt;
+        std::optional<std::string> fmt            = std::nullopt;
+        std::optional<std::string> ecolor         = std::nullopt;
+        std::optional<double> elinewidth          = std::nullopt;
+        std::optional<double> capsize             = 0.0;
+        std::optional<double> capthick            = std::nullopt;
+        std::optional<bool> barsabove             = false;
 
         // limit arrows
-        std::optional<LimValue> lolims = false;
-        std::optional<LimValue> uplims = false;
-        std::optional<LimValue> xlolims = false;
-        std::optional<LimValue> xuplims = false;
+        std::optional<LimValue> lolims            = false;
+        std::optional<LimValue> uplims            = false;
+        std::optional<LimValue> xlolims           = false;
+        std::optional<LimValue> xuplims           = false;
 
         // errorevery — int or (start, N) e.g. .errorevery={4, 2} 
         std::optional<ErrorEveryValue> errorevery = 1;
@@ -817,7 +884,7 @@ namespace matplotlibcpp {
 
         // **kwargs between properties
         std::optional<double> alpha                     = std::nullopt;
-        std::optional<FillBetweenValue> animated        = std::nullopt;
+        std::optional<bool> animated                    = std::nullopt;
         std::optional<Vec> array                        = std::nullopt;
         std::optional<Clim> clim                        = std::nullopt;
         std::optional<bool> clip_on                     = std::nullopt;
@@ -855,7 +922,7 @@ namespace matplotlibcpp {
 
         // **kwargs between properties
         std::optional<double> alpha                     = std::nullopt;
-        std::optional<FillBetweenValue> animated        = std::nullopt;
+        std::optional<bool> animated                    = std::nullopt;
         std::optional<Vec> array                        = std::nullopt;
         std::optional<Clim> clim                        = std::nullopt;
         std::optional<bool> clip_on                     = std::nullopt;
@@ -897,7 +964,7 @@ namespace matplotlibcpp {
         
         // fig_kw
         std::optional<double> alpha                         = std::nullopt;
-        std::optional<double> animated                      = std::nullopt;
+        std::optional<bool> animated                        = std::nullopt;
         std::optional<std::string> clip_on                  = std::nullopt;
         std::optional<double> dpi                           = std::nullopt;
         std::optional<std::string> edgecolor                = std::nullopt;
@@ -920,28 +987,190 @@ namespace matplotlibcpp {
 
         BarXValue x;
         BarValue height;
-        
-
-        // optional
         std::optional<BarValue> width               = 0.8;
         std::optional<BarValue> bottom              = 0.0;
         std::optional<std::string> align            = toString(BarAlign::Center);
+        std::optional<ErrorValue> xerr              = std::nullopt;
+        std::optional<ErrorValue> yerr              = std::nullopt;
         
 
-        // kwargs
+        // optional
         std::optional<std::string> color            = std::nullopt;
+        std::optional<std::string> facecolor        = std::nullopt;
+        std::optional<std::string> edgecolor        = std::nullopt;
+        std::optional<LinewidthValue> linewidth     = std::nullopt;
+        std::optional<TickLabelValue> tick_label    = std::nullopt;
         std::optional<std::string> label            = std::nullopt;
+        std::optional<std::string> ecolor           = std::nullopt;
+        std::optional<double> capsize               = 0.0;
+        std::optional<bool> log                     = false;
+        
+        // kwargs Rectangle
         std::optional<double> alpha                 = std::nullopt;
-        std::optional<double> linewidth             = std::nullopt;
+        std::optional<bool> animated                = std::nullopt;
+        std::optional<bool> antialiased             = std::nullopt;
+        std::optional<std::string> bounds           = std::nullopt;
+        std::optional<std::string> capstyle         = std::nullopt;
+        std::optional<double> clip_on               = std::nullopt;
+        std::optional<std::string> edgegapcolor     = std::nullopt;
+        std::optional<bool> fill                    = std::nullopt;
+        std::optional<std::string> gid              = std::nullopt;
+        std::optional<std::string> hatch            = std::nullopt;
+        std::optional<bool> in_layout               = std::nullopt;
+        std::optional<std::string> joinstyle        = std::nullopt;
         std::optional<std::string> linestyle        = std::nullopt;
-        std::optional<std::string> marker           = std::nullopt;
-        std::optional<double> markersize            = std::nullopt;
-        std::optional<std::string> markerfacecolor  = std::nullopt;
-        std::optional<std::string> markeredgecolor  = std::nullopt;
-        std::optional<double> markeredgewidth       = std::nullopt;
-        std::optional<std::string> drawstyle        = std::nullopt;
-        std::optional<std::string> fillstyle        = std::nullopt;
+        std::optional<bool> mouseover               = std::nullopt;
+        std::optional<bool> rasterized              = std::nullopt;
+        std::optional<bool> snap                    = std::nullopt;
+        std::optional<std::string> url              = std::nullopt;
+        std::optional<bool> visible                 = std::nullopt;
+        std::optional<XY> xy                        = std::nullopt;
+        std::optional<double> zorder                = std::nullopt;
 
+    };
+
+
+    struct BarhConfig {
+        BarYValue y;
+        BarValue width;
+        std::optional<BarValue> height            = 0.8;
+        std::optional<BarValue> left              = 0.0;
+        std::optional<std::string> align          = toString(BarAlign::Center);
+        std::optional<ErrorValue> xerr            = std::nullopt;
+        std::optional<ErrorValue> yerr            = std::nullopt;
+
+
+        // optional
+        std::optional<std::string> color            = std::nullopt;
+        std::optional<std::string> facecolor        = std::nullopt;
+        std::optional<std::string> edgecolor        = std::nullopt;
+        std::optional<LinewidthValue> linewidth     = std::nullopt;
+        std::optional<TickLabelValue> tick_label    = std::nullopt;
+        std::optional<std::string> label            = std::nullopt;
+        std::optional<std::string> ecolor           = std::nullopt;
+        std::optional<double> capsize               = 0.0;
+        std::optional<bool> log                     = false;
+        
+        // kwargs Rectangle
+        std::optional<double> alpha                 = std::nullopt;
+        std::optional<bool> animated                = std::nullopt;
+        std::optional<bool> antialiased             = std::nullopt;
+        std::optional<std::string> bounds           = std::nullopt;
+        std::optional<std::string> capstyle         = std::nullopt;
+        std::optional<double> clip_on               = std::nullopt;
+        std::optional<std::string> edgegapcolor     = std::nullopt;
+        std::optional<bool> fill                    = std::nullopt;
+        std::optional<std::string> gid              = std::nullopt;
+        std::optional<std::string> hatch            = std::nullopt;
+        std::optional<bool> in_layout               = std::nullopt;
+        std::optional<std::string> joinstyle        = std::nullopt;
+        std::optional<std::string> linestyle        = std::nullopt;
+        std::optional<bool> mouseover               = std::nullopt;
+        std::optional<bool> rasterized              = std::nullopt;
+        std::optional<bool> snap                    = std::nullopt;
+        std::optional<std::string> url              = std::nullopt;
+        std::optional<bool> visible                 = std::nullopt;
+        std::optional<XY> xy                        = std::nullopt;
+        std::optional<double> zorder                = std::nullopt;
+
+    };
+
+
+    struct XTicksConfig {
+        std::vector<double> ticks;
+        std::optional<bool> minor                       = std::nullopt;
+
+        // kwargs Text
+        std::optional<double> alpha                     = std::nullopt;
+        std::optional<bool> animated                    = std::nullopt;
+        std::optional<bool> antialiased                 = std::nullopt;
+        std::optional<double> clip_on                   = std::nullopt;
+        std::optional<std::string> color                = std::nullopt;
+        std::optional<std::string> fontFamily           = std::nullopt;
+        std::optional<FontSizeValue> fontSize           = std::nullopt;
+        std::optional<FontStretchValue> fontStretch     = std::nullopt;
+        std::optional<std::string> fontStyle            = std::nullopt;
+        std::optional<std::string> fontVariant          = std::nullopt;
+        std::optional<FontWeightValue> fontWeight       = std::nullopt;
+        std::optional<bool> in_layout                   = std::nullopt;
+        std::optional<std::string> label                = std::nullopt;
+        std::optional<std::string> language             = std::nullopt;
+        std::optional<LineSpacingValue> linespacing     = std::nullopt; 
+        std::optional<std::string> math_fontfamily      = std::nullopt;
+        std::optional<bool> mouseover                   = std::nullopt;
+        std::optional<std::string> multialignment       = std::nullopt;
+        std::optional<std::string> parse_math           = std::nullopt;
+        std::optional<Position> position                = std::nullopt;
+        std::optional<bool> rasterized                  = std::nullopt;
+        std::optional<RotationValue> rotation           = std::nullopt;
+        std::optional<std::string> rotation_mode        = std::nullopt;
+        std::optional<SketchParams> sketch_params       = std::nullopt;
+        std::optional<bool> snap                        = std::nullopt;
+        std::optional<std::string> text                 = std::nullopt;
+        std::optional<bool> transform_rotates_text      = std::nullopt;
+        std::optional<std::string> url                  = std::nullopt;
+        std::optional<std::string> verticalalignment    = std::nullopt;
+        std::optional<bool> visible                     = std::nullopt;
+        std::optional<bool> wrap                        = std::nullopt;
+        std::optional<double> x                         = std::nullopt;
+        std::optional<double> y                         = std::nullopt;
+        std::optional<double> zorder                    = std::nullopt;
+
+    };
+
+    struct YTicksConfig {
+        std::vector<double> ticks;
+        std::optional<bool> minor                       = std::nullopt;
+
+        // kwargs Text
+        std::optional<double> alpha                     = std::nullopt;
+        std::optional<bool> animated                    = std::nullopt;
+        std::optional<bool> antialiased                 = std::nullopt;
+        std::optional<double> clip_on                   = std::nullopt;
+        std::optional<std::string> color                = std::nullopt;
+        std::optional<std::string> fontFamily           = std::nullopt;
+        std::optional<FontSizeValue> fontSize           = std::nullopt;
+        std::optional<FontStretchValue> fontStretch     = std::nullopt;
+        std::optional<std::string> fontStyle            = std::nullopt;
+        std::optional<std::string> fontVariant          = std::nullopt;
+        std::optional<FontWeightValue> fontWeight       = std::nullopt;
+        std::optional<bool> in_layout                   = std::nullopt;
+        std::optional<std::string> label                = std::nullopt;
+        std::optional<std::string> language             = std::nullopt;
+        std::optional<LineSpacingValue> linespacing     = std::nullopt; 
+        std::optional<std::string> math_fontfamily      = std::nullopt;
+        std::optional<bool> mouseover                   = std::nullopt;
+        std::optional<std::string> multialignment       = std::nullopt;
+        std::optional<std::string> parse_math           = std::nullopt;
+        std::optional<Position> position                = std::nullopt;
+        std::optional<bool> rasterized                  = std::nullopt;
+        std::optional<RotationValue> rotation           = std::nullopt;
+        std::optional<std::string> rotation_mode        = std::nullopt;
+        std::optional<SketchParams> sketch_params       = std::nullopt;
+        std::optional<bool> snap                        = std::nullopt;
+        std::optional<std::string> text                 = std::nullopt;
+        std::optional<bool> transform_rotates_text      = std::nullopt;
+        std::optional<std::string> url                  = std::nullopt;
+        std::optional<std::string> verticalalignment    = std::nullopt;
+        std::optional<bool> visible                     = std::nullopt;
+        std::optional<bool> wrap                        = std::nullopt;
+        std::optional<double> x                         = std::nullopt;
+        std::optional<double> y                         = std::nullopt;
+        std::optional<double> zorder                    = std::nullopt;
+
+
+
+    };
+
+
+    struct XTickLabelsConfig {
+        std::vector<std::string> labels;
+        std::optional<bool> minor                       = std::nullopt;
+    };
+
+    struct YTickLabelsConfig {
+        std::vector<std::string> labels;
+        std::optional<bool> minor                       = std::nullopt;
     };
 
 

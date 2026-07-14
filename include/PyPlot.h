@@ -696,6 +696,34 @@ public:
         detail::barImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
+    /**
+    * @brief Plots a barh graph.
+    * @param config barh configuration
+    * @throws std::runtime_error if bar fails
+    */
+    void barh(const BarhConfig& config) {
+        detail::barhImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+    /**
+    * @brief Sets the ticks on the x axis.
+    * @param config ticks configuration
+    * @throws std::runtime_error if ticks fails
+    */
+    void xticks(const XTicksConfig& config) {
+        detail::set_xticksImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+    /**
+    * @brief Sets the ticks on the y axis.
+    * @param config ticks configuration
+    * @throws std::runtime_error if ticks fails
+    */
+    void yticks(const YTicksConfig& config) {
+        detail::set_yticksImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+
 
 
 };

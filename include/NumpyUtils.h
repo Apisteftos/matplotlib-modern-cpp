@@ -338,6 +338,24 @@ namespace matplotlibcpp {
         }, bx);
     }
 
+    /** 
+     * @brief Converts a BarYValue in points to a Python object
+     * @param bv input BarYValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* barYValueToPython(const BarYValue& bv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>) {
+                return PyFloat_FromDouble(val);
+            } else if constexpr (std::is_same_v<T, Vec>) {
+                return toNumpy(val);
+            } else {
+                return toStringList(val);
+            }
+        }, bv);
+    }
+
     
     /** 
      * @brief Converts a BarValue in points to a Python object
@@ -353,22 +371,6 @@ namespace matplotlibcpp {
                 return toNumpy(val);
             }
         }, bv);
-    }
-
-    /** 
-     * @brief Converts a FillBetweenValue either in bool or vector<bool> to a Python object
-     * @param fbv input FillBetweenValue
-     * @return PyObject* Python object
-     */
-    inline PyObject* fillBetweenValueToPython(const FillBetweenValue& fbv) {
-        return std::visit([](const auto& val) -> PyObject* {
-            using T = std::decay_t<decltype(val)>;
-            if constexpr (std::is_same_v<T, bool>) {
-                return val ? Py_True : Py_False;
-            } else if constexpr (std::is_same_v<T, std::vector<bool>>) {
-                return toBoolArray(val);
-            } 
-        }, fbv);
     }
 
     
@@ -388,21 +390,104 @@ namespace matplotlibcpp {
         }, lwv);
     }
 
+    /**
+     * @brief Converts TickLabelValue to a Python object
+     * @param tlv input TickLabelValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* tickLabelValueToPython(const TickLabelValue& tlv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, std::string>) {
+                return PyUnicode_FromString(val.c_str());
+            } else {
+                return toStringList(val);
+            }
+        }, tlv);
+    }
 
+
+
+
+    
+
+    /**
+    * @brief Converts FontSizeValue to a Python object
+    * @param fsv input FontSizeValue
+    * @return PyObject* Python object
+    */
+    inline PyObject* fontSizeValueToPython(const FontSizeValue& fsv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>)
+                return PyFloat_FromDouble(val);
+            else
+                return toStringList(val);
+        }, fsv);
+    }
+
+
+    /** 
+     * @brief Converts FontSizeValue to a Python object
+     * @param fsv input FontSizeValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* fontStretchValueToPython(const FontStretchValue& fsv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, int>)
+                return PyLong_FromLong(val);
+            else
+                return PyUnicode_FromString(val.c_str());
+        }, fsv);
+    }
+
+    /**
+     * @brief Converts FontWeightValue to a Python object
+     * @param fwv input FontWeightValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* fontWeightValueToPython(const FontWeightValue& fwv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, int>)
+                return PyLong_FromLong(val);
+            else
+                return PyUnicode_FromString(val.c_str());
+        }, fwv);
+    }
 
 
     /**
-    * @brief Converts a Clim to a Python tuple
-    * @param c input Clim
-    * @return PyObject* Python tuple
-    */
-    inline PyObject* climToTuple(const Clim& c) {
-        PyObject* t = PyTuple_New(2);
-        PyTuple_SetItem(t, 0, PyFloat_FromDouble(c.vmin));
-        PyTuple_SetItem(t, 1, PyFloat_FromDouble(c.vmax));
-        return t;
+     * @brief Converts lineSpacingValue to a Python object
+     * @param lsv input lineSpacingValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* lineSpacingValueToPython(const LineSpacingValue& lsv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>)
+                return PyFloat_FromDouble(val);
+            else
+                return PyUnicode_FromString(val.c_str());
+        }, lsv);
     }
 
+
+    /**
+    * @brief Converts RotationValue to a Python object
+    * @param rv input RotationValue
+    * @return PyObject* Python object
+    */
+    inline PyObject* rotationValueToPython(const RotationValue& rv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>)
+                return PyFloat_FromDouble(val);
+            else
+                return PyUnicode_FromString(val.c_str());
+        }, rv);
+    }
 
 
     
@@ -423,6 +508,63 @@ namespace matplotlibcpp {
     inline Vec operator+(double scalar, const Vec& v) { return v + scalar; }
 
 
+    // ============================================================
+    // Generic conversion functions
+    // ============================================================
+
+
+    /**
+    * @brief Converts sketchParams to a Python object
+    * @param sp input sketchParams
+    * @return PyObject* Python object
+    */
+    inline PyObject* sketchParamsToPython(const SketchParams& sp) {
+        PyObject* tuple = PyTuple_New(3);
+        PyTuple_SetItem(tuple, 0, PyFloat_FromDouble(sp.scale));
+        PyTuple_SetItem(tuple, 1, PyFloat_FromDouble(sp.length));
+        PyTuple_SetItem(tuple, 2, PyFloat_FromDouble(sp.randomness));
+
+        return tuple;
+    }
+
+
+
+    /**
+    * @brief Converts a Clim to a Python tuple
+    * @param c input Clim
+    * @return PyObject* Python tuple
+    */
+    inline PyObject* climToTuple(const Clim& c) {
+        PyObject* t = PyTuple_New(2);
+        PyTuple_SetItem(t, 0, PyFloat_FromDouble(c.vmin));
+        PyTuple_SetItem(t, 1, PyFloat_FromDouble(c.vmax));
+        return t;
+    }
+
+
+    /**
+    * @brief Converts a XY to a Python tuple
+    * @param xy input XY
+    * @return PyObject* Python tuple
+    */
+    inline PyObject* xyToTuple(const XY& xy) {
+        PyObject* t = PyTuple_New(2);
+        PyTuple_SetItem(t, 0, PyFloat_FromDouble(xy.x));
+        PyTuple_SetItem(t, 1, PyFloat_FromDouble(xy.y));
+        return t;
+    }
+
+    /**
+    * @brief Converts a Position to a Python tuple
+    * @param p input Position
+    * @return PyObject* Python tuple
+    */
+    inline PyObject* positionToTuple(const Position& p) {
+        PyObject* t = PyTuple_New(2);
+        PyTuple_SetItem(t, 0, PyFloat_FromDouble(p.x));
+        PyTuple_SetItem(t, 1, PyFloat_FromDouble(p.y));
+        return t;
+    }
 
     
 

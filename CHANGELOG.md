@@ -5,6 +5,57 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
+
+## [0.11.0] - 14/07/2026
+
+
+
+### Added
+
+- `BarConfig` — full Rectangle kwargs for `bar()`
+- `BarhConfig` — full Rectangle kwargs for `barh()`
+- `XTicksConfig`, `YTicksConfig` — `set_xticks()`, `set_yticks()` with Text kwargs
+- `XTickLabelsConfig`, `YTickLabelsConfig` — `set_xticklabels()`, `set_yticklabels()`
+- `kwargsTextImpl<T>()` — shared Text kwargs implementation
+- `FontSizeValue` — `variant<double, string>` for font size
+- `FontStretchValue` — `variant<int, string>` for font stretch
+- `FontWeightValue` — `variant<int, string>` for font weight
+- `LineSpacingValue` — `variant<double, string>` for line spacing
+- `RotationValue` — `variant<double, string>` for rotation
+- `SketchParams` struct — `{scale, length, randomness}`
+- `Position` struct — `{x, y}` for text position
+- `XY` struct — `{x, y}` for rectangle position
+- `tickLabelValueToPython()`, `fontSizeValueToPython()`, `fontStretchValueToPython()`
+- `fontWeightValueToPython()`, `lineSpacingValueToPython()`, `rotationValueToPython()`
+- `sketchParamsToPython()`, `positionToTuple()`, `xyToTuple()`, `barYValueToPython()`
+- bar and barh C++ and Python examples
+- text example in Python
+- test_bar.cpp CI/CD and unit test for bar
+
+
+
+### Changed
+
+- updated the CmakeLists.txt file for bar and CI/CD and unit test for bar
+- separated gereric conversion functions int the `NumpyUtils.h` header
+
+
+### Removed
+
+- unused `Subplot2Grid.h` header
+- `fillBetweenValueToPython()` in the `NumpyUtils.h` header
+- `FillBetweenValue`struct in the `Configs.h` header
+
+
+### Fixed
+
+- typo `kwargsPolygonImpl<T>()` — kwargs for Polygon 
+- typo `kwargsFillBetweenImpl<T>()` — kwargs for FillBetween
+- animated in the `FillBetweenConfig` and  `FillBetweenxConfig` struct data type from `FillBetweenValue`to bool
+
+
+
+
 ## [0.10.0] - 08/07/2026
 
 ### Added

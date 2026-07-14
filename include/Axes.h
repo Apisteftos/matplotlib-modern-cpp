@@ -279,14 +279,13 @@ public:
     }
         
         
-
-    void barh(const std::vector<double>& y, const std::vector<double>& width, const std::string& fmt = "b") {
-
-        PyPtr yarray(toNumpy(y));
-        PyPtr widtharray(toNumpy(width)); 
-
-        PyObject_CallMethod(ax_.get(), "barh", "OOs", yarray.get(), widtharray.get(), fmt.c_str());
-        
+    /**
+    * @brief Plots a barh graph.
+    * @param config barh configuration
+    * @throws std::runtime_error if bar fails
+    */
+    void barh(const BarhConfig& config) {
+        detail::barhImpl(ax_.get(), config);
     }
 
     void bar_label(const std::vector<double>& bars, const std::vector<std::string>& labels) {
@@ -407,8 +406,43 @@ public:
     }
 
 
-    
+    /**
+     * @brief Sets the ticks on the x and y axes.
+     * @param config ticks configuration
+     * @throws std::runtime_error if ticks fails
+     */
+    void set_xticks(const XTicksConfig& config) {
+        detail::set_xticksImpl(ax_.get(), config);
+    }
 
+
+    /**
+    * @brief Sets the ticks on the y axis.
+    * @param config ticks configuration 
+    * @throws std::runtime_error if ticks fails
+    */
+    void set_yticks(const YTicksConfig& config) {
+        detail::set_yticksImpl(ax_.get(), config);
+    }
+
+
+    /**
+    * @brief Set tick labels — DISCOURAGED by matplotlib.
+    * Prefer set_xticks({.ticks = x, .labels = categories}) instead.
+    * Use only when tick positions are already fixed.
+    */
+    void set_xticklabels(const XTickLabelsConfig& config) {
+        detail::set_xticklabelsImpl(ax_.get(), config);
+    }
+    
+    /**
+    * @brief Set tick labels — DISCOURAGED by matplotlib.
+    * Prefer set_xticks({.ticks = y, .labels = categories}) instead.
+    * Use only when tick positions are already fixed.
+    */
+    void set_yticklabels(const YTickLabelsConfig& config) {
+        detail::set_yticklabelsImpl(ax_.get(), config);
+    }
     
 
 }; 

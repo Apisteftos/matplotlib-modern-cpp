@@ -93,3 +93,6 @@ pics/
 # ignore temporary py files
 tempCodeRunnerFile.py
 
+# ignore .venv
+.venv/
+
