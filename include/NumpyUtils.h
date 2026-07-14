@@ -566,6 +566,21 @@ namespace matplotlibcpp {
         return t;
     }
 
+
+    /**
+    * @brief Converts Bounds coordinates to a Python tuple
+    * @param b input Bounds
+    * @return PyObject* Python tuple
+    */
+    inline PyObject* boundsToPython(const Bounds& b) {
+        PyObject* tuple = PyTuple_New(4);
+        PyTuple_SetItem(tuple, 0, PyFloat_FromDouble(b.left));
+        PyTuple_SetItem(tuple, 1, PyFloat_FromDouble(b.bottom));
+        PyTuple_SetItem(tuple, 2, PyFloat_FromDouble(b.width));
+        PyTuple_SetItem(tuple, 3, PyFloat_FromDouble(b.height));
+        return tuple;
+    }
+
     
 
     

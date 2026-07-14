@@ -258,9 +258,11 @@ namespace matplotlibcpp {
             if (config.antialiased.has_value())
                 PyDict_SetItemString(pyObj, "antialiased",
                     *config.antialiased ? Py_True : Py_False);
-            if (config.bounds.has_value())
-                PyDict_SetItemString(pyObj, "bounds",
-                    PyUnicode_FromString(config.bounds->c_str()));
+            if (config.bounds.has_value()) {
+                PyObject* t = boundsToPython(*config.bounds);
+                PyDict_SetItemString(pyObj, "bounds", t);
+                Py_DECREF(t);
+            }
             if (config.capstyle.has_value())
                 PyDict_SetItemString(pyObj, "capstyle",
                     PyUnicode_FromString(config.capstyle->c_str()));

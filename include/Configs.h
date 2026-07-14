@@ -477,6 +477,16 @@ namespace matplotlibcpp {
         double length      = 128.0;  
         double randomness  = 16.0;  
     };
+
+    /**
+    * @brief Struct for bounds with coordinates
+    */
+    struct Bounds {
+        double left   = 0.0;
+        double bottom = 0.0;
+        double width  = 0.0;
+        double height = 0.0;
+    };
     
 
 
@@ -1009,7 +1019,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha                 = std::nullopt;
         std::optional<bool> animated                = std::nullopt;
         std::optional<bool> antialiased             = std::nullopt;
-        std::optional<std::string> bounds           = std::nullopt;
+        std::optional<Bounds> bounds                = std::nullopt;
         std::optional<std::string> capstyle         = std::nullopt;
         std::optional<double> clip_on               = std::nullopt;
         std::optional<std::string> edgegapcolor     = std::nullopt;
@@ -1055,7 +1065,7 @@ namespace matplotlibcpp {
         std::optional<double> alpha                 = std::nullopt;
         std::optional<bool> animated                = std::nullopt;
         std::optional<bool> antialiased             = std::nullopt;
-        std::optional<std::string> bounds           = std::nullopt;
+        std::optional<Bounds> bounds                = std::nullopt;
         std::optional<std::string> capstyle         = std::nullopt;
         std::optional<double> clip_on               = std::nullopt;
         std::optional<std::string> edgegapcolor     = std::nullopt;

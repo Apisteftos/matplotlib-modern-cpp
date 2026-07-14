@@ -5,7 +5,6 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
-
 ## [0.11.0] - 14/07/2026
 
 

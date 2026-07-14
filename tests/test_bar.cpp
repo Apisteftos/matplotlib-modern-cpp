@@ -6,6 +6,7 @@
 
 using matplotlibcpp::Vec;
 using matplotlibcpp::XY;
+using matplotlibcpp::Bounds;
 
 // ============================================================
 // Test helpers
@@ -81,7 +82,7 @@ void test_bar() {
         .alpha = 0.3,
         .animated = true,
         .antialiased = true,
-        .bounds = "boxes",
+        .bounds = Bounds{0.0, 0.0, 1.0, 1.0},
         .capstyle = "round",
         .clip_on = true,
         .edgegapcolor = "red",
