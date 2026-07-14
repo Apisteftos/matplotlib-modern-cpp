@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
+
+## [0.11.1] - 14/07/2026
+
+### Fixed
+
+- `bar()`, `barh()` bounds from string to `Bounds` struct coorindates
+- boundsToPython() in the `NumpyUtils.h` header
+- Bounds in the `Detail.h` header
+- Bounds in the test_bar.cpp for unit tests
+
 ## [0.11.0] - 14/07/2026
 
 
