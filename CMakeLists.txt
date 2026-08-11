@@ -55,12 +55,24 @@ add_plot_executable(stem stem_example.cpp)
 
 
 # =============================================================================
+# doctest 
+# =============================================================================
+include(FetchContent)
+FetchContent_Declare(
+    doctest
+    GIT_REPOSITORY https://github.com/doctest/doctest.git
+    GIT_TAG v2.5.3
+)
+FetchContent_MakeAvailable(doctest)
+
+
+# =============================================================================
 # Tests
 # =============================================================================
 function(add_test_executable target source)
     add_executable(${target} tests/${source})
     target_include_directories(${target} PRIVATE ${COMMON_INCLUDES})
-    target_link_libraries(${target} PRIVATE ${Python3_LIBRARIES})
+    target_link_libraries(${target} PRIVATE ${Python3_LIBRARIES} doctest::doctest)
     add_test(NAME ${target} COMMAND ${target})
 endfunction()
 
@@ -70,15 +82,4 @@ add_test_executable(test_fill test_fill.cpp)
 add_test_executable(test_bar test_bar.cpp)
 add_test_executable(test_stem test_stem.cpp)
 
-
-# =============================================================================
-# doctest 
-# =============================================================================
-include(FetchContent)
-FetchContent_Declare(
-    doctest
-    GIT_REPOSITORY https://github.com/doctest/doctest.git
-    GIT_TAG v2.4.11
-)
-FetchContent_MakeAvailable(doctest)
 
