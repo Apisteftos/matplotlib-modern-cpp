@@ -723,6 +723,14 @@ public:
         detail::set_yticksImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
+    /**
+    * @brief Plots a stem graph.
+    * @param config stem configuration
+    * @throws std::runtime_error if stem fails
+    */
+    void stem(const StemConfig& config) {
+        detail::stemImpl(Interpreter::getInstance().getPyplot(), config);
+    }
 
 
 

@@ -1185,4 +1185,21 @@ namespace matplotlibcpp {
 
 
 
+    struct StemConfig {
+
+        std::optional<std::vector<double>> locs = std::nullopt;
+        std::vector<double> heads; 
+
+        // optional
+        std::optional<std::string> linefmt = std::nullopt;
+        std::optional<std::string> markerfmt = std::nullopt;
+        std::optional<std::string> basefmt = std::nullopt;
+        std::optional<std::string> orientation = "vertical";
+        double bottom = 0.0;
+        std::optional<std::string> label = std::nullopt;
+        
+    };
+
+
+
 }

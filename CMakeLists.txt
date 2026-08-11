@@ -50,6 +50,7 @@ add_plot_executable(errorbar errorbar_example.cpp)
 add_plot_executable(scatter scatter_example.cpp)
 add_plot_executable(subplot_mosaic subplot_mosaic_example.cpp)
 add_plot_executable(bar bar_example.cpp)
+add_plot_executable(stem stem_example.cpp)
 
 
 
@@ -67,4 +68,17 @@ enable_testing()
 add_test_executable(test_basic test_basic.cpp)
 add_test_executable(test_fill test_fill.cpp)
 add_test_executable(test_bar test_bar.cpp)
+add_test_executable(test_stem test_stem.cpp)
+
+
+# =============================================================================
+# doctest 
+# =============================================================================
+include(FetchContent)
+FetchContent_Declare(
+    doctest
+    GIT_REPOSITORY https://github.com/doctest/doctest.git
+    GIT_TAG v2.5.3
+)
+FetchContent_MakeAvailable(doctest)
 

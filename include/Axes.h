@@ -443,6 +443,15 @@ public:
     void set_yticklabels(const YTickLabelsConfig& config) {
         detail::set_yticklabelsImpl(ax_.get(), config);
     }
+
+    /**
+    * @brief Plots a stem graph.
+    * @param config stem configuration
+    * @throws std::runtime_error if stem fails
+    */
+    void stem(const StemConfig& config) {
+        detail::stemImpl(ax_.get(), config);
+    }
     
 
 }; 

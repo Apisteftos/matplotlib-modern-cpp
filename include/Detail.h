@@ -16,6 +16,7 @@
 
 #include <map>
 #include <string>
+#include <numeric>
 
 
 namespace matplotlibcpp {
@@ -1261,6 +1262,57 @@ namespace matplotlibcpp {
             PyPtr res(PyObject_Call(set_yticklabels.get(), args.get(), kwargs.get()));
             checkResult(res.get(), "set_yticklabels");
             
+        }
+
+        /**
+        * @brief Plots a stem graph.
+        * @param config stem configuration
+        * @throws std::runtime_error if stem fails
+        */
+        inline void stemImpl(PyObject* pyObj, const StemConfig& config) {
+
+            std::vector<double> locs;
+            if (config.locs.has_value()) {
+                locs = config.locs.value();
+            } else {
+                locs.resize(config.heads.size());
+                std::iota(locs.begin(), locs.end(), 0.0);
+            }
+
+            PyPtr args(PyTuple_New(2));
+            PyTuple_SetItem(args.get(), 0, toNumpy(locs));
+            PyTuple_SetItem(args.get(), 1, toNumpy(config.heads));
+
+            PyPtr kwargs(PyDict_New());
+            if (config.linefmt.has_value())
+                PyDict_SetItemString(kwargs.get(), "linefmt",
+                    PyUnicode_FromString(config.linefmt.value().c_str()));
+            if (config.markerfmt.has_value())
+                PyDict_SetItemString(kwargs.get(), "markerfmt",
+                    PyUnicode_FromString(config.markerfmt.value().c_str()));
+            if (config.basefmt.has_value())
+                PyDict_SetItemString(kwargs.get(), "basefmt",
+                    PyUnicode_FromString(config.basefmt.value().c_str()));
+            if (config.orientation.has_value())
+                PyDict_SetItemString(kwargs.get(), "orientation",
+                    PyUnicode_FromString(config.orientation.value().c_str()));
+            
+            PyDict_SetItemString(kwargs.get(), "bottom",
+            PyFloat_FromDouble(config.bottom));
+            
+            if (config.label.has_value())
+                PyDict_SetItemString(kwargs.get(), "label",
+                    PyUnicode_FromString(config.label.value().c_str()));
+
+            
+
+            PyPtr stem(PyObject_GetAttrString(pyObj, "stem"));
+            checkAttr(stem.get(), "stem");
+
+            PyPtr res(PyObject_Call(stem.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "stem");
+
+
         }
 
 
