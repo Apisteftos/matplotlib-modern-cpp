@@ -452,6 +452,15 @@ public:
     void stem(const StemConfig& config) {
         detail::stemImpl(ax_.get(), config);
     }
+
+    /**
+     * @brief Toggles the frame on or off.
+     * @param config frame configuration
+     * @throws std::runtime_error if frame fails
+     */
+    void set_frame_on(const SetFrameOnConfig& config) {
+        detail::set_frame_onImpl(ax_.get(), config);
+    }
     
 
 }; 

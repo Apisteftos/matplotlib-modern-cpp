@@ -1299,7 +1299,7 @@ namespace matplotlibcpp {
             
             PyDict_SetItemString(kwargs.get(), "bottom",
             PyFloat_FromDouble(config.bottom));
-            
+
             if (config.label.has_value())
                 PyDict_SetItemString(kwargs.get(), "label",
                     PyUnicode_FromString(config.label.value().c_str()));
@@ -1313,6 +1313,53 @@ namespace matplotlibcpp {
             checkResult(res.get(), "stem");
 
 
+        }
+
+
+        /**
+         * @brief Toggles the box on or off.
+         * @param config box configuration
+         * @throws std::runtime_error if box fails
+         */
+        inline void boxImpl(PyObject* pyObj, const BoxConfig& config) {
+
+            PyPtr args(PyTuple_New(0));
+            PyPtr kwargs(PyDict_New());
+            
+            if (config.on.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "on",
+                    config.on.value() ? Py_True : Py_False);
+            }else{
+                args.reset(PyTuple_New(0));
+            }
+
+            PyPtr box(PyObject_GetAttrString(pyObj, "box"));
+            checkAttr(box.get(), "box");
+            
+            PyPtr res(PyObject_Call(box.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "box");
+        }
+
+        /**
+         * @brief Toggles the frame on or off.
+         * @param config frame configuration
+         * @throws std::runtime_error if frame fails
+         */
+        inline void set_frame_onImpl(PyObject* pyObj, const SetFrameOnConfig& config) {
+
+            PyPtr args(PyTuple_New(0));
+            PyPtr kwargs(PyDict_New());
+            
+            if (config.b.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "b",
+                    config.b.value() ? Py_True : Py_False);
+            }
+
+            PyPtr set_frame_on(PyObject_GetAttrString(pyObj, "set_frame_on"));
+            checkAttr(set_frame_on.get(), "set_frame_on");
+            
+            PyPtr res(PyObject_Call(set_frame_on.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "set_frame_on");
         }
 
 

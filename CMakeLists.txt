@@ -51,6 +51,7 @@ add_plot_executable(scatter scatter_example.cpp)
 add_plot_executable(subplot_mosaic subplot_mosaic_example.cpp)
 add_plot_executable(bar bar_example.cpp)
 add_plot_executable(stem stem_example.cpp)
+add_plot_executable(box box_example.cpp)
 
 
 
@@ -81,5 +82,7 @@ add_test_executable(test_basic test_basic.cpp)
 add_test_executable(test_fill test_fill.cpp)
 add_test_executable(test_bar test_bar.cpp)
 add_test_executable(test_stem test_stem.cpp)
+add_test_executable(test_box test_box.cpp)
+add_test_executable(test_set_frame_on test_set_frame_on.cpp)
 
 

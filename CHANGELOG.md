@@ -9,14 +9,17 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - `StemConfig` struct with `locs`, `heads`,`linefmt`, `markerfmt`, `basefmt`, `bottom`, `label`, `orientation`
+- `BoxConfig` and `SetFrameOnConfig` for box and set_frame_on 
 - `Axes::stem()` and `PyPlot::stem()` wrappers using the new config-struct pattern
 - `stemImpl()` in `Detail.h` 
-- `stem_example` in python and C++
+- `stem_example`, `box_example` and `set_frame_on_example` in python and C++
 - doctest integration via CMake for unit tests
 - `tests/test_stem.cpp` — 5 test cases 
+- `test_box` and `test_set_frame_on` unit tests
 
 ### Changed
 - `CMakeLists.txt`: added `doctest` FetchContent block and `test_stem` test executable
+- `CMakeLists`: added `doctest` for `test_box` and `test_set_frame_on`
 
 
 ## [0.11.1] - 14/07/2026

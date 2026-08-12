@@ -732,6 +732,15 @@ public:
         detail::stemImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
+    /**
+     * @brief Toggles the box on or off.
+     * @param config box configuration
+     * @throws std::runtime_error if box fails
+     */
+    void box(const BoxConfig& config) {
+        detail::boxImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
 
 
 };
