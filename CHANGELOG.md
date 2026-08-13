@@ -30,14 +30,13 @@ All notable changes to this project will be documented in this file.
 - **`text` kwarg collision** — same issue as `label`, between `SupTitleConfig::text` and the positional `t` argument in `suptitle()`; now stripped from kwargs before the call
 - **`checkResult()` / `checkAttr()`** in `Helper.h` — previously only called `PyErr_Print()` (stderr only, not captured); now use `fetchPythonError()` to fold the actual Python exception message into the thrown `std::runtime_error`, making failures debuggable from the exception text alone
 - **Field naming convention** — renamed `fontFamily`, `fontSize`, `fontStretch`, `fontStyle`, `fontVariant`, `fontWeight` (camelCase) to `fontfamily`, `fontsize`, `fontstretch`, `fontstyle`, `fontvariant`, `fontweight` (snake_case) across all Text-kwargs config structs, matching matplotlib's actual Python kwarg names exactly — prevents silent kwarg mismatches when building the `kwargs` dict
+- Diagnosed and fixed a CI-only build failure caused by a system-wide `doctest-dev` apt package masking a missing `doctest::doctest` link locally; CI's clean container correctly exposed the bug
+- Diagnosed and fixed a local Python/matplotlib version mismatch: CMake was resolving `/usr/bin/python3` (system, matplotlib 3.10.9) instead of `.venv`'s Python (3.12.3, matplotlib 3.11.0), causing spurious `AttributeError: 'Text' object has no property 'language'`; fixed via explicit `-DPython3_EXECUTABLE`/`-DPython3_ROOT_DIR` when configuring with `.venv` activated
 
 ### Changed
 - `CMakeLists.txt`: added `doctest` FetchContent block (moved above the Tests section so `doctest::doctest` target exists before test executables reference it) and `test_stem`, `test_box`, `test_set_frame_on`, `test_xlabel`, `test_ylabel`, `test_suptitle` executables
 - `add_test_executable()` CMake function: added `doctest::doctest` to `target_link_libraries` (previously missing, causing `doctest/doctest.h: No such file or directory` in clean CI containers while masked locally by a system-installed `doctest-dev` package)
 
-### Fixed 
-- Diagnosed and fixed a CI-only build failure caused by a system-wide `doctest-dev` apt package masking a missing `doctest::doctest` link locally; CI's clean container correctly exposed the bug
-- Diagnosed and fixed a local Python/matplotlib version mismatch: CMake was resolving `/usr/bin/python3` (system, matplotlib 3.10.9) instead of `.venv`'s Python (3.12.3, matplotlib 3.11.0), causing spurious `AttributeError: 'Text' object has no property 'language'`; fixed via explicit `-DPython3_EXECUTABLE`/`-DPython3_ROOT_DIR` when configuring with `.venv` activated
 
 
 ## [0.11.1] - 14/07/2026
