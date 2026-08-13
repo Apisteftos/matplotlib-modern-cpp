@@ -92,20 +92,34 @@ public:
         PyObject_CallMethod(ax_.get(), "set_title", "s", title.c_str());
     }
 
+    /**
+     * @brief Sets the x-axis label.
+     * @param config xlabel configuration
+     * @throws std::runtime_error if xlabel fails
+     */
     void set_xlabel(const XLabelConfig& config) {
 
         PyPtr args(PyTuple_New(1));
         PyTuple_SetItem(args.get(), 0, PyUnicode_FromString(config.xlabel.c_str()));
-        
-        PyPtr kwargs(PyDict_New());
-        PyDict_SetItemString(kwargs.get(), "labelpad",
-            PyFloat_FromDouble(config.labelpad));
-        if (!config.color.empty())
-            PyDict_SetItemString(kwargs.get(), "color",
-                PyUnicode_FromString(config.color.c_str()));
 
-        PyPtr res(PyObject_Call(
-            PyObject_GetAttrString(ax_.get(), "set_xlabel"), args.get(), kwargs.get()));
+        PyPtr kwargs(PyDict_New());
+        if (config.labelpad.has_value())
+            PyDict_SetItemString(kwargs.get(), "labelpad", 
+        PyFloat_FromDouble(config.labelpad.value()));
+        if (config.loc.has_value())
+            PyDict_SetItemString(kwargs.get(), "loc",
+                PyUnicode_FromString(config.loc.value().c_str()));
+        
+        detail::kwargsTextImpl(kwargs.get(), config);
+        // removes collision with the xlabel
+        if (PyDict_Contains(kwargs.get(), PyUnicode_FromString("label"))) {
+            PyDict_DelItemString(kwargs.get(), "label");
+        }
+        
+        PyPtr set_xlabel(PyObject_GetAttrString(ax_.get(), "set_xlabel"));
+        checkAttr(set_xlabel.get(), "set_xlabel");
+        
+        PyPtr res(PyObject_Call(set_xlabel.get(), args.get(), kwargs.get()));
         checkResult(res.get(), "set_xlabel");
 
     }
@@ -116,11 +130,18 @@ public:
         PyTuple_SetItem(args.get(), 0, PyUnicode_FromString(config.ylabel.c_str()));
 
         PyPtr kwargs(PyDict_New());
-        PyDict_SetItemString(kwargs.get(), "labelpad",
-            PyFloat_FromDouble(config.labelpad));
-        if (!config.color.empty())
-            PyDict_SetItemString(kwargs.get(), "color",
-                PyUnicode_FromString(config.color.c_str()));
+        if (config.labelpad.has_value())
+            PyDict_SetItemString(kwargs.get(), "labelpad", 
+        PyFloat_FromDouble(config.labelpad.value()));
+        if (config.loc.has_value())
+            PyDict_SetItemString(kwargs.get(), "loc",
+                PyUnicode_FromString(config.loc.value().c_str()));
+        
+        detail::kwargsTextImpl(kwargs.get(), config);
+        if (PyDict_Contains(kwargs.get(), PyUnicode_FromString("label"))) {
+            PyDict_DelItemString(kwargs.get(), "label");
+        }
+        
 
         PyPtr res(PyObject_Call(
             PyObject_GetAttrString(ax_.get(), "set_ylabel"), args.get(), kwargs.get()));

@@ -741,6 +741,78 @@ public:
         detail::boxImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
+    /**
+     * @brief Sets the x-axis label.
+     * @param config xlabel configuration
+     * @throws std::runtime_error if xlabel fails
+     */
+    void xlabel(const XLabelConfig& config) {
+        PyPtr args(PyTuple_New(1));
+        PyTuple_SetItem(args.get(), 0, PyUnicode_FromString(config.xlabel.c_str()));
+
+        PyPtr kwargs(PyDict_New());
+        if (config.labelpad.has_value())
+            PyDict_SetItemString(kwargs.get(), "labelpad",
+                PyFloat_FromDouble(config.labelpad.value()));
+        if (config.loc.has_value())
+            PyDict_SetItemString(kwargs.get(), "loc",
+                PyUnicode_FromString(config.loc.value().c_str()));  
+
+        
+        detail::kwargsTextImpl(kwargs.get(), config);
+        // removes collision with the xlabel
+        if (PyDict_Contains(kwargs.get(), PyUnicode_FromString("label"))) {
+            PyDict_DelItemString(kwargs.get(), "label");
+        }
+        
+        PyPtr set_xlabel(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "xlabel"));
+        checkAttr(set_xlabel.get(), "xlabel");
+        
+        PyPtr res(PyObject_Call(set_xlabel.get(), args.get(), kwargs.get()));
+        checkResult(res.get(), "xlabel");
+    }
+
+    /**
+     * @brief Sets the y-axis label.
+     * @param config ylabel configuration
+     * @throws std::runtime_error if ylabel fails
+     */ 
+    void ylabel(const YLabelConfig& config) {
+        PyPtr args(PyTuple_New(1));
+        PyTuple_SetItem(args.get(), 0, PyUnicode_FromString(config.ylabel.c_str()));
+
+        PyPtr kwargs(PyDict_New());
+        if (config.labelpad.has_value())
+            PyDict_SetItemString(kwargs.get(), "labelpad",
+                PyFloat_FromDouble(config.labelpad.value()));
+        if (config.loc.has_value())
+            PyDict_SetItemString(kwargs.get(), "loc",
+                PyUnicode_FromString(config.loc.value().c_str()));
+   
+        
+        detail::kwargsTextImpl(kwargs.get(), config);
+        // removes collision with the ylabel
+        if (PyDict_Contains(kwargs.get(), PyUnicode_FromString("label"))) {
+            PyDict_DelItemString(kwargs.get(), "label");
+        }
+        
+
+        PyPtr set_ylabel(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "ylabel"));
+        checkAttr(set_ylabel.get(), "ylabel");
+        
+        PyPtr res(PyObject_Call(set_ylabel.get(), args.get(), kwargs.get()));
+        checkResult(res.get(), "ylabel");
+    }
+
+    /**
+     * @brief Sets the suptitle.
+     * @param config suptitle configuration
+     * @throws std::runtime_error if suptitle fails
+     */
+    void suptitle(const SupTitleConfig& config) {
+        detail::suptitleImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
 
 
 };

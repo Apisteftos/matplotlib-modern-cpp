@@ -328,51 +328,51 @@ namespace matplotlibcpp {
         template<typename T>
         inline void kwargsFigImpl(PyObject* pyObj, const T& config) {
 
-            if (config.alpha)
+            if (config.alpha.has_value())
                 PyDict_SetItemString(pyObj, "alpha",
-                    PyFloat_FromDouble(*config.alpha));
-            if (config.animated)
+                    PyFloat_FromDouble(config.alpha.value()));
+            if (config.animated.has_value())
                 PyDict_SetItemString(pyObj, "animated",
-                    *config.animated ? Py_True : Py_False);
-            if (config.clip_on)
-                PyDict_SetItemString(pyObj, "clip_on",
-                    PyUnicode_FromString(config.clip_on->c_str()));
-            if (config.dpi)
+                    config.animated.value() ? Py_True : Py_False);
+            if (config.clip_on.has_value())
+                PyDict_SetItemString(pyObj, "clip_on", 
+            config.clip_on.value() ? Py_True : Py_False);
+            if (config.dpi.has_value())
                 PyDict_SetItemString(pyObj, "dpi",
-                    PyFloat_FromDouble(*config.dpi));
-            if (config.edgecolor)
+                    PyFloat_FromDouble(config.dpi.value()));
+            if (config.edgecolor.has_value())
                 PyDict_SetItemString(pyObj, "edgecolor",
-                    PyUnicode_FromString(config.edgecolor->c_str()));
-            if (config.facecolor)
+                    PyUnicode_FromString(config.edgecolor.value().c_str()));
+            if (config.facecolor.has_value())
                 PyDict_SetItemString(pyObj, "facecolor",
-                    PyUnicode_FromString(config.facecolor->c_str()));
-            if (config.figheight)
+                    PyUnicode_FromString(config.facecolor.value().c_str()));
+            if (config.figheight.has_value())
                 PyDict_SetItemString(pyObj, "figheight",
-                    PyFloat_FromDouble(*config.figheight));
-            if (config.figwidth)
+                    PyFloat_FromDouble(config.figheight.value()));
+            if (config.figwidth.has_value())
                 PyDict_SetItemString(pyObj, "figwidth",
-                    PyFloat_FromDouble(*config.figwidth));
-            if (config.frameon)
+                    PyFloat_FromDouble(config.figwidth.value()));
+            if (config.frameon.has_value())
                 PyDict_SetItemString(pyObj, "frameon",
-                    *config.frameon ? Py_True : Py_False);
-            if (config.gid)
+                    config.frameon.value() ? Py_True : Py_False);
+            if (config.gid.has_value())
                 PyDict_SetItemString(pyObj, "gid",
-                    PyUnicode_FromString(config.gid->c_str()));
-            if (config.mouseover)
+                    PyUnicode_FromString(config.gid.value().c_str()));
+            if (config.mouseover.has_value())
                 PyDict_SetItemString(pyObj, "mouseover",
-                    *config.mouseover ? Py_True : Py_False);
-            if (config.rasterized)
+                    config.mouseover.value() ? Py_True : Py_False);
+            if (config.rasterized.has_value())
                 PyDict_SetItemString(pyObj, "rasterized",
-                    *config.rasterized ? Py_True : Py_False);
-            if (config.url)
+                    config.rasterized.value() ? Py_True : Py_False);
+            if (config.url.has_value())
                 PyDict_SetItemString(pyObj, "url",
-                    PyUnicode_FromString(config.url->c_str()));
-            if (config.visible)
+                    PyUnicode_FromString(config.url.value().c_str()));
+            if (config.visible.has_value())
                 PyDict_SetItemString(pyObj, "visible",
-                    *config.visible ? Py_True : Py_False);
-            if (config.zorder)
+                    config.visible.value() ? Py_True : Py_False);
+            if (config.zorder.has_value())
                 PyDict_SetItemString(pyObj, "zorder",
-                    PyFloat_FromDouble(*config.zorder));
+                    PyFloat_FromDouble(config.zorder.value()));
 
         }
 
@@ -401,24 +401,30 @@ namespace matplotlibcpp {
             if (config.color.has_value())
                 PyDict_SetItemString(pyObj, "color",
                     PyUnicode_FromString(config.color.value().c_str()));
-            if (config.fontFamily.has_value())
-                PyDict_SetItemString(pyObj, "fontFamily",
-                    PyUnicode_FromString(config.fontFamily.value().c_str()));
-            if (config.fontSize.has_value())
-                PyDict_SetItemString(pyObj, "fontSize",
-                    fontSizeValueToPython(config.fontSize.value()));
-            if (config.fontStretch.has_value())
-                PyDict_SetItemString(pyObj, "fontStretch",
-                    fontStretchValueToPython(config.fontStretch.value()));
-            if (config.fontStyle.has_value())
-                PyDict_SetItemString(pyObj, "fontStyle",
-                    PyUnicode_FromString(config.fontStyle.value().c_str()));
-            if (config.fontVariant.has_value())
-                PyDict_SetItemString(pyObj, "fontVariant",
-                    PyUnicode_FromString(config.fontVariant.value().c_str()));
-            if (config.fontWeight.has_value())
-                PyDict_SetItemString(pyObj, "fontWeight",
-                    fontWeightValueToPython(config.fontWeight.value()));
+            if (config.fontfamily.has_value())
+                PyDict_SetItemString(pyObj, "fontfamily",
+                    PyUnicode_FromString(config.fontfamily.value().c_str()));
+            if (config.fontsize.has_value())
+                PyDict_SetItemString(pyObj, "fontsize",
+                    fontSizeValueToPython(config.fontsize.value()));
+            if (config.fontstretch.has_value())
+                PyDict_SetItemString(pyObj, "fontstretch",
+                    fontStretchValueToPython(config.fontstretch.value()));
+            if (config.fontstyle.has_value())
+                PyDict_SetItemString(pyObj, "fontstyle",
+                    PyUnicode_FromString(config.fontstyle.value().c_str()));
+            if (config.fontvariant.has_value())
+                PyDict_SetItemString(pyObj, "fontvariant",
+                    PyUnicode_FromString(config.fontvariant.value().c_str()));
+            if (config.fontweight.has_value())
+                PyDict_SetItemString(pyObj, "fontweight",
+                    fontWeightValueToPython(config.fontweight.value()));
+            if (config.gid.has_value())
+                PyDict_SetItemString(pyObj, "gid",
+                    PyUnicode_FromString(config.gid.value().c_str()));
+            if (config.horizontalalignment.has_value())
+                PyDict_SetItemString(pyObj, "horizontalalignment",
+                    PyUnicode_FromString(config.horizontalalignment.value().c_str()));
             if (config.in_layout.has_value())
                 PyDict_SetItemString(pyObj, "in_layout",                
                     config.in_layout.value() ? Py_True : Py_False);
@@ -441,8 +447,8 @@ namespace matplotlibcpp {
                 PyDict_SetItemString(pyObj, "multialignment",
                     PyUnicode_FromString(config.multialignment.value().c_str()));
             if (config.parse_math.has_value())
-                PyDict_SetItemString(pyObj, "parse_math",
-                    PyUnicode_FromString(config.parse_math.value().c_str()));
+                PyDict_SetItemString(pyObj, "parse_math", 
+                config.parse_math.value() ? Py_True : Py_False);
             if (config.position.has_value())
                 PyDict_SetItemString(pyObj, "position",
                     positionToTuple(config.position.value()));
@@ -1363,7 +1369,31 @@ namespace matplotlibcpp {
         }
 
 
+        /**
+         * @brief Sets the suptitle.
+         * @param config suptitle configuration
+         * @throws std::runtime_error if suptitle fails
+         */
+        inline void suptitleImpl(PyObject* pyObj, const SupTitleConfig& config) {
 
+            PyPtr args(PyTuple_New(1));
+            PyTuple_SetItem(args.get(), 0, PyUnicode_FromString(config.t.c_str()));
+
+            PyPtr kwargs(PyDict_New());
+
+            kwargsTextImpl(kwargs.get(), config);
+            // removes collision with the text, t and text are similar
+            if (PyDict_DelItemString(kwargs.get(), "text") != 0) PyErr_Clear();
+
+            
+            PyPtr suptitle(PyObject_GetAttrString(pyObj, "suptitle"));
+            checkAttr(suptitle.get(), "suptitle");
+            
+            PyPtr res(PyObject_Call(suptitle.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "suptitle");
+            
+            
+        }
         
 
 

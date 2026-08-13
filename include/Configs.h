@@ -410,7 +410,7 @@ namespace matplotlibcpp {
     // text parameters
     using FontSizeValue = std::variant<
         double,
-        std::vector<std::string>
+        std::string
     >;
 
     // text parameters
@@ -653,16 +653,94 @@ namespace matplotlibcpp {
 
 
     struct XLabelConfig {
-        std::string xlabel       = toString(Loc::CENTER);
-        double labelpad          = 4.0;
-        std::string color;
+        std::string xlabel; 
+        std::optional<double> labelpad                  = std::nullopt;
+        std::optional<std::string> loc                  = std::nullopt;
+
+
+        // kwargs Text
+        std::optional<double> alpha                     = std::nullopt;
+        std::optional<bool> animated                    = std::nullopt;
+        std::optional<bool> antialiased                 = std::nullopt;
+        std::optional<bool> clip_on                     = std::nullopt;
+        std::optional<std::string> color                = std::nullopt;
+        std::optional<std::string> fontfamily           = std::nullopt;
+        std::optional<FontSizeValue> fontsize           = std::nullopt;
+        std::optional<FontStretchValue> fontstretch     = std::nullopt;
+        std::optional<std::string> fontstyle            = std::nullopt;
+        std::optional<std::string> fontvariant          = std::nullopt;
+        std::optional<FontWeightValue> fontweight       = std::nullopt;
+        std::optional<std::string> gid                  = std::nullopt;
+        std::optional<std::string> horizontalalignment  = std::nullopt;
+        std::optional<bool> in_layout                   = std::nullopt;
+        std::optional<std::string> label                = std::nullopt;
+        std::optional<std::string> language             = std::nullopt;
+        std::optional<LineSpacingValue> linespacing     = std::nullopt; 
+        std::optional<std::string> math_fontfamily      = std::nullopt;
+        std::optional<bool> mouseover                   = std::nullopt;
+        std::optional<std::string> multialignment       = std::nullopt;
+        std::optional<bool> parse_math                  = std::nullopt;
+        std::optional<Position> position                = std::nullopt;
+        std::optional<bool> rasterized                  = std::nullopt;
+        std::optional<RotationValue> rotation           = std::nullopt;
+        std::optional<std::string> rotation_mode        = std::nullopt;
+        std::optional<SketchParams> sketch_params       = std::nullopt;
+        std::optional<bool> snap                        = std::nullopt;
+        std::optional<std::string> text                 = std::nullopt;
+        std::optional<bool> transform_rotates_text      = std::nullopt;
+        std::optional<std::string> url                  = std::nullopt;
+        std::optional<std::string> verticalalignment    = std::nullopt;
+        std::optional<bool> visible                     = std::nullopt;
+        std::optional<bool> wrap                        = std::nullopt;
+        std::optional<double> x                         = std::nullopt;
+        std::optional<double> y                         = std::nullopt;
+        std::optional<double> zorder                    = std::nullopt;
     };
 
 
     struct YLabelConfig {
-        std::string ylabel       = toString(Loc::CENTER);
-        double labelpad          = 4.0;
-        std::string color;
+        std::string ylabel;
+        std::optional<double> labelpad                  = std::nullopt;
+        std::optional<std::string> loc                  = std::nullopt;
+
+
+        // kwargs Text
+        std::optional<double> alpha                     = std::nullopt;
+        std::optional<bool> animated                    = std::nullopt;
+        std::optional<bool> antialiased                 = std::nullopt;
+        std::optional<bool> clip_on                     = std::nullopt;
+        std::optional<std::string> color                = std::nullopt;
+        std::optional<std::string> fontfamily           = std::nullopt;
+        std::optional<FontSizeValue> fontsize           = std::nullopt;
+        std::optional<FontStretchValue> fontstretch     = std::nullopt;
+        std::optional<std::string> fontstyle            = std::nullopt;
+        std::optional<std::string> fontvariant          = std::nullopt;
+        std::optional<FontWeightValue> fontweight       = std::nullopt;
+        std::optional<std::string> gid                  = std::nullopt;
+        std::optional<std::string> horizontalalignment  = std::nullopt;
+        std::optional<bool> in_layout                   = std::nullopt;
+        std::optional<std::string> label                = std::nullopt;
+        std::optional<std::string> language             = std::nullopt;
+        std::optional<LineSpacingValue> linespacing     = std::nullopt; 
+        std::optional<std::string> math_fontfamily      = std::nullopt;
+        std::optional<bool> mouseover                   = std::nullopt;
+        std::optional<std::string> multialignment       = std::nullopt;
+        std::optional<bool> parse_math                  = std::nullopt;
+        std::optional<Position> position                = std::nullopt;
+        std::optional<bool> rasterized                  = std::nullopt;
+        std::optional<RotationValue> rotation           = std::nullopt;
+        std::optional<std::string> rotation_mode        = std::nullopt;
+        std::optional<SketchParams> sketch_params       = std::nullopt;
+        std::optional<bool> snap                        = std::nullopt;
+        std::optional<std::string> text                 = std::nullopt;
+        std::optional<bool> transform_rotates_text      = std::nullopt;
+        std::optional<std::string> url                  = std::nullopt;
+        std::optional<std::string> verticalalignment    = std::nullopt;
+        std::optional<bool> visible                     = std::nullopt;
+        std::optional<bool> wrap                        = std::nullopt;
+        std::optional<double> x                         = std::nullopt;
+        std::optional<double> y                         = std::nullopt;
+        std::optional<double> zorder                    = std::nullopt;
     };
 
     
@@ -975,7 +1053,7 @@ namespace matplotlibcpp {
         // fig_kw
         std::optional<double> alpha                         = std::nullopt;
         std::optional<bool> animated                        = std::nullopt;
-        std::optional<std::string> clip_on                  = std::nullopt;
+        std::optional<bool> clip_on                         = std::nullopt;
         std::optional<double> dpi                           = std::nullopt;
         std::optional<std::string> edgecolor                = std::nullopt;
         std::optional<std::string> facecolor                = std::nullopt;
@@ -1021,7 +1099,7 @@ namespace matplotlibcpp {
         std::optional<bool> antialiased             = std::nullopt;
         std::optional<Bounds> bounds                = std::nullopt;
         std::optional<std::string> capstyle         = std::nullopt;
-        std::optional<double> clip_on               = std::nullopt;
+        std::optional<bool> clip_on                 = std::nullopt;
         std::optional<std::string> edgegapcolor     = std::nullopt;
         std::optional<bool> fill                    = std::nullopt;
         std::optional<std::string> gid              = std::nullopt;
@@ -1067,7 +1145,7 @@ namespace matplotlibcpp {
         std::optional<bool> antialiased             = std::nullopt;
         std::optional<Bounds> bounds                = std::nullopt;
         std::optional<std::string> capstyle         = std::nullopt;
-        std::optional<double> clip_on               = std::nullopt;
+        std::optional<bool> clip_on                 = std::nullopt;
         std::optional<std::string> edgegapcolor     = std::nullopt;
         std::optional<bool> fill                    = std::nullopt;
         std::optional<std::string> gid              = std::nullopt;
@@ -1094,14 +1172,16 @@ namespace matplotlibcpp {
         std::optional<double> alpha                     = std::nullopt;
         std::optional<bool> animated                    = std::nullopt;
         std::optional<bool> antialiased                 = std::nullopt;
-        std::optional<double> clip_on                   = std::nullopt;
+        std::optional<bool> clip_on                     = std::nullopt;
         std::optional<std::string> color                = std::nullopt;
-        std::optional<std::string> fontFamily           = std::nullopt;
-        std::optional<FontSizeValue> fontSize           = std::nullopt;
-        std::optional<FontStretchValue> fontStretch     = std::nullopt;
-        std::optional<std::string> fontStyle            = std::nullopt;
-        std::optional<std::string> fontVariant          = std::nullopt;
-        std::optional<FontWeightValue> fontWeight       = std::nullopt;
+        std::optional<std::string> fontfamily           = std::nullopt;
+        std::optional<FontSizeValue> fontsize           = std::nullopt;
+        std::optional<FontStretchValue> fontstretch     = std::nullopt;
+        std::optional<std::string> fontstyle            = std::nullopt;
+        std::optional<std::string> fontvariant          = std::nullopt;
+        std::optional<FontWeightValue> fontweight       = std::nullopt;
+        std::optional<std::string> gid                  = std::nullopt;
+        std::optional<std::string> horizontalalignment  = std::nullopt;
         std::optional<bool> in_layout                   = std::nullopt;
         std::optional<std::string> label                = std::nullopt;
         std::optional<std::string> language             = std::nullopt;
@@ -1109,7 +1189,7 @@ namespace matplotlibcpp {
         std::optional<std::string> math_fontfamily      = std::nullopt;
         std::optional<bool> mouseover                   = std::nullopt;
         std::optional<std::string> multialignment       = std::nullopt;
-        std::optional<std::string> parse_math           = std::nullopt;
+        std::optional<bool> parse_math                  = std::nullopt;
         std::optional<Position> position                = std::nullopt;
         std::optional<bool> rasterized                  = std::nullopt;
         std::optional<RotationValue> rotation           = std::nullopt;
@@ -1136,14 +1216,16 @@ namespace matplotlibcpp {
         std::optional<double> alpha                     = std::nullopt;
         std::optional<bool> animated                    = std::nullopt;
         std::optional<bool> antialiased                 = std::nullopt;
-        std::optional<double> clip_on                   = std::nullopt;
+        std::optional<bool> clip_on                     = std::nullopt;
         std::optional<std::string> color                = std::nullopt;
-        std::optional<std::string> fontFamily           = std::nullopt;
-        std::optional<FontSizeValue> fontSize           = std::nullopt;
-        std::optional<FontStretchValue> fontStretch     = std::nullopt;
-        std::optional<std::string> fontStyle            = std::nullopt;
-        std::optional<std::string> fontVariant          = std::nullopt;
-        std::optional<FontWeightValue> fontWeight       = std::nullopt;
+        std::optional<std::string> fontfamily           = std::nullopt;
+        std::optional<FontSizeValue> fontsize           = std::nullopt;
+        std::optional<FontStretchValue> fontstretch     = std::nullopt;
+        std::optional<std::string> fontstyle            = std::nullopt;
+        std::optional<std::string> fontvariant          = std::nullopt;
+        std::optional<FontWeightValue> fontweight       = std::nullopt;
+        std::optional<std::string> gid                  = std::nullopt;
+        std::optional<std::string> horizontalalignment  = std::nullopt;
         std::optional<bool> in_layout                   = std::nullopt;
         std::optional<std::string> label                = std::nullopt;
         std::optional<std::string> language             = std::nullopt;
@@ -1151,7 +1233,7 @@ namespace matplotlibcpp {
         std::optional<std::string> math_fontfamily      = std::nullopt;
         std::optional<bool> mouseover                   = std::nullopt;
         std::optional<std::string> multialignment       = std::nullopt;
-        std::optional<std::string> parse_math           = std::nullopt;
+        std::optional<bool> parse_math                  = std::nullopt;
         std::optional<Position> position                = std::nullopt;
         std::optional<bool> rasterized                  = std::nullopt;
         std::optional<RotationValue> rotation           = std::nullopt;
@@ -1209,6 +1291,53 @@ namespace matplotlibcpp {
     struct SetFrameOnConfig {
         std::optional<bool> b = std::nullopt;
     };
+
+    struct SupTitleConfig {
+        std::string t; 
+
+        // kwargs Text
+        std::optional<double> alpha                     = std::nullopt;
+        std::optional<bool> animated                    = std::nullopt;
+        std::optional<bool> antialiased                 = std::nullopt;
+        std::optional<bool> clip_on                     = std::nullopt;
+        std::optional<std::string> color                = std::nullopt;
+        std::optional<std::string> fontfamily           = std::nullopt;
+        std::optional<FontSizeValue> fontsize           = "large";
+        std::optional<FontStretchValue> fontstretch     = std::nullopt;
+        std::optional<std::string> fontstyle            = std::nullopt;
+        std::optional<std::string> fontvariant          = std::nullopt;
+        std::optional<FontWeightValue> fontweight       = "normal";
+        std::optional<std::string> gid                  = std::nullopt;
+        std::optional<std::string> horizontalalignment  = "center";
+        std::optional<bool> in_layout                   = std::nullopt;
+        std::optional<std::string> label                = std::nullopt;
+        std::optional<std::string> language             = std::nullopt;
+        std::optional<LineSpacingValue> linespacing     = std::nullopt; 
+        std::optional<std::string> math_fontfamily      = std::nullopt;
+        std::optional<bool> mouseover                   = std::nullopt;
+        std::optional<std::string> multialignment       = std::nullopt;
+        std::optional<bool> parse_math                  = std::nullopt;
+        std::optional<Position> position                = std::nullopt;
+        std::optional<bool> rasterized                  = std::nullopt;
+        std::optional<RotationValue> rotation           = std::nullopt;
+        std::optional<std::string> rotation_mode        = std::nullopt;
+        std::optional<SketchParams> sketch_params       = std::nullopt;
+        std::optional<bool> snap                        = std::nullopt;
+        std::optional<std::string> text                 = std::nullopt;
+        std::optional<bool> transform_rotates_text      = std::nullopt;
+        std::optional<std::string> url                  = std::nullopt;
+        std::optional<std::string> verticalalignment    = "top";
+        std::optional<bool> visible                     = std::nullopt;
+        std::optional<bool> wrap                        = std::nullopt;
+        std::optional<double> x                         = 0.5;
+        std::optional<double> y                         = 0.95;
+        std::optional<double> zorder                    = std::nullopt;
+
+
+    };
+
+
+    
 
 
 }

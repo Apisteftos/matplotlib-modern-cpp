@@ -422,7 +422,7 @@ namespace matplotlibcpp {
             if constexpr (std::is_same_v<T, double>)
                 return PyFloat_FromDouble(val);
             else
-                return toStringList(val);
+                return PyUnicode_FromString(val.c_str()); 
         }, fsv);
     }
 

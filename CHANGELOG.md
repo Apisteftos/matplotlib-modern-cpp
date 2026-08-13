@@ -8,18 +8,36 @@ All notable changes to this project will be documented in this file.
 ## [0.12.0] - 11/08/2026
 
 ### Added
-- `StemConfig` struct with `locs`, `heads`,`linefmt`, `markerfmt`, `basefmt`, `bottom`, `label`, `orientation`
-- `BoxConfig` and `SetFrameOnConfig` for box and set_frame_on 
-- `Axes::stem()` and `PyPlot::stem()` wrappers using the new config-struct pattern
-- `stemImpl()` in `Detail.h` 
-- `stem_example`, `box_example` and `set_frame_on_example` in python and C++
-- doctest integration via CMake for unit tests
-- `tests/test_stem.cpp` — 5 test cases 
-- `test_box` and `test_set_frame_on` unit tests
+- `StemConfig` struct with `locs` (optional), `heads`, `linefmt`, `markerfmt`, `basefmt`, `bottom`, `label`, `orientation`
+- `Axes::stem()` and `PyPlot::stem()` wrappers using the config-struct pattern
+- `stemImpl()` in `Detail.h`
+- `BoxConfig` with `on` (`std::optional<bool>` — toggle behavior when `nullopt`) and `PyPlot::box()` wrapper
+- `Axes::set_frame_on(bool)` — direct scalar parameter, no config struct needed
+- `XLabelConfig`, `YLabelConfig`, `SupTitleConfig` structs covering the full matplotlib Text properties surface
+- `Axes::set_xlabel()`, `Axes::set_ylabel()`, `PyPlot::xlabel()`, `PyPlot::ylabel()`, `PyPlot::suptitle()` wrappers
+- doctest integration via CMake `FetchContent` for unit tests
+- `tests/test_stem.cpp`, `tests/test_box.cpp`, `tests/test_set_frame_on.cpp`, `tests/test_xlabel.cpp`, `tests/test_ylabel.cpp`, `tests/test_suptitle.cpp`
+- `stem_example`, `box_example`, `set_frame_on_example`, `xlabel_example`, `ylabel_example` in Python and C++
+- `fetchPythonError()` helper in `Helper.h` — captures the live Python exception message via `PyErr_Fetch`/`PyErr_NormalizeException` and folds it into thrown `std::runtime_error` messages
+
+### Fixed
+- **`FontSizeValue`** variant corrected from `std::variant<double, std::vector<std::string>>` to `std::variant<double, std::string>` — fixes construction failures for string defaults like `"large"`
+- **`clip_on`** type corrected from `std::optional<double>` to `std::optional<bool>` across all Text-based configs
+- **`parse_math`** type corrected from `std::optional<std::string>` to `std::optional<bool>` across all Text-based configs
+- **`loc`** made `std::optional<std::string>` (was a hardcoded `std::string loc = "center"`) in `XLabelConfig`/`YLabelConfig` — was being sent unconditionally on every call, causing `TypeError: Specifying 'loc' is disallowed when any of its corresponding low level keyword arguments (['x'/'y', 'horizontalalignment', 'ha']) are also supplied` whenever low-level positioning kwargs were also set
+- **`labelpad`** made `std::optional<double>` (was a hardcoded `double labelpad = 4.0`) — was silently overriding any previously-set labelpad value on every call instead of respecting matplotlib's "if None, previous value is left as is" behavior
+- **`label` kwarg collision** — the generic Text `label` property collided with the positional `xlabel`/`ylabel`/`t` argument in `set_xlabel()`/`set_ylabel()`/`suptitle()`, causing `TypeError: got multiple values for argument 'label'`; now stripped from kwargs before the call when redundant
+- **`text` kwarg collision** — same issue as `label`, between `SupTitleConfig::text` and the positional `t` argument in `suptitle()`; now stripped from kwargs before the call
+- **`checkResult()` / `checkAttr()`** in `Helper.h` — previously only called `PyErr_Print()` (stderr only, not captured); now use `fetchPythonError()` to fold the actual Python exception message into the thrown `std::runtime_error`, making failures debuggable from the exception text alone
+- **Field naming convention** — renamed `fontFamily`, `fontSize`, `fontStretch`, `fontStyle`, `fontVariant`, `fontWeight` (camelCase) to `fontfamily`, `fontsize`, `fontstretch`, `fontstyle`, `fontvariant`, `fontweight` (snake_case) across all Text-kwargs config structs, matching matplotlib's actual Python kwarg names exactly — prevents silent kwarg mismatches when building the `kwargs` dict
 
 ### Changed
-- `CMakeLists.txt`: added `doctest` FetchContent block and `test_stem` test executable
-- `CMakeLists`: added `doctest` for `test_box` and `test_set_frame_on`
+- `CMakeLists.txt`: added `doctest` FetchContent block (moved above the Tests section so `doctest::doctest` target exists before test executables reference it) and `test_stem`, `test_box`, `test_set_frame_on`, `test_xlabel`, `test_ylabel`, `test_suptitle` executables
+- `add_test_executable()` CMake function: added `doctest::doctest` to `target_link_libraries` (previously missing, causing `doctest/doctest.h: No such file or directory` in clean CI containers while masked locally by a system-installed `doctest-dev` package)
+
+### Fixed 
+- Diagnosed and fixed a CI-only build failure caused by a system-wide `doctest-dev` apt package masking a missing `doctest::doctest` link locally; CI's clean container correctly exposed the bug
+- Diagnosed and fixed a local Python/matplotlib version mismatch: CMake was resolving `/usr/bin/python3` (system, matplotlib 3.10.9) instead of `.venv`'s Python (3.12.3, matplotlib 3.11.0), causing spurious `AttributeError: 'Text' object has no property 'language'`; fixed via explicit `-DPython3_EXECUTABLE`/`-DPython3_ROOT_DIR` when configuring with `.venv` activated
 
 
 ## [0.11.1] - 14/07/2026
