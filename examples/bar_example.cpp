@@ -62,8 +62,8 @@ int main() {
 
 
 
-    fig.suptitle("bar examples");
-    fig.save("../pics/bar_example.png");
+    fig.suptitle({.t = "bar examples"});
+    fig.savefig("../pics/bar_example.png");
     fig.tight_layout();
     plt.show();
 

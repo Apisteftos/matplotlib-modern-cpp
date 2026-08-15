@@ -37,8 +37,8 @@ int main() {
     ax2.tick_params({.axis="y", .labelcolor = "r"});  
 
 
-    fig.suptitle("twinx example — two y-axes");
-    fig.save("../pics/twinx_example.png");
+    fig.suptitle({.t = "twinx example — two y-axes"});
+    fig.savefig("../pics/twinx_example.png");
 
     
     plt.tight_layout();

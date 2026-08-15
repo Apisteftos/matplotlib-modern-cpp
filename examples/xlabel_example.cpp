@@ -43,7 +43,7 @@ int main() {
     axes[1].set_title("axes.set_xlabel() — loc='right'");
     axes[1].grid({.visible = true});
 
-    fig.suptitle("Axes.set_xlabel — OOP style");
+    fig.suptitle({.t = "Axes.set_xlabel — OOP style"});
     fig.tight_layout();
   
 

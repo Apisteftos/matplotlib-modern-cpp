@@ -44,9 +44,91 @@ namespace matplotlibcpp {
     template<> struct NumpyType<long long>              { static constexpr int typenum = NPY_LONGLONG;  };
     template<> struct NumpyType<unsigned long long>     { static constexpr int typenum = NPY_ULONGLONG; };
 
+    // ============================================================
+    // Generic conversion functions
+    // ============================================================
+
+
+    /**
+    * @brief Converts sketchParams to a Python object
+    * @param sp input sketchParams
+    * @return PyObject* Python object
+    */
+    inline PyObject* sketchParamsToPython(const SketchParams& sp) {
+        PyObject* tuple = PyTuple_New(3);
+        PyTuple_SetItem(tuple, 0, PyFloat_FromDouble(sp.scale));
+        PyTuple_SetItem(tuple, 1, PyFloat_FromDouble(sp.length));
+        PyTuple_SetItem(tuple, 2, PyFloat_FromDouble(sp.randomness));
+
+        return tuple;
+    }
 
 
 
+    /**
+    * @brief Converts a Clim to a Python tuple
+    * @param c input Clim
+    * @return PyObject* Python tuple
+    */
+    inline PyObject* climToTuple(const Clim& c) {
+        PyObject* t = PyTuple_New(2);
+        PyTuple_SetItem(t, 0, PyFloat_FromDouble(c.vmin));
+        PyTuple_SetItem(t, 1, PyFloat_FromDouble(c.vmax));
+        return t;
+    }
+
+
+    /**
+    * @brief Converts a XY to a Python tuple
+    * @param xy input XY
+    * @return PyObject* Python tuple
+    */
+    inline PyObject* xyToTuple(const XY& xy) {
+        PyObject* t = PyTuple_New(2);
+        PyTuple_SetItem(t, 0, PyFloat_FromDouble(xy.x));
+        PyTuple_SetItem(t, 1, PyFloat_FromDouble(xy.y));
+        return t;
+    }
+
+    /**
+    * @brief Converts a Position to a Python tuple
+    * @param p input Position
+    * @return PyObject* Python tuple
+    */
+    inline PyObject* positionToTuple(const Position& p) {
+        PyObject* t = PyTuple_New(2);
+        PyTuple_SetItem(t, 0, PyFloat_FromDouble(p.x));
+        PyTuple_SetItem(t, 1, PyFloat_FromDouble(p.y));
+        return t;
+    }
+
+
+    /**
+    * @brief Converts Bounds coordinates to a Python tuple
+    * @param b input Bounds
+    * @return PyObject* Python tuple
+    */
+    inline PyObject* boundsToPython(const Bounds& b) {
+        PyObject* tuple = PyTuple_New(4);
+        PyTuple_SetItem(tuple, 0, PyFloat_FromDouble(b.left));
+        PyTuple_SetItem(tuple, 1, PyFloat_FromDouble(b.bottom));
+        PyTuple_SetItem(tuple, 2, PyFloat_FromDouble(b.width));
+        PyTuple_SetItem(tuple, 3, PyFloat_FromDouble(b.height));
+        return tuple;
+    }
+
+    /**
+     * @brief Converts a Loc to a Python tuple
+     * @param loc input Loc
+     * @return PyObject* Python tuple
+     */
+    inline PyObject* locToPython(const Loc& loc) {
+        PyPtr tup(PyTuple_New(2));
+        PyTuple_SetItem(tup.get(), 0, PyFloat_FromDouble(loc.x));
+        PyTuple_SetItem(tup.get(), 1, PyFloat_FromDouble(loc.y));
+    return tup.release();
+
+    }
 
     // ============================================================
     // Conversion functions
@@ -75,6 +157,22 @@ namespace matplotlibcpp {
 
         return array;
     }
+
+    /**
+     * @brief Converts a vector of vectors to a numpy array
+     * @tparam T numeric type — must have a NumpyType specialization
+     * @param v input vector
+     * @return PyObject* numpy array — caller must Py_XDECREF
+     */
+    template <typename T>
+    inline PyObject* toNumpyList(const std::vector<std::vector<T>>& vv) {
+        PyObject* list = PyList_New(vv.size());
+        for (size_t i = 0; i < vv.size(); ++i) {
+            PyList_SetItem(list, i, toNumpy(vv[i]));   
+        }
+        return list;
+    }
+
 
 
     /** 
@@ -489,6 +587,23 @@ namespace matplotlibcpp {
         }, rv);
     }
 
+    /** 
+     * @brief Converts LegendLocValue to a Python object
+     * @param llv input LegendLocValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* legendLocValueToPython(const LegendLocValue& llv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, std::string>)
+                return PyUnicode_FromString(val.c_str());
+            else if constexpr (std::is_same_v<T, int>)
+                return PyLong_FromLong(val);
+            else if constexpr (std::is_same_v<T, Loc>)
+                return locToPython(val);
+        }, llv);
+    }
+
 
     
 
@@ -507,81 +622,6 @@ namespace matplotlibcpp {
      */
     inline Vec operator+(double scalar, const Vec& v) { return v + scalar; }
 
-
-    // ============================================================
-    // Generic conversion functions
-    // ============================================================
-
-
-    /**
-    * @brief Converts sketchParams to a Python object
-    * @param sp input sketchParams
-    * @return PyObject* Python object
-    */
-    inline PyObject* sketchParamsToPython(const SketchParams& sp) {
-        PyObject* tuple = PyTuple_New(3);
-        PyTuple_SetItem(tuple, 0, PyFloat_FromDouble(sp.scale));
-        PyTuple_SetItem(tuple, 1, PyFloat_FromDouble(sp.length));
-        PyTuple_SetItem(tuple, 2, PyFloat_FromDouble(sp.randomness));
-
-        return tuple;
-    }
-
-
-
-    /**
-    * @brief Converts a Clim to a Python tuple
-    * @param c input Clim
-    * @return PyObject* Python tuple
-    */
-    inline PyObject* climToTuple(const Clim& c) {
-        PyObject* t = PyTuple_New(2);
-        PyTuple_SetItem(t, 0, PyFloat_FromDouble(c.vmin));
-        PyTuple_SetItem(t, 1, PyFloat_FromDouble(c.vmax));
-        return t;
-    }
-
-
-    /**
-    * @brief Converts a XY to a Python tuple
-    * @param xy input XY
-    * @return PyObject* Python tuple
-    */
-    inline PyObject* xyToTuple(const XY& xy) {
-        PyObject* t = PyTuple_New(2);
-        PyTuple_SetItem(t, 0, PyFloat_FromDouble(xy.x));
-        PyTuple_SetItem(t, 1, PyFloat_FromDouble(xy.y));
-        return t;
-    }
-
-    /**
-    * @brief Converts a Position to a Python tuple
-    * @param p input Position
-    * @return PyObject* Python tuple
-    */
-    inline PyObject* positionToTuple(const Position& p) {
-        PyObject* t = PyTuple_New(2);
-        PyTuple_SetItem(t, 0, PyFloat_FromDouble(p.x));
-        PyTuple_SetItem(t, 1, PyFloat_FromDouble(p.y));
-        return t;
-    }
-
-
-    /**
-    * @brief Converts Bounds coordinates to a Python tuple
-    * @param b input Bounds
-    * @return PyObject* Python tuple
-    */
-    inline PyObject* boundsToPython(const Bounds& b) {
-        PyObject* tuple = PyTuple_New(4);
-        PyTuple_SetItem(tuple, 0, PyFloat_FromDouble(b.left));
-        PyTuple_SetItem(tuple, 1, PyFloat_FromDouble(b.bottom));
-        PyTuple_SetItem(tuple, 2, PyFloat_FromDouble(b.width));
-        PyTuple_SetItem(tuple, 3, PyFloat_FromDouble(b.height));
-        return tuple;
-    }
-
-    
 
     
 

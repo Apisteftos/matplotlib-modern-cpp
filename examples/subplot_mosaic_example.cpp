@@ -68,8 +68,8 @@ int main() {
     axes["E"].set_title("Bar");
     axes["E"].grid({.visible = true});
 
-    fig.suptitle("subplot_mosaic example");
-    fig.save("../pics/subplot_mosaic.png");
+    fig.suptitle({.t = "subplot_mosaic example"});
+    fig.savefig("../pics/subplot_mosaic.png");
     fig.tight_layout();
     plt.show();
 

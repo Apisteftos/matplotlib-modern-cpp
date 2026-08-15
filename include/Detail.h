@@ -13,7 +13,7 @@
 #include "Configs.h"
 #include "Helper.h"
 
-
+#include <iostream>
 #include <map>
 #include <string>
 #include <numeric>
@@ -728,6 +728,11 @@ namespace matplotlibcpp {
                     *config.reverse ? Py_True : Py_False);
             }
 
+            if (config.loc.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "loc",
+                    legendLocValueToPython(config.loc.value()));
+            }
+
 
             PyPtr legend(PyObject_GetAttrString(pyObj, "legend"));
             checkAttr(legend.get(), "legend");
@@ -1234,7 +1239,7 @@ namespace matplotlibcpp {
                 PyDict_SetItemString(kwargs.get(), "minor",
                     config.minor.value() ? Py_True : Py_False);
             
-         
+            kwargsTextImpl(kwargs.get(), config);
 
             PyPtr set_xticklabels(PyObject_GetAttrString(pyObj, "set_xticklabels"));
             checkAttr(set_xticklabels.get(), "set_xticklabels");
@@ -1261,6 +1266,7 @@ namespace matplotlibcpp {
                 PyDict_SetItemString(kwargs.get(), "minor",
                     config.minor.value() ? Py_True : Py_False);
             
+            kwargsTextImpl(kwargs.get(), config);
 
             PyPtr set_yticklabels(PyObject_GetAttrString(pyObj, "set_yticklabels"));
             checkAttr(set_yticklabels.get(), "set_yticklabels");
@@ -1385,7 +1391,7 @@ namespace matplotlibcpp {
             // removes collision with the text, t and text are similar
             if (PyDict_DelItemString(kwargs.get(), "text") != 0) PyErr_Clear();
 
-            
+
             PyPtr suptitle(PyObject_GetAttrString(pyObj, "suptitle"));
             checkAttr(suptitle.get(), "suptitle");
             
@@ -1393,6 +1399,49 @@ namespace matplotlibcpp {
             checkResult(res.get(), "suptitle");
             
             
+        }
+
+        /**
+         * @brief Plots a stackplot graph.
+         * @param config stackplot configuration
+         * @throws std::runtime_error if stackplot fails
+         */
+        inline void stackplotImpl(PyObject* pyObj, const StackplotConfig& config) {
+
+            PyPtr args(PyTuple_New(2));
+            PyTuple_SetItem(args.get(), 0, toNumpy(config.x));
+            PyTuple_SetItem(args.get(), 1, toNumpyList(config.y));
+
+            PyPtr kwargs(PyDict_New());
+
+        
+            PyDict_SetItemString(kwargs.get(), "baseline",
+                    PyUnicode_FromString(config.baseline.c_str()));
+            
+            if (config.labels.has_value()) {
+                PyDict_SetItemString(kwargs.get(), "labels",
+                    toStringList(*config.labels));
+            }
+
+            if (config.colors.has_value()){
+                PyDict_SetItemString(kwargs.get(), "colors",
+                    toStringList(*config.colors));
+            }
+
+            kwargsFillBetweenImpl(kwargs.get(), config);
+            // strip 'label' — collides with stackplot's own internal per-series labels iteration
+            if (PyDict_DelItemString(kwargs.get(), "label") != 0) {
+                PyErr_Clear();
+            }
+
+
+            PyPtr stackplot(PyObject_GetAttrString(pyObj, "stackplot"));
+            checkAttr(stackplot.get(), "stackplot");
+
+            PyPtr res(PyObject_Call(stackplot.get(), args.get(), kwargs.get()));
+            checkResult(res.get(), "stackplot");
+
+
         }
         
 

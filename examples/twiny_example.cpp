@@ -34,9 +34,9 @@ int main() {
     ax2.tick_params({.axis="x", .labelcolor = "r"});
 
     ax1.set_ylabel({.ylabel = "Signal"});
-    fig.suptitle("twiny example — two x-axes");
+    fig.suptitle({.t = "twiny example — two x-axes"});
     fig.tight_layout(); 
-    fig.save("../pics/twiny_example.png");
+    fig.savefig("../pics/twiny_example.png");
     plt.show();
 
 

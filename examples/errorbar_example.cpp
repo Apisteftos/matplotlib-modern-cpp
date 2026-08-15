@@ -44,8 +44,8 @@ int main() {
     axes[1, 1].set_title("Error bars only");
     axes[1, 1].grid({.visible = true});
 
-    fig.suptitle("Error Bar Plot");
-    fig.save("../pics/errorbar_example.png");
+    fig.suptitle({.t = "Error Bar Plot"});
+    fig.savefig("../pics/errorbar_example.png");
     fig.tight_layout();
     plt.show();
 

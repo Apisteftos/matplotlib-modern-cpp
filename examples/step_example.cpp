@@ -38,8 +38,8 @@ int main() {
     axes[1, 1].set_title("Styled step plot");
     axes[1, 1].grid({.visible = true});
 
-    fig.suptitle("step() examples");
-    fig.save("../pics/step_example.png");
+    fig.suptitle({.t = "step() examples"});
+    fig.savefig("../pics/step_example.png");
     fig.tight_layout();
     plt.show();
 

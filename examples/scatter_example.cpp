@@ -61,8 +61,8 @@ int main() {
     axes[1, 1].grid({.visible = true});
 
 
-    fig.suptitle("scatter examples");
-    fig.save("../pics/scatter_example.png");
+    fig.suptitle({.t = "scatter examples"});
+    fig.savefig("../pics/scatter_example.png");
     fig.tight_layout(); 
     plt.show();
 

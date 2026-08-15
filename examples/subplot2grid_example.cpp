@@ -59,8 +59,8 @@ int main() {
     ax5.plot({.x = x, .y = sinY2, .fmt = "orange"});
     ax5.set_title("sin²");
 
-    fig.suptitle("subplot2grid example");
-    fig.save("../pics/subplot2grid_example.png");
+    fig.suptitle({.t = "subplot2grid example"});
+    fig.savefig("../pics/subplot2grid_example.png");
     fig.tight_layout();
 
     plt.show();

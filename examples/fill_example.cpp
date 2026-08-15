@@ -48,8 +48,8 @@ int main() {
     axes[1, 1].set_title("fill — closed polygon");
     axes[1, 1].grid({.visible = true});
 
-    fig.suptitle("fill examples");
-    fig.save("../pics/fill_example.png");
+    fig.suptitle({.t = "fill examples"});
+    fig.savefig("../pics/fill_example.png");
     fig.tight_layout();
     plt.show();
 

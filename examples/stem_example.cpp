@@ -47,8 +47,8 @@ int main() {
     axes[1, 1].set_title("Horizontal stem");
     axes[1, 1].grid({.visible = true});
     
-    fig.suptitle("Stem examples");
-    fig.save("../pics/stem_example.png");
+    fig.suptitle({.t = "Stem examples"});
+    fig.savefig("../pics/stem_example.png");
     fig.tight_layout();
     plt.show();
 

@@ -4,6 +4,34 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.13.0] - 15/08/2026
+
+### Added
+- `LegendConfig` with `LegendLocValue` (`std::variant<std::string, int, Loc>`) covering string keywords, legacy int codes, and exact `(x, y)` coordinates for `loc`
+- `Loc` struct `{double x; double y;}` and `locToPython()` converter
+- `Axes::legend()` / `PyPlot::legend()` wrappers
+- `StackplotConfig` with full kwargs coverage (`baseline`, `labels`, `colors`, plus complete `fill_between`-forwarded properties)
+- `Axes::stackplot()` / `PyPlot::stackplot()` wrappers
+- `stackplotImpl()` in `Detail.h`
+- `toNumpyList<T>()` — templated `vector<vector<T>>` to Python list-of-1D-numpy-arrays converter, needed for `stackplot`'s `(M,N)` `y` shape
+- `stackplot_example.cpp` and `stackplot_example.py`
+- `test_stackplot.cpp` — full parameter coverage
+- `Artist.h` — RAII-based wrapper for matplotlib.artist.Artist
+
+
+### Fixed
+- **`FontSizeValue`** default `std::optional<FontSizeValue> fontsize = "large"` in `SupTitleConfig` — corrected the underlying variant type from `std::vector<std::string>` to `std::string`, fixing construction failure
+- **Circular include** — `Configs.h` included `Figure.h` (for `subplot2gridConfig::fig` and `Figure::suptitle()`), which transitively re-included `Configs.h`'s own dependents before its structs were defined
+- **`label` kwarg collision in `stackplotImpl`** — `stackplot()` internally forwards its own per-series `labels` iteration into `fill_between()`; the generic `config.label` field (from `kwargsFillBetweenImpl`) collided with it, causing `TypeError: got multiple values for keyword argument 'label'`; now stripped from kwargs before the call
+- **`toNumpy()` called directly on `vector<vector<double>>`** — `Detail.h`'s original `stackplotImpl` passed `config.y` straight to `toNumpy()`, which only handles flat `vector<T>`; fixed by introducing `toNumpyList()` and routing the 2D `y` through it instead
+- Confirmed (not a library bug) — a dtype-dependent discrepancy in matplotlib's own `weighted_wiggle` baseline algorithm: `int64` vs `float64` input arrays produce numerically different polygon geometry inside matplotlib itself; the C++ wrapper's `float64`-only output is correct, and `stackplot_example.py` was updated to use `dtype=float` explicitly to match
+
+
+### Changed
+- `CMakeLists.txt`: added `stackplot` example executable and `test_stackplot` test executable
+- `Vec` to templated `VecT<T>`, with `Vec = VecT<double>` and `StrVec = VecT<std::string>` aliases; comparison operators available for any `T`, arithmetic operators gated to arithmetic `T` via `requires`
+- `fix.save` to `fix.savefig` in all cpp examples
+
 
 ## [0.12.0] - 11/08/2026
 

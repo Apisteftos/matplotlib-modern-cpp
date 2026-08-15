@@ -44,8 +44,8 @@ int main() {
     axes[1].legend();
     axes[1].grid({.visible = true});
 
-    fig.suptitle("semilogy vs linear");
-    fig.save("../pics/semilogy_example.png");
+    fig.suptitle({.t = "semilogy vs linear"});
+    fig.savefig("../pics/semilogy_example.png");
     fig.tight_layout();
     plt.show();
 

@@ -813,6 +813,15 @@ public:
         detail::suptitleImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
+    /**
+     * @brief Plots a stackplot graph.
+     * @param config stackplot configuration
+     * @throws std::runtime_error if stackplot fails
+     */
+    void stackplot(const StackplotConfig& config) {
+        detail::stackplotImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
 
 
 };

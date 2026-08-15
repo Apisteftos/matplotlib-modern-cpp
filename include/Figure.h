@@ -10,6 +10,8 @@
 
 #include "Interpreter.h"
 #include "PyPtr.h"
+#include "Configs.h"
+#include "Detail.h"
 
 #include <vector>
 
@@ -24,11 +26,16 @@ namespace matplotlibcpp {
 
         PyObject* get_figure() const { return fig_.get(); }
 
-        void suptitle(const std::string& title) {
-            PyObject_CallMethod(fig_.get(), "suptitle", "s", title.c_str());
+        /**
+        * @brief Sets the suptitle.
+        * @param config suptitle configuration
+        * @throws std::runtime_error if suptitle fails
+        */
+        void suptitle(const SupTitleConfig& config) {
+            detail::suptitleImpl(fig_.get(), config);
         }
 
-        void save(const std::string& filename, const int dpi=0) {
+        void savefig(const std::string& filename, const int dpi=0) {
             if(dpi > 0)
                 PyObject_CallMethod(fig_.get(), "savefig", "si", filename.c_str(), dpi);
             else

@@ -6,17 +6,18 @@
 // Date: 10/06/2024
 // =============================================================================
 
-#include "Figure.h"
 
 #include <string>
 #include <vector>
 #include <optional>
 #include <variant>
+#include <algorithm>
 
 
 
 namespace matplotlibcpp {
 
+    class Figure;
 
     // =============================================================================
     // Enums
@@ -45,7 +46,7 @@ namespace matplotlibcpp {
 
 
     // XLabelConfig - YLabelConfig
-    enum class Loc {
+    enum class Location {
         BOTTOM,
         TOP,
         CENTER
@@ -123,14 +124,14 @@ namespace matplotlibcpp {
     }
 
     /**
-     * @brief Converts Loc enum to string
-     * @param l default is Loc::BOTTOM
+     * @brief Converts Location enum to string
+     * @param l default is Location::BOTTOM
      */
-    inline const char* toString(Loc l) {
+    inline const char* toString(Location l) {
         switch (l) {
-            case Loc::BOTTOM: return "bottom";
-            case Loc::TOP:    return "top";
-            case Loc::CENTER: return "center";
+            case Location::BOTTOM: return "bottom";
+            case Location::TOP:    return "top";
+            case Location::CENTER: return "center";
         }
         return "center";
     }
@@ -195,108 +196,169 @@ namespace matplotlibcpp {
     // Vec - a vector of doubles with element-wise operators
     // ============================================================
 
-    struct Vec : std::vector<double> {
-        using std::vector<double>::vector;  
+    template<typename T>
+    struct VecT : std::vector<T> {
+        using std::vector<T>::vector;
 
         // ============================================================
         // Element-wise comparison operators — return bool mask
         // ============================================================
-        std::vector<bool> operator>(const Vec& other) const {
-            std::vector<bool> result(size());
-            std::transform(begin(), end(), other.begin(), result.begin(),
-                [](double a, double b) { return a > b; });
+        std::vector<bool> operator>(const VecT<T>& other) const {
+            std::vector<bool> result(this->size());
+            std::transform(this->begin(), this->end(), other.begin(), result.begin(),
+                [](const T& a, const T& b) { return a > b; });
             return result;
         }
 
-        std::vector<bool> operator<(const Vec& other) const {
-            std::vector<bool> result(size());
-            std::transform(begin(), end(), other.begin(), result.begin(),
-                [](double a, double b) { return a < b; });
+        std::vector<bool> operator<(const VecT<T>& other) const {
+            std::vector<bool> result(this->size());
+            std::transform(this->begin(), this->end(), other.begin(), result.begin(),
+                [](const T& a, const T& b) { return a < b; });
             return result;
         }
 
-        std::vector<bool> operator>=(const Vec& other) const {
-            std::vector<bool> result(size());
-            std::transform(begin(), end(), other.begin(), result.begin(),
-                [](double a, double b) { return a >= b; });
+        std::vector<bool> operator>=(const VecT<T>& other) const {
+            std::vector<bool> result(this->size());
+            std::transform(this->begin(), this->end(), other.begin(), result.begin(),
+                [](const T& a, const T& b) { return a >= b; });
             return result;
         }
 
-        std::vector<bool> operator<=(const Vec& other) const {
-            std::vector<bool> result(size());
-            std::transform(begin(), end(), other.begin(), result.begin(),
-                [](double a, double b) { return a <= b; });
+        std::vector<bool> operator<=(const VecT<T>& other) const {
+            std::vector<bool> result(this->size());
+            std::transform(this->begin(), this->end(), other.begin(), result.begin(),
+                [](const T& a, const T& b) { return a <= b; });
             return result;
         }
 
-        std::vector<bool> operator==(const Vec& other) const {
-            std::vector<bool> result(size());
-            std::transform(begin(), end(), other.begin(), result.begin(),
-                [](double a, double b) { return a == b; });
+        std::vector<bool> operator==(const VecT<T>& other) const {
+            std::vector<bool> result(this->size());
+            std::transform(this->begin(), this->end(), other.begin(), result.begin(),
+                [](const T& a, const T& b) { return a == b; });
             return result;
         }
 
         // ============================================================
         // Element-wise arithmetic operators — like numpy
         // ============================================================
-        Vec operator+(const Vec& other) const {
-            Vec result(size());
-            std::transform(begin(), end(), other.begin(), result.begin(),
-                std::plus<double>());
+        VecT<T> operator+(const VecT<T>& other) const {
+            VecT<T> result(this->size());
+            std::transform(this->begin(), this->end(), other.begin(), result.begin(),
+                std::plus<T>());
             return result;
         }
 
-        Vec operator-(const Vec& other) const {
-            Vec result(size());
-            std::transform(begin(), end(), other.begin(), result.begin(),
-                std::minus<double>());
+        VecT<T> operator-(const VecT<T>& other) const {
+            VecT<T> result(this->size());
+            std::transform(this->begin(), this->end(), other.begin(), result.begin(),
+                std::minus<T>());
             return result;
         }
 
-        Vec operator*(const Vec& other) const {
-            Vec result(size());
-            std::transform(begin(), end(), other.begin(), result.begin(),
-                std::multiplies<double>());
+        VecT<T> operator*(const VecT<T>& other) const {
+            VecT<T> result(this->size());
+            std::transform(this->begin(), this->end(), other.begin(), result.begin(),
+                std::multiplies<T>());
             return result;
         }
 
-        Vec operator/(const Vec& other) const {
-            Vec result(size());
-            std::transform(begin(), end(), other.begin(), result.begin(),
-                std::divides<double>());
+        VecT<T> operator/(const VecT<T>& other) const {
+            VecT<T> result(this->size());
+            std::transform(this->begin(), this->end(), other.begin(), result.begin(),
+                std::divides<T>());
             return result;
         }
 
         // scalar versions
-        Vec operator*(double scalar) const {
-            Vec result(size());
-            std::transform(begin(), end(), result.begin(),
-                [scalar](double v) { return v * scalar; });
+        VecT<T> operator*(T scalar) const {
+            VecT<T> result(this->size());
+            std::transform(this->begin(), this->end(), result.begin(),
+                [scalar](T v) { return v * scalar; });
             return result;
         }
 
-        Vec operator/(double scalar) const {
-            Vec result(size());
-            std::transform(begin(), end(), result.begin(),
-                [scalar](double v) { return v / scalar; });
+        VecT<T> operator/(T scalar) const {
+            VecT<T> result(this->size());
+            std::transform(this->begin(), this->end(), result.begin(),
+                [scalar](T v) { return v / scalar; });
             return result;
         }
 
-        Vec operator+(double scalar) const {
-            Vec result(size());
-            std::transform(begin(), end(), result.begin(),
-                [scalar](double v) { return v + scalar; });
+        VecT<T> operator+(T scalar) const {
+            VecT<T> result(this->size());
+            std::transform(this->begin(), this->end(), result.begin(),
+                [scalar](T v) { return v + scalar; });
             return result;
         }
 
-        Vec operator-(double scalar) const {
-            Vec result(size());
-            std::transform(begin(), end(), result.begin(),
-                [scalar](double v) { return v - scalar; });
+        VecT<T> operator-(T scalar) const {
+            VecT<T> result(this->size());
+            std::transform(this->begin(), this->end(), result.begin(),
+                [scalar](T v) { return v - scalar; });
             return result;
         }
     };
 
+    using Vec = VecT<double>;        
+    using StrVec = VecT<std::string>;  
+    
+    
+    // =============================================================================
+    // General reusable structs
+    // =============================================================================
+
+    /**
+    * @brief Color limits for colormap normalization
+    * @note: .clim = {vmin, vmax}
+    */
+    struct Clim {
+        double vmin;
+        double vmax;
+    };
+
+    /**
+     * @brief Struct for x, y coordinates 
+     */ 
+    struct XY {
+        double x;
+        double y;
+    };
+
+    /**
+     * @brief Struct for x, y coordinates for the text position
+     */
+    struct Position {
+        double x;
+        double y;
+    };
+
+
+    /**
+    * @brief Struct for sketch parameters
+    */
+    struct SketchParams {
+        double scale       = 1.0;    
+        double length      = 128.0;  
+        double randomness  = 16.0;  
+    };
+
+    /**
+    * @brief Struct for bounds with coordinates
+    */
+    struct Bounds {
+        double left   = 0.0;
+        double bottom = 0.0;
+        double width  = 0.0;
+        double height = 0.0;
+    };
+
+    /**
+    * @brief Struct for location with coordinates
+    */
+    struct Loc {
+        double x;
+        double y;
+    }; 
 
 
     // =============================================================================
@@ -438,57 +500,12 @@ namespace matplotlibcpp {
         std::string   
     >;
 
-
-    // =============================================================================
-    // General reusable structs
-    // =============================================================================
-
-    /**
-    * @brief Color limits for colormap normalization
-    * @note: .clim = {vmin, vmax}
-    */
-    struct Clim {
-        double vmin;
-        double vmax;
-    };
-
-    /**
-     * @brief Struct for x, y coordinates 
-     */ 
-    struct XY {
-        double x;
-        double y;
-    };
-
-    /**
-     * @brief Struct for x, y coordinates for the text position
-     */
-    struct Position {
-        double x;
-        double y;
-    };
-
-
-    /**
-    * @brief Struct for sketch parameters
-    */
-    struct SketchParams {
-        double scale       = 1.0;    
-        double length      = 128.0;  
-        double randomness  = 16.0;  
-    };
-
-    /**
-    * @brief Struct for bounds with coordinates
-    */
-    struct Bounds {
-        double left   = 0.0;
-        double bottom = 0.0;
-        double width  = 0.0;
-        double height = 0.0;
-    };
-    
-
+    // legend parameters
+    using LegendLocValue = std::variant<
+        std::string,                    
+        int,                             
+        Loc   
+    >;
 
     // =============================================================================
     // Structs for matplotlib.pyplot.plot() 
@@ -497,10 +514,10 @@ namespace matplotlibcpp {
 
 
     struct FigureConfig {
-        int num = 0;
-        std::vector<long> figsize = {10, 10};
-        float dpi = 100.0f;
-        std::string label = "";
+        int num                                    = 0;
+        std::vector<long> figsize                  = {10, 10};
+        float dpi                                  = 100.0f;
+        std::string label                          = "";
 
     };
 
@@ -512,27 +529,27 @@ namespace matplotlibcpp {
 
     struct PlotConfig {
         
-        std::optional<DataValue> x = std::nullopt;
+        std::optional<DataValue> x                 = std::nullopt;
         DataValue y; 
-        bool scalex = true;
-        bool scaley = true;
+        bool scalex                                = true;
+        bool scaley                                = true;
 
         // optional
-        std::optional<std::string> fmt = std::nullopt;
+        std::optional<std::string> fmt             = std::nullopt;
         
         // kwargs
-        std::optional<std::string> color          = std::nullopt;
-        std::optional<std::string> label          = std::nullopt;
-        std::optional<double> alpha               = std::nullopt;
-        std::optional<double> linewidth           = std::nullopt;
-        std::optional<std::string> linestyle      = std::nullopt;
-        std::optional<std::string> marker         = std::nullopt;
-        std::optional<double> markersize          = std::nullopt;
+        std::optional<std::string> color           = std::nullopt;
+        std::optional<std::string> label           = std::nullopt;
+        std::optional<double> alpha                = std::nullopt;
+        std::optional<double> linewidth            = std::nullopt;
+        std::optional<std::string> linestyle       = std::nullopt;
+        std::optional<std::string> marker          = std::nullopt;
+        std::optional<double> markersize           = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
-        std::optional<double> markeredgewidth     = std::nullopt;
-        std::optional<std::string> drawstyle      = std::nullopt;
-        std::optional<std::string> fillstyle      = std::nullopt;
+        std::optional<double> markeredgewidth      = std::nullopt;
+        std::optional<std::string> drawstyle       = std::nullopt;
+        std::optional<std::string> fillstyle       = std::nullopt;
 
     };
 
@@ -807,11 +824,11 @@ namespace matplotlibcpp {
     struct LegendConfig {
         
         // optional
-        std::optional<std::vector<std::string>> labels = std::nullopt;
-        std::optional<int> ncol = 1;
-        std::optional<bool> reverse = false;
+        std::optional<std::vector<std::string>> labels   = std::nullopt;
+        std::optional<int> ncol                          = 1;
+        std::optional<bool> reverse                      = false;
         // TODO: handles
-        // TODO: loc
+        std::optional<LegendLocValue> loc                = "best";
         // TODO: bbox_to_anchor
         // TODO: prop
         // TODO: fontsize
@@ -1258,11 +1275,90 @@ namespace matplotlibcpp {
     struct XTickLabelsConfig {
         std::vector<std::string> labels;
         std::optional<bool> minor                       = std::nullopt;
+
+        // kwargs Text
+        std::optional<double> alpha                     = std::nullopt;
+        std::optional<bool> animated                    = std::nullopt;
+        std::optional<bool> antialiased                 = std::nullopt;
+        std::optional<bool> clip_on                     = std::nullopt;
+        std::optional<std::string> color                = std::nullopt;
+        std::optional<std::string> fontfamily           = std::nullopt;
+        std::optional<FontSizeValue> fontsize           = std::nullopt;
+        std::optional<FontStretchValue> fontstretch     = std::nullopt;
+        std::optional<std::string> fontstyle            = std::nullopt;
+        std::optional<std::string> fontvariant          = std::nullopt;
+        std::optional<FontWeightValue> fontweight       = std::nullopt;
+        std::optional<std::string> gid                  = std::nullopt;
+        std::optional<std::string> horizontalalignment  = std::nullopt;
+        std::optional<bool> in_layout                   = std::nullopt;
+        std::optional<std::string> label                = std::nullopt;
+        std::optional<std::string> language             = std::nullopt;
+        std::optional<LineSpacingValue> linespacing     = std::nullopt; 
+        std::optional<std::string> math_fontfamily      = std::nullopt;
+        std::optional<bool> mouseover                   = std::nullopt;
+        std::optional<std::string> multialignment       = std::nullopt;
+        std::optional<bool> parse_math                  = std::nullopt;
+        std::optional<Position> position                = std::nullopt;
+        std::optional<bool> rasterized                  = std::nullopt;
+        std::optional<RotationValue> rotation           = std::nullopt;
+        std::optional<std::string> rotation_mode        = std::nullopt;
+        std::optional<SketchParams> sketch_params       = std::nullopt;
+        std::optional<bool> snap                        = std::nullopt;
+        std::optional<std::string> text                 = std::nullopt;
+        std::optional<bool> transform_rotates_text      = std::nullopt;
+        std::optional<std::string> url                  = std::nullopt;
+        std::optional<std::string> verticalalignment    = std::nullopt;
+        std::optional<bool> visible                     = std::nullopt;
+        std::optional<bool> wrap                        = std::nullopt;
+        std::optional<double> x                         = std::nullopt;
+        std::optional<double> y                         = std::nullopt;
+        std::optional<double> zorder                    = std::nullopt;
+
+
     };
 
     struct YTickLabelsConfig {
         std::vector<std::string> labels;
         std::optional<bool> minor                       = std::nullopt;
+
+
+        // kwargs Text
+        std::optional<double> alpha                     = std::nullopt;
+        std::optional<bool> animated                    = std::nullopt;
+        std::optional<bool> antialiased                 = std::nullopt;
+        std::optional<bool> clip_on                     = std::nullopt;
+        std::optional<std::string> color                = std::nullopt;
+        std::optional<std::string> fontfamily           = std::nullopt;
+        std::optional<FontSizeValue> fontsize           = std::nullopt;
+        std::optional<FontStretchValue> fontstretch     = std::nullopt;
+        std::optional<std::string> fontstyle            = std::nullopt;
+        std::optional<std::string> fontvariant          = std::nullopt;
+        std::optional<FontWeightValue> fontweight       = std::nullopt;
+        std::optional<std::string> gid                  = std::nullopt;
+        std::optional<std::string> horizontalalignment  = std::nullopt;
+        std::optional<bool> in_layout                   = std::nullopt;
+        std::optional<std::string> label                = std::nullopt;
+        std::optional<std::string> language             = std::nullopt;
+        std::optional<LineSpacingValue> linespacing     = std::nullopt; 
+        std::optional<std::string> math_fontfamily      = std::nullopt;
+        std::optional<bool> mouseover                   = std::nullopt;
+        std::optional<std::string> multialignment       = std::nullopt;
+        std::optional<bool> parse_math                  = std::nullopt;
+        std::optional<Position> position                = std::nullopt;
+        std::optional<bool> rasterized                  = std::nullopt;
+        std::optional<RotationValue> rotation           = std::nullopt;
+        std::optional<std::string> rotation_mode        = std::nullopt;
+        std::optional<SketchParams> sketch_params       = std::nullopt;
+        std::optional<bool> snap                        = std::nullopt;
+        std::optional<std::string> text                 = std::nullopt;
+        std::optional<bool> transform_rotates_text      = std::nullopt;
+        std::optional<std::string> url                  = std::nullopt;
+        std::optional<std::string> verticalalignment    = std::nullopt;
+        std::optional<bool> visible                     = std::nullopt;
+        std::optional<bool> wrap                        = std::nullopt;
+        std::optional<double> x                         = std::nullopt;
+        std::optional<double> y                         = std::nullopt;
+        std::optional<double> zorder                    = std::nullopt;
     };
 
 
@@ -1335,6 +1431,41 @@ namespace matplotlibcpp {
 
 
     };
+
+
+    struct StackplotConfig {
+        std::vector<double> x;                        
+        std::vector<std::vector<double>> y;
+        std::string baseline                            = "zero";
+        std::optional<StrVec> labels                    = std::nullopt;
+        std::optional<StrVec> colors                    = std::nullopt;
+        
+
+
+        // **kwargs between properties
+        std::optional<double> alpha                     = std::nullopt;
+        std::optional<bool> animated                    = std::nullopt;
+        std::optional<Vec> array                        = std::nullopt;
+        std::optional<Clim> clim                        = std::nullopt;
+        std::optional<bool> clip_on                     = std::nullopt;
+        std::optional<std::string> cmap                 = std::nullopt;
+        std::optional<std::string> color                = std::nullopt;
+        std::optional<std::string> edgecolor            = std::nullopt;
+        std::optional<std::string> facecolor            = std::nullopt;
+        std::optional<std::string> gid                  = std::nullopt;
+        std::optional<std::string> hatch                = std::nullopt;
+        std::optional<bool> in_layout                   = std::nullopt;
+        std::optional<std::string> label                = std::nullopt;
+        std::optional<std::string> linestyle            = std::nullopt;
+        std::optional<LinewidthValue> linewidth         = std::nullopt;
+        std::optional<bool> mouseover                   = std::nullopt;
+        std::optional<double> pickradius                = std::nullopt;
+        std::optional<bool> rasterized                  = std::nullopt;
+        std::optional<bool> snap                        = std::nullopt;
+        std::optional<std::string> url                  = std::nullopt;
+        std::optional<bool> visible                     = std::nullopt;
+        std::optional<double> zorder                    = std::nullopt;
+    }; 
 
 
     

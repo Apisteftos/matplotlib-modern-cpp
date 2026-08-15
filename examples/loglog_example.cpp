@@ -50,8 +50,8 @@ int main() {
     axes[1].grid({.visible = true});
 
 
-    fig.suptitle("loglog vs linear");
-    fig.save("../pics/loglog_example.png");
+    fig.suptitle({.t = "loglog vs linear"});
+    fig.savefig("../pics/loglog_example.png");
     fig.tight_layout();
     plt.show();
 

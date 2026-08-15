@@ -46,8 +46,8 @@ int main() {
     axes[3].grid({.visible = true});
 
 
-    fig.suptitle("Math Functions");
-    fig.save("../pics/math_functions.png");
+    fig.suptitle({.t = "Math Functions"});
+    fig.savefig("../pics/math_functions.png");
 
     
     plt.tight_layout();

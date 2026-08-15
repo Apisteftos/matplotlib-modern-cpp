@@ -54,6 +54,7 @@ add_plot_executable(stem stem_example.cpp)
 add_plot_executable(box box_example.cpp)
 add_plot_executable(xlabel xlabel_example.cpp)
 add_plot_executable(ylabel ylabel_example.cpp)
+add_plot_executable(stackplot stackplot_example.cpp)
 
 
 
@@ -90,5 +91,6 @@ add_test_executable(test_set_frame_on test_set_frame_on.cpp)
 add_test_executable(test_xlabel test_xlabel.cpp)
 add_test_executable(test_ylabel test_ylabel.cpp)
 add_test_executable(test_suptitle test_suptitle.cpp)
+add_test_executable(test_stackplot test_stackplot.cpp)
 
 

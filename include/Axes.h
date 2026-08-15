@@ -482,6 +482,15 @@ public:
     void set_frame_on(const SetFrameOnConfig& config) {
         detail::set_frame_onImpl(ax_.get(), config);
     }
+
+    /**
+     * @brief Plots a stackplot graph.
+     * @param config stackplot configuration
+     * @throws std::runtime_error if stackplot fails
+     */
+    void stackplot(const StackplotConfig& config) {
+        detail::stackplotImpl(ax_.get(), config);
+    }
     
 
 }; 

@@ -25,8 +25,8 @@ int main() {
     axes[1].grid({ .visible = true});
 
 
-    fig.suptitle("SCA Example");
-    fig.save("../pics/sca_example.png");
+    fig.suptitle({.t = "SCA Example"});
+    fig.savefig("../pics/sca_example.png");
     fig.tight_layout();
     
   

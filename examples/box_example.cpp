@@ -34,7 +34,7 @@ int main() {
     axes[2].set_title("plt.box(False)");
     axes[2].grid({.visible = true});
 
-    fig.suptitle("box example");
+    fig.suptitle({.t = "box example"});
     fig.tight_layout();
     plt.show();
 
