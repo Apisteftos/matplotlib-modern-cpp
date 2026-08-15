@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - `CMakeLists.txt`: added `stackplot` example executable and `test_stackplot` test executable
 - `Vec` to templated `VecT<T>`, with `Vec = VecT<double>` and `StrVec = VecT<std::string>` aliases; comparison operators available for any `T`, arithmetic operators gated to arithmetic `T` via `requires`
 - `fix.save` to `fix.savefig` in all cpp examples
+- `Figure::suptitle()` — added `kwargsTextImpl()` to forward `t` and `text` kwargs by using the `detail::suptitleImpl()` internals
 
 
 ## [0.12.0] - 11/08/2026
