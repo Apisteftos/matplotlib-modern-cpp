@@ -4,6 +4,35 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+
+## [0.14.0] - 19/08/2026
+
+### Added
+
+- Partially `rc()` system in new `RcConfigs.h` / `RcDetail.h`:
+  - `RcConfig` — generic `{group, map<string, RcValue>}` fallback covering any rcParam group
+  - `RcValue` variant 
+  - `GridRcConfig`, `LegendRcConfig`, `FigureRcConfig`, `AxesRcConfig`, `LinesRcConfig`, `FontRcConfig`, `TicksRcConfig` — typed structs covering each group's full kwargs surface
+  - `rcValueToPython()` / `rcImpl()` overloads per config type
+- `fgsToPython()` figsize converter, `rcValueToPython` coverter for `RcValue`, `fontsizeValueToPython`, `labelcolorValueToPython`, `titleFontsizeValueToPython`, `tickNdivsToPython`, `whiskerValueToPython` converters in the `NumpyUtils.h` header
+- missing kwargs TickParams in the `XTicksConfig` and `YTicksConfig` structs
+- new `rc_example.cpp` / `rc_example.py` examples for rc in python and c++
+- `test_rc.cpp` unit tests for rc
+
+### Fixed
+- **`FontRcConfig`'s `serif`/`sansserif`/`cursive`/`fantasy`/`monospace` typed as `Vec` (`vector<double>`) instead of `StrVec`** — caused `toNumpy()` to misinterpret string data as numeric, throwing `cannot create std::vector larger than max_size()`; fixed field types to `StrVec` and converter to `toStringList()`
+- **Hardcoded (non-`nullopt`) default values across multiple config structs** — `FigureRcConfig`, `LegendRcConfig`, `AxesRcConfig`, `LinesRcConfig`, `SubplotsConfig`, `FigureConfig`, `SupTitleConfig` all had real default values (e.g. `titlesize = "large"`, `figsize = {10,10}`) instead of `std::nullopt`/empty, causing every call to silently resend untouched fields — leading to `Unrecognized key` errors when a shared struct was reused across differently-scoped groups (e.g. `figure` vs `figure.subplot`), and to explicit kwargs silently overriding previously-set rc values (e.g. `SupTitleConfig::fontsize = "large"` overriding `rc('figure', titlesize='medium')`); systematically corrected across all affected structs
+- **`SubplotsConfig::figsize` defaulting to `{}`** — unconditionally overrode `rc('figure', figsize=...)` on every `subplots()` call regardless of whether the user set it; fixed to empty default, matching real matplotlib's `figsize=None`
+- **`FigureConfig::num`/`dpi`/`label` sent unconditionally** — `num` (should default to auto-assignment), `dpi` (uninitialized `double`, undefined behavior), and `label` all lacked proper `optional` wrapping; fixed and `num` moved from positional arg to kwarg to support omission. 
+- **`figure`** — matplotlib's `figure` function is now `Figure::figure()` with proper if statement to check if `figsize`, `label`and `dpi` exists
+
+
+### Changed
+- `CMakeLists.txt`: added `legend`, `stackplot`, `rc` example executables and `test_rc` test executables
+
+
+
+
 ## [0.13.0] - 15/08/2026
 
 ### Added

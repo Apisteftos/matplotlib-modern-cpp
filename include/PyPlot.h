@@ -13,6 +13,8 @@
 #include "Figure.h"
 #include "NumpyUtils.h"
 #include "Configs.h"
+#include "RcDetail.h"
+#include "RcConfigs.h"
 #include "Helper.h"
 
 #include <map>
@@ -114,10 +116,12 @@ public:
         PyTuple_SetItem(args.get(), 1, PyLong_FromLong(config.ncols));
 
         PyPtr kwargs(PyDict_New());
-        PyPtr fs(PyTuple_New(2));
-        PyTuple_SetItem(fs.get(), 0, PyLong_FromLong(config.figsize[0]));
-        PyTuple_SetItem(fs.get(), 1, PyLong_FromLong(config.figsize[1]));
-        PyDict_SetItemString(kwargs.get(), "figsize", fs.get());
+        if (!config.figsize.empty()) {
+            PyPtr fs(PyTuple_New(2));
+            PyTuple_SetItem(fs.get(), 0, PyLong_FromLong(config.figsize[0]));
+            PyTuple_SetItem(fs.get(), 1, PyLong_FromLong(config.figsize[1]));
+            PyDict_SetItemString(kwargs.get(), "figsize", fs.get());
+        }
         PyDict_SetItemString(kwargs.get(), "squeeze", Py_False);
         
         PyPtr subplots(PyObject_GetAttrString(
@@ -522,18 +526,29 @@ public:
      */
     Figure figure(const FigureConfig& config){
 
-        PyPtr args(PyTuple_New(1));  
-        PyTuple_SetItem(args.get(), 0, PyLong_FromLong(config.num));
+        PyPtr args(PyTuple_New(0));  
+        
+        PyPtr kwargs(PyDict_New());
+
+        if (config.num.has_value())
+            PyDict_SetItemString(kwargs.get(), "num", 
+                PyLong_FromLong(config.num.value()));
 
         PyPtr fs(PyTuple_New(2));
-        PyTuple_SetItem(fs.get(), 0, PyLong_FromLong(config.figsize[0]));
-        PyTuple_SetItem(fs.get(), 1, PyLong_FromLong(config.figsize[1]));
+        if (!config.figsize.empty()) {
+            PyTuple_SetItem(fs.get(), 0, PyLong_FromLong(config.figsize[0]));
+            PyTuple_SetItem(fs.get(), 1, PyLong_FromLong(config.figsize[1]));
+            PyDict_SetItemString(kwargs.get(), "figsize", fs.get());
+        }
+        
+        if (config.dpi.has_value())
+            PyDict_SetItemString(kwargs.get(), "dpi", 
+        PyFloat_FromDouble(config.dpi.value()));
 
-        PyPtr kwargs(PyDict_New());
-        PyDict_SetItemString(kwargs.get(), "figsize", fs.get());
-        PyDict_SetItemString(kwargs.get(), "dpi", PyFloat_FromDouble(config.dpi));
-        PyDict_SetItemString(kwargs.get(), "label", PyUnicode_FromString(config.label.c_str()));
-
+        if (config.label.has_value())
+            PyDict_SetItemString(kwargs.get(), "label", 
+        PyUnicode_FromString(config.label->c_str()));
+        
         PyPtr figure(PyObject_GetAttrString(Interpreter::getInstance().getPyplot(), "figure"));
         checkAttr(figure.get(), "figure");
 
@@ -822,7 +837,86 @@ public:
         detail::stackplotImpl(Interpreter::getInstance().getPyplot(), config);
     }
 
+    /**
+     * @brief Configures the rcParams.
+     * @param config rc configuration
+     * @throws std::runtime_error if rc fails    
+     */
+    void rc(const RcConfig& config) {
+        detail::rcImpl(Interpreter::getInstance().getPyplot(), config);
+    }
 
+    /**
+     * @brief Configures the rcParams for grid.
+     * @param config rc grid configuration
+     * @throws std::runtime_error if rc fails    
+     */
+    void rc(const GridRcConfig& config) {
+        detail::rcImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+    /**
+     * @brief Configures the rcParams for legend.
+     * @param config rc legend configuration
+     * @throws std::runtime_error if rc fails    
+     */
+    void rc(const LegendRcConfig& config) {
+        detail::rcImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+    /**
+     * @brief Configures the rcParams for ticks.
+     * @param config rc ticks configuration
+     * @throws std::runtime_error if rc fails    
+     */
+    void rc(const TicksRcConfig& config) {
+        detail::rcImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+    /**
+     * @brief Configures the rcParams for boxplot.
+     * @param config rc boxplot configuration
+     * @throws std::runtime_error if rc fails    
+     */
+    void rc(const BoxplotRcConfig& config) {
+        detail::rcImpl(Interpreter::getInstance().getPyplot(), config);
+    }   
+
+    /**
+     * @brief Configures the rcParams for font.
+     * @param config rc font configuration
+     * @throws std::runtime_error if rc fails    
+     */
+    void rc(const FontRcConfig& config) {
+        detail::rcImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+    /**
+     * @brief Configures the rcParams for lines.
+     * @param config rc lines configuration
+     * @throws std::runtime_error if rc fails    
+     */
+    void rc(const LinesRcConfig& config) {
+        detail::rcImpl(Interpreter::getInstance().getPyplot(), config);
+    }   
+
+    /**
+     * @brief Configures the rcParams for axes.
+     * @param config rc axes configuration
+     * @throws std::runtime_error if rc fails    
+     */
+    void rc(const AxesRcConfig& config) {
+        detail::rcImpl(Interpreter::getInstance().getPyplot(), config);
+    }
+
+    /**
+     * @brief Configures the rcParams for figure.
+     * @param config rc figure configuration
+     * @throws std::runtime_error if rc fails    
+     */
+    void rc(const FigureRcConfig& config) {
+        detail::rcImpl(Interpreter::getInstance().getPyplot(), config);
+    }
 
 };
 

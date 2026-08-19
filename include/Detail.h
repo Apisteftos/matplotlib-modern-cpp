@@ -1,7 +1,7 @@
 #pragma once
 
 // =============================================================================
-// detail.h - internal shared implementation between Axes and Pyplot
+// Detail.h - internal shared implementation between Axes and Pyplot
 // Modern C++23 matplotlib wrapper built on top of Python C API
 // Author: Konstantinos Angeloulis
 // Date: 16/06/2024

@@ -126,9 +126,24 @@ namespace matplotlibcpp {
         PyPtr tup(PyTuple_New(2));
         PyTuple_SetItem(tup.get(), 0, PyFloat_FromDouble(loc.x));
         PyTuple_SetItem(tup.get(), 1, PyFloat_FromDouble(loc.y));
-    return tup.release();
+        return tup.release();
 
     }
+
+    /**
+     * @brief Converts figsize to a Python tuple
+     * @param fgs input Fgs
+     * @return PyObject* Python tuple
+     */
+    inline PyObject* fgsToPython(const Fgs& fgs) {
+        PyObject* tuple = PyTuple_New(2);
+        PyTuple_SetItem(tuple, 0, PyFloat_FromDouble(fgs.width));
+        PyTuple_SetItem(tuple, 1, PyFloat_FromDouble(fgs.height));
+        return tuple;
+    }
+    
+
+
 
     // ============================================================
     // Conversion functions
@@ -602,6 +617,105 @@ namespace matplotlibcpp {
             else if constexpr (std::is_same_v<T, Loc>)
                 return locToPython(val);
         }, llv);
+    }
+
+    /**
+     * @brief Converts RcValue to a Python object
+     * @param rv input RcValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* rcValueToPython(const RcValue& rv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, std::string>)
+                return PyUnicode_FromString(val.c_str());
+            else if constexpr (std::is_same_v<T, double>)
+                return PyFloat_FromDouble(val);
+            else if constexpr (std::is_same_v<T, bool>)
+                return val ? Py_True : Py_False;
+            else if constexpr (std::is_same_v<T, int>)
+                return PyLong_FromLong(val);
+            else if constexpr (std::is_same_v<T, std::vector<std::string>>)
+                return toStringList(val);
+            else if constexpr (std::is_same_v<T, Fgs>)
+                return fgsToPython(val);
+        }, rv);
+    }
+
+    /**
+    * @brief Converts FontSizeValue to a Python object
+    * @param fsv input FontSizeValue
+    * @return PyObject* Python object
+    */
+    inline PyObject* fontsizeValueToPython(const FontSizeValue& fsv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>)
+                return PyFloat_FromDouble(val);
+            else
+                return PyUnicode_FromString(val.c_str()); 
+        }, fsv);
+    }
+
+    /**
+    * @brief Converts LabelcolorValue to a Python object
+    * @param lcv input LabelcolorValue
+    * @return PyObject* Python object
+    */
+    inline PyObject* labelcolorValueToPython(const LabelcolorValue& lcv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, std::string>)
+                return PyUnicode_FromString(val.c_str());
+            else
+                return toStringList(val);
+        }, lcv);
+    }
+
+    /**
+    * @brief Converts TitleFontSizeValue to a Python object
+    * @param tfsv input TitleFontSizeValue
+    * @return PyObject* Python object    
+    */
+    inline PyObject* titleFontsizeValueToPython(const TitleFontSizeValue& tfsv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, int>)
+                return PyLong_FromLong(val);
+            else
+                return PyUnicode_FromString(val.c_str());
+        }, tfsv);
+    }
+
+
+    /** 
+     * @brief Converts TickMajorNdivsValue to a Python object
+     * @param tmv input TickMajorNdivsValue
+     * @return PyObject* Python object
+     */
+    inline PyObject* tickNdivsToPython(const TickNdivsValue& tmv) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, int>)
+                return PyLong_FromLong(val);
+            else if constexpr (std::is_same_v<T, std::string>)
+                return PyUnicode_FromString(val.c_str());
+        }, tmv);
+    }
+
+    /**
+    * @brief Converts WhisValue to a Python object
+    * @param w input WhisValue
+    * @return PyObject* Python object        
+    */
+    inline PyObject* whiskerValueToPython(const WhisValue& w) {
+        return std::visit([](const auto& val) -> PyObject* {
+            using T = std::decay_t<decltype(val)>;
+            if constexpr (std::is_same_v<T, double>)
+                return PyFloat_FromDouble(val);
+            else if constexpr (std::is_same_v<T, std::vector<double>>)
+                return toNumpy(val);
+        }, w);
     }
 
 

@@ -12,6 +12,7 @@
 #include <optional>
 #include <variant>
 #include <algorithm>
+#include <map>
 
 
 
@@ -301,6 +302,7 @@ namespace matplotlibcpp {
 
     using Vec = VecT<double>;        
     using StrVec = VecT<std::string>;  
+    using IntVec = VecT<int>;
     
     
     // =============================================================================
@@ -360,10 +362,27 @@ namespace matplotlibcpp {
         double y;
     }; 
 
+    /**
+     * @brief Struct for figsize with width and height
+     */
+    struct Fgs {
+        double width;
+        double height;
+    };
+
+    /**
+     * @brief Struct for whisker with low and high
+     */
+    struct Whisker {
+        double lower;
+        double upper;
+    };
+
 
     // =============================================================================
-    // Optional types
+    // Multiple data types
     // =============================================================================
+
 
     // errorbar parameters
     using ErrorValue = std::variant<
@@ -378,12 +397,21 @@ namespace matplotlibcpp {
         std::string
     >;
 
+    // rc parameters
+    using LabelcolorValue = std::variant<
+        std::string,
+        std::vector<std::string>
+    >;
 
-    // =============================================================================
-    // Multiple data types
-    // =============================================================================
 
-    // Errorbar parameters
+    // boxplot parameters
+    using WhisValue = std::variant<
+        double,
+        std::vector<double>
+    >;
+
+
+    
     using DataValue = std::variant<
         double,
         std::vector<double>
@@ -507,6 +535,30 @@ namespace matplotlibcpp {
         Loc   
     >;
 
+    // legend parameters
+    using TitleFontSizeValue = std::variant<
+        int,
+        std::string
+    >;  
+
+    // rc parameters
+    using RcValue = std::variant<
+        std::string, 
+        double, 
+        bool, 
+        int, 
+        std::vector<std::string>,
+        Fgs
+    >;
+
+    // tick_params and rc parameters
+    using TickNdivsValue = std::variant<
+        int,
+        std::string
+    >;
+
+
+
     // =============================================================================
     // Structs for matplotlib.pyplot.plot() 
     // =============================================================================
@@ -514,10 +566,10 @@ namespace matplotlibcpp {
 
 
     struct FigureConfig {
-        int num                                    = 0;
-        std::vector<long> figsize                  = {10, 10};
-        float dpi                                  = 100.0f;
-        std::string label                          = "";
+        std::optional<int> num                     = std::nullopt;
+        std::vector<long> figsize                  = {};
+        std::optional<double> dpi                  = std::nullopt;
+        std::optional<std::string> label           = std::nullopt;
 
     };
 
@@ -578,18 +630,18 @@ namespace matplotlibcpp {
         std::optional<ErrorEveryValue> errorevery = 1;
 
         // kwargs
-        std::optional<std::string> color          = std::nullopt;
-        std::optional<std::string> label          = std::nullopt;
-        std::optional<double> alpha               = std::nullopt;
-        std::optional<double> linewidth           = std::nullopt;
-        std::optional<std::string> linestyle      = std::nullopt;
-        std::optional<std::string> marker         = std::nullopt;
-        std::optional<double> markersize          = std::nullopt;
+        std::optional<std::string> color           = std::nullopt;
+        std::optional<std::string> label           = std::nullopt;
+        std::optional<double> alpha                = std::nullopt;
+        std::optional<double> linewidth            = std::nullopt;
+        std::optional<std::string> linestyle       = std::nullopt;
+        std::optional<std::string> marker          = std::nullopt;
+        std::optional<double> markersize           = std::nullopt;
         std::optional<std::string> markerfacecolor = std::nullopt;
         std::optional<std::string> markeredgecolor = std::nullopt;
-        std::optional<double> markeredgewidth     = std::nullopt;
-        std::optional<std::string> drawstyle      = std::nullopt;
-        std::optional<std::string> fillstyle      = std::nullopt;
+        std::optional<double> markeredgewidth      = std::nullopt;
+        std::optional<std::string> drawstyle       = std::nullopt;
+        std::optional<std::string> fillstyle       = std::nullopt;
         
 
     };
@@ -765,7 +817,7 @@ namespace matplotlibcpp {
     struct SubplotsConfig {
         long nrows                = 1;
         long ncols                = 1;
-        std::vector<long> figsize = {10, 10};
+        std::vector<long> figsize = {};
     };
 
 
@@ -831,20 +883,28 @@ namespace matplotlibcpp {
         std::optional<LegendLocValue> loc                = "best";
         // TODO: bbox_to_anchor
         // TODO: prop
-        // TODO: fontsize
-        // TODO: labelcolorarray-like or float
-        // TODO: numpoints
-        // TODO: scatterpoints
+        std::optional<FontSizeValue> fontsize            = "medium";
+        std::optional<LabelcolorValue> labelcolor        = std::nullopt;
+        std::optional<int> numpoints                     = 1;
+        std::optional<int> scatterpoints                 = 1;
         // TODO: scatteryoffsets
-        // TODO: markerscale
-        // TODO: markerfirst
-        // TODO: frameon
-        // TODO: fancybox
+        std::optional<double> markerscale                = 1.0;
+        std::optional<bool> markerfirst                  = true;
+        std::optional<bool> frameon                      = true;
+        std::optional<bool> fancybox                     = true;
         // TODO: shadow
-        // TODO: framealpha
-        // TODO: facecolor
-        // TODO: edgecolor
-        // TODO: linewidth
+        std::optional<double> framealpha                 = 0.8;
+        std::optional<TitleFontSizeValue> title_fontsize = std::nullopt;
+        std::optional<std::string> facecolor             = "inherit";
+        std::optional<std::string> edgecolor             = "0.8";   
+        std::optional<double> linewidth                  = 1.0;
+        std::optional<double> borderpad                  = 0.4;
+        std::optional<double> labelspacing               = 0.5;
+        std::optional<double> handlelength               = 2.0;
+        std::optional<double> handleheight               = 0.7;
+        std::optional<double> handletextpad              = 0.8;
+        std::optional<double> borderaxespad              = 0.5;
+        std::optional<double> columnspacing              = 2.0;
 
     };
 
@@ -1067,7 +1127,7 @@ namespace matplotlibcpp {
         std::optional<std::string> empty_sentinel           = "empty";
 
         
-        // fig_kw
+        // fig_kwargs
         std::optional<double> alpha                         = std::nullopt;
         std::optional<bool> animated                        = std::nullopt;
         std::optional<bool> clip_on                         = std::nullopt;
@@ -1223,6 +1283,35 @@ namespace matplotlibcpp {
         std::optional<double> y                         = std::nullopt;
         std::optional<double> zorder                    = std::nullopt;
 
+        // kwargs TickParams
+        std::optional<std::string> axis                 = std::nullopt;
+        std::optional<std::string> which                = std::nullopt;
+        std::optional<bool> reset                       = std::nullopt;
+        std::optional<std::string> direction            = std::nullopt;
+        std::optional<double> length                    = std::nullopt;
+        std::optional<double> width                     = std::nullopt;
+        //std::optional<std::string> color                = std::nullopt;
+        std::optional<double> pad                       = std::nullopt;
+        std::optional<LabelsizeValue> labelsize         = std::nullopt;
+        std::optional<std::string> labelcolor           = std::nullopt;
+        std::optional<std::string> labelfontfamily      = std::nullopt;
+        std::optional<std::string> colors               = std::nullopt;
+        //std::optional<double> zorder                    = std::nullopt;
+        std::optional<bool> bottom                      = std::nullopt;
+        std::optional<bool> top                         = std::nullopt;
+        std::optional<bool> left                        = std::nullopt;
+        std::optional<bool> right                       = std::nullopt;
+        std::optional<bool> labelbottom                 = std::nullopt;
+        std::optional<bool> labeltop                    = std::nullopt;
+        std::optional<bool> labelleft                   = std::nullopt;
+        std::optional<bool> labelright                  = std::nullopt;
+        std::optional<double> labelrotation             = std::nullopt;
+        std::optional<std::string> labelrotation_mode   = std::nullopt;
+        std::optional<std::string> grid_color           = std::nullopt;
+        std::optional<double> grid_alpha                = std::nullopt;
+        std::optional<double> grid_linewidth            = std::nullopt;
+        std::optional<std::string> grid_linestyle       = std::nullopt;
+
     };
 
     struct YTicksConfig {
@@ -1267,8 +1356,34 @@ namespace matplotlibcpp {
         std::optional<double> y                         = std::nullopt;
         std::optional<double> zorder                    = std::nullopt;
 
-
-
+        // kwargs TickParams
+        std::optional<std::string> axis                 = std::nullopt;
+        std::optional<std::string> which                = std::nullopt;
+        std::optional<bool> reset                       = std::nullopt;
+        std::optional<std::string> direction            = std::nullopt;
+        std::optional<double> length                    = std::nullopt;
+        std::optional<double> width                     = std::nullopt;
+        //std::optional<std::string> color                = std::nullopt;
+        std::optional<double> pad                       = std::nullopt;
+        std::optional<LabelsizeValue> labelsize         = std::nullopt;
+        std::optional<std::string> labelcolor           = std::nullopt;
+        std::optional<std::string> labelfontfamily      = std::nullopt;
+        std::optional<std::string> colors               = std::nullopt;
+        //std::optional<double> zorder                    = std::nullopt;
+        std::optional<bool> bottom                      = std::nullopt;
+        std::optional<bool> top                         = std::nullopt;
+        std::optional<bool> left                        = std::nullopt;
+        std::optional<bool> right                       = std::nullopt;
+        std::optional<bool> labelbottom                 = std::nullopt;
+        std::optional<bool> labeltop                    = std::nullopt;
+        std::optional<bool> labelleft                   = std::nullopt;
+        std::optional<bool> labelright                  = std::nullopt;
+        std::optional<double> labelrotation             = std::nullopt;
+        std::optional<std::string> labelrotation_mode   = std::nullopt;
+        std::optional<std::string> grid_color           = std::nullopt;
+        std::optional<double> grid_alpha                = std::nullopt;
+        std::optional<double> grid_linewidth            = std::nullopt;
+        std::optional<std::string> grid_linestyle       = std::nullopt;
     };
 
 
@@ -1398,13 +1513,13 @@ namespace matplotlibcpp {
         std::optional<bool> clip_on                     = std::nullopt;
         std::optional<std::string> color                = std::nullopt;
         std::optional<std::string> fontfamily           = std::nullopt;
-        std::optional<FontSizeValue> fontsize           = "large";
+        std::optional<FontSizeValue> fontsize           = std::nullopt;
         std::optional<FontStretchValue> fontstretch     = std::nullopt;
         std::optional<std::string> fontstyle            = std::nullopt;
         std::optional<std::string> fontvariant          = std::nullopt;
-        std::optional<FontWeightValue> fontweight       = "normal";
+        std::optional<FontWeightValue> fontweight       = std::nullopt;
         std::optional<std::string> gid                  = std::nullopt;
-        std::optional<std::string> horizontalalignment  = "center";
+        std::optional<std::string> horizontalalignment  = std::nullopt;
         std::optional<bool> in_layout                   = std::nullopt;
         std::optional<std::string> label                = std::nullopt;
         std::optional<std::string> language             = std::nullopt;
@@ -1422,11 +1537,11 @@ namespace matplotlibcpp {
         std::optional<std::string> text                 = std::nullopt;
         std::optional<bool> transform_rotates_text      = std::nullopt;
         std::optional<std::string> url                  = std::nullopt;
-        std::optional<std::string> verticalalignment    = "top";
+        std::optional<std::string> verticalalignment    = std::nullopt;
         std::optional<bool> visible                     = std::nullopt;
         std::optional<bool> wrap                        = std::nullopt;
-        std::optional<double> x                         = 0.5;
-        std::optional<double> y                         = 0.95;
+        std::optional<double> x                         = std::nullopt;
+        std::optional<double> y                         = std::nullopt;
         std::optional<double> zorder                    = std::nullopt;
 
 
@@ -1469,6 +1584,5 @@ namespace matplotlibcpp {
 
 
     
-
 
 }
